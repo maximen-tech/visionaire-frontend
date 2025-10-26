@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
+import LeadForm from "@/components/LeadForm";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -214,17 +215,7 @@ export default function ResultsPage() {
         </div>
 
         {/* CTA - Conversion Lead */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-lg p-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Prêt à transformer votre entreprise avec l&apos;IA ?
-          </h2>
-          <p className="text-indigo-100 mb-6 text-lg">
-            Discutons de comment mettre en œuvre ces opportunités concrètes
-          </p>
-          <button className="px-8 py-4 bg-white text-indigo-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-md">
-            Prendre rendez-vous
-          </button>
-        </div>
+        <LeadForm analysisId={results.analysis_id} />
 
         {/* Métadonnées */}
         <div className="bg-gray-50 rounded-lg p-4 text-center text-sm text-gray-500">

@@ -53,3 +53,31 @@ export interface AnalysisResults {
 export interface APIError {
   detail: string;
 }
+
+export interface LeadConversionRequest {
+  analysis_id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+}
+
+export interface LeadConversionResponse {
+  lead_id: string;
+  analysis_id: string;
+  name: string;
+  email: string;
+  message: string;
+  crm_synced: boolean;
+}
+
+export interface EmailNotificationRequest {
+  email: string;
+}
+
+export interface EmailNotificationResponse {
+  analysis_id: string;
+  email: string;
+  message: string;
+  status: string;
+}

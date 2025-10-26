@@ -46,8 +46,14 @@ export default function Home() {
         {/* URL Input Form */}
         <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800">{error}</p>
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg animate-shake">
+              <div className="flex items-center gap-2">
+                <span className="text-red-600 text-xl">⚠️</span>
+                <div className="flex-1">
+                  <p className="text-red-900 font-semibold">Erreur</p>
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+              </div>
             </div>
           )}
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -62,28 +68,31 @@ export default function Home() {
             <button
               type="submit"
               disabled={isLoading}
-              className="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
             >
-              {isLoading ? "Analyse en cours..." : "Analyser"}
+              {isLoading && (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              )}
+              {isLoading ? "Démarrage..." : "Analyser"}
             </button>
           </div>
         </form>
 
         {/* Features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-          <div className="p-6 bg-white rounded-xl shadow-md">
+          <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="text-4xl mb-3">🎯</div>
             <h3 className="text-lg font-semibold mb-2">Analyse A1</h3>
             <p className="text-gray-600">Identification du secteur et de la taille</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl shadow-md">
+          <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="text-4xl mb-3">📊</div>
             <h3 className="text-lg font-semibold mb-2">Score A2</h3>
             <p className="text-gray-600">Scoring IA avec benchmark</p>
           </div>
 
-          <div className="p-6 bg-white rounded-xl shadow-md">
+          <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="text-4xl mb-3">💡</div>
             <h3 className="text-lg font-semibold mb-2">Top 3 Gaps</h3>
             <p className="text-gray-600">Opportunités d'amélioration identifiées</p>

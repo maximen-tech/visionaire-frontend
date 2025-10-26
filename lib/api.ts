@@ -4,6 +4,10 @@ import type {
   AnalysisStartResponse,
   AnalysisStatus,
   AnalysisResults,
+  LeadConversionRequest,
+  LeadConversionResponse,
+  EmailNotificationRequest,
+  EmailNotificationResponse,
   APIError,
 } from "./types";
 
@@ -76,4 +80,51 @@ export async function getAnalysisResults(
  */
 export function getSSEStreamURL(analysisId: string): string {
   return `${API_URL}/analysis/${analysisId}/stream`;
+}
+
+/**
+ * Convertit un lead en CRM
+ */
+export async function convertLead(
+  data: LeadConversionRequest
+): Promise<LeadConversionResponse> {
+  const response = await fetch(`${API_URL}/leads/convert`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error: APIError = await response.json();
+    throw new Error(error.detail || "Erreur lors de la conversion du lead");
+  }
+
+  return response.json();
+}
+
+/**
+ * Active la notification email pour une analyse
+ */
+export async function enableEmailNotification(
+  analysisId: string,
+  data: EmailNotificationRequest
+): Promise<EmailNotificationResponse> {
+  const response = await fetch(`${API_URL}/analysis/${analysisId}/notify`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error: APIError = await response.json();
+    throw new Error(
+      error.detail || "Erreur lors de l'activation de la notification"
+    );
+  }
+
+  return response.json();
 }

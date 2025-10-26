@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import ProgressBar from "@/components/ProgressBar";
 import LogStream from "@/components/LogStream";
 import StatusCard from "@/components/StatusCard";
+import EmailNotificationButton from "@/components/EmailNotificationButton";
 import { getSSEStreamURL } from "@/lib/api";
 import type { SSEEvent } from "@/lib/types";
 
@@ -150,6 +151,9 @@ export default function WarRoomPage() {
                 </li>
               </ul>
             </div>
+
+            {/* Email Notification */}
+            <EmailNotificationButton analysisId={analysisId} />
           </div>
 
           {/* Colonne droite - Logs */}
