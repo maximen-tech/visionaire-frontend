@@ -8,6 +8,7 @@ Frontend Next.js pour la plateforme d'analyse IA Vision'AI're.
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS 3.4.14
 - **Real-time**: Server-Sent Events (EventSource API)
+- **Testing**: Playwright 1.56.1 (E2E)
 - **Deployment**: Vercel (recommandé)
 
 ## 📦 Installation
@@ -25,6 +26,9 @@ npm start
 
 # Lint
 npm run lint
+
+# E2E Tests
+npm run test:e2e
 ```
 
 ## 🌍 Variables d'Environnement
@@ -61,6 +65,14 @@ visionaire-frontend/
 ├── lib/                      # Services et types
 │   ├── api.ts                # API client (fetch)
 │   └── types.ts              # TypeScript interfaces
+├── tests/e2e/                # E2E tests (Playwright)
+│   ├── analysis-flow.spec.ts
+│   ├── error-handling.spec.ts
+│   ├── lead-conversion.spec.ts
+│   ├── email-notification.spec.ts
+│   ├── performance-accessibility.spec.ts
+│   ├── visual-regression.spec.ts
+│   └── fixtures.ts
 ├── public/                   # Assets statiques
 ├── .env.local                # Variables locales (gitignored)
 └── tailwind.config.ts        # Configuration Tailwind
@@ -123,26 +135,64 @@ visionaire-frontend/
 
 ## 🧪 Tests
 
-Voir [`TESTING.md`](./TESTING.md) pour le guide complet.
+### E2E Testing with Playwright ✅
 
-**Tests E2E Manuels** :
+**Comprehensive test suite: 69 automated tests**
+
+**Coverage:**
+- ✅ Complete user flows (Home → War Room → Results)
+- ✅ Error handling & edge cases  
+- ✅ Lead conversion & CRM integration
+- ✅ Email notifications
+- ✅ Performance & Accessibility (WCAG 2.1)
+- ✅ Visual regression testing
+
+**Quick Commands:**
 ```bash
-# 1. Démarrer services
-# Terminal 1: Backend (voir visionaire-bff/README.md)
-# Terminal 2: Celery Worker
-# Terminal 3: Frontend
-npm run dev
-
-# 2. Tester dans le browser
-open http://localhost:3000
-```
-
-**Tests Automatisés (Future)** :
-```bash
-npm install -D @playwright/test
-npx playwright install
+# Run all tests (headless)
 npm run test:e2e
+
+# Interactive UI mode (recommended for debugging)
+npm run test:e2e:ui
+
+# Run with visible browser
+npm run test:e2e:headed
+
+# Debug mode (step-by-step)
+npm run test:e2e:debug
+
+# View HTML report
+npm run test:e2e:report
+
+# Generate test code
+npm run test:e2e:codegen
 ```
+
+**Test Suites:**
+```
+tests/e2e/
+├── analysis-flow.spec.ts          (5 tests)  - Complete user journey
+├── error-handling.spec.ts         (19 tests) - Edge cases & errors
+├── lead-conversion.spec.ts        (8 tests)  - CRM integration
+├── email-notification.spec.ts     (11 tests) - Email fallback
+├── performance-accessibility.spec.ts (18 tests) - Perf & A11y
+├── visual-regression.spec.ts      (13 tests) - Visual diffs
+└── fixtures.ts                    - Test helpers & mocks
+```
+
+**📚 Documentation:**
+- [E2E Testing Guide](./E2E_TESTING.md) - Complete testing guide
+- [Test Suite Summary](./TEST_SUMMARY.md) - Detailed coverage
+- [Implementation Summary](./E2E_IMPLEMENTATION_SUMMARY.md) - Setup details
+- [Known Issues](./KNOWN_ISSUES.md) - Current test status
+
+**CI/CD Integration:**
+- ✅ Automated on every push/PR
+- ✅ Parallel execution (3 shards)
+- ✅ Test artifacts & traces on failure
+- 📍 Workflow: `.github/workflows/playwright.yml`
+
+**⚠️ Note:** Some tests require selector updates to match implementation. See [KNOWN_ISSUES.md](./KNOWN_ISSUES.md).
 
 ## 🚢 Déploiement
 
@@ -247,11 +297,25 @@ rm -rf .next
 npm run build
 ```
 
+**Erreur: E2E tests failing**
+```bash
+# Check if dev server is running
+curl http://localhost:3000
+
+# View detailed test report
+npm run test:e2e:report
+
+# Debug specific test
+npx playwright test --debug analysis-flow.spec.ts
+```
+
 ## 📚 Documentation
 
+- [E2E Testing Guide](./E2E_TESTING.md)
 - [Next.js Docs](https://nextjs.org/docs)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [TypeScript](https://www.typescriptlang.org/docs)
+- [Playwright](https://playwright.dev)
 - [Backend API](../visionaire-bff/README.md)
 
 ## 🤝 Contributing
@@ -259,8 +323,9 @@ npm run build
 1. Fork le repo
 2. Créer une branche (`git checkout -b feature/amazing`)
 3. Commit (`git commit -m 'feat: Add amazing feature'`)
-4. Push (`git push origin feature/amazing`)
-5. Ouvrir une PR
+4. **Run E2E tests** (`npm run test:e2e`)
+5. Push (`git push origin feature/amazing`)
+6. Ouvrir une PR
 
 ## 📝 License
 
