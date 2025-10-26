@@ -16,7 +16,7 @@ test.describe('Email Notification', () => {
     // Start an analysis
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://email-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://email-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -39,7 +39,7 @@ test.describe('Email Notification', () => {
   test('should expand email notification form when clicked', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://expand-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://expand-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -81,7 +81,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://validation-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://validation-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -128,7 +128,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://success-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://success-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -169,7 +169,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://error-notify-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://error-notify-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -213,7 +213,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://loading-notify-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://loading-notify-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -263,7 +263,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://collapse-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://collapse-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -318,7 +318,7 @@ test.describe('Email Notification', () => {
 
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://duplicate-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://duplicate-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -356,7 +356,7 @@ test.describe('Email Notification Use Cases', () => {
   test('should allow email notification during long analysis', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://long-analysis-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://long-analysis-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -382,7 +382,7 @@ test.describe('Email Notification Use Cases', () => {
       route.abort('failed');
     });
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://sse-fail-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://sse-fail-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});

@@ -21,7 +21,7 @@ test.describe('Error Handling', () => {
       route.abort('failed');
     });
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     await urlInput.fill('https://test-error.com');
@@ -70,7 +70,7 @@ test.describe('Error Handling', () => {
     // Start an analysis
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://sse-error-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://sse-error-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -126,7 +126,7 @@ test.describe('Error Handling', () => {
       });
     });
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://fail-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://fail-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -152,7 +152,7 @@ test.describe('Error Handling', () => {
       });
     });
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://timeout-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://timeout-test.com');
 
     // Click and expect timeout handling
     await page.getByRole('button', { name: /analyser/i }).click();
@@ -180,7 +180,7 @@ test.describe('Error Handling', () => {
   test('should handle rapid form submissions', async ({ page }) => {
     await page.goto('/');
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     await urlInput.fill('https://rapid-test.com');
@@ -202,7 +202,7 @@ test.describe('Error Handling', () => {
   test('should handle back navigation from War Room', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://back-nav-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://back-nav-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -214,13 +214,13 @@ test.describe('Error Handling', () => {
     await expect(page).toHaveURL('/');
 
     // Home page should still be functional
-    await expect(page.getByPlaceholder(/URL de votre entreprise/i)).toBeVisible();
+    await expect(page.getByPlaceholder(/votresite\.com/i)).toBeVisible();
   });
 
   test('should handle browser refresh on War Room', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://refresh-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://refresh-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
@@ -247,11 +247,11 @@ test.describe('Responsive Behavior', () => {
 
     // All elements should still be visible and functional
     await expect(page.getByRole('heading', { name: /Vision'AI're/i })).toBeVisible();
-    await expect(page.getByPlaceholder(/URL de votre entreprise/i)).toBeVisible();
+    await expect(page.getByPlaceholder(/votresite\.com/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /analyser/i }).first()).toBeVisible();
 
     // Test form submission on mobile
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://mobile-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://mobile-test.com');
     await page.getByRole('button', { name: /analyser/i }).first().click();
 
     // Should navigate to War Room

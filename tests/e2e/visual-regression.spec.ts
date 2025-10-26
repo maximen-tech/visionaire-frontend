@@ -54,7 +54,7 @@ test.describe('Visual Regression', () => {
   test('home page with filled form should match baseline', async ({ page }) => {
     await page.goto('/');
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     await urlInput.fill('https://example.com');
 
     // Wait a bit for any animations
@@ -76,7 +76,7 @@ test.describe('Visual Regression', () => {
       route.abort('failed');
     });
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     // Wait for error message
@@ -121,7 +121,7 @@ test.describe('Visual Regression', () => {
     });
 
     await page.goto('/');
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://visual-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://visual-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
@@ -166,7 +166,7 @@ test.describe('Visual Regression', () => {
     });
 
     await page.goto('/');
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://progress-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://progress-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
@@ -358,7 +358,7 @@ test.describe('Mobile Visual Regression', () => {
     });
 
     await page.goto('/');
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://mobile-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://mobile-test.com');
     await page.getByRole('button', { name: /analyser/i }).first().click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });

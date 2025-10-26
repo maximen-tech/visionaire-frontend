@@ -26,7 +26,7 @@ test.describe('Complete Analysis Flow', () => {
     await expect(page.getByRole('heading', { name: /Vision'AI're/i })).toBeVisible();
 
     // Verify input and button are present
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     await expect(urlInput).toBeVisible();
@@ -129,7 +129,7 @@ test.describe('Complete Analysis Flow', () => {
   test('should show loading state when submitting URL', async ({ page }) => {
     await page.goto('/');
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     await urlInput.fill('https://test.com');
@@ -146,7 +146,7 @@ test.describe('Complete Analysis Flow', () => {
   test('should validate URL format on home page', async ({ page }) => {
     await page.goto('/');
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     // Try invalid URL
@@ -167,7 +167,7 @@ test.describe('War Room Real-time Features', () => {
     // Start an analysis first
     await page.goto('/');
 
-    const urlInput = page.getByPlaceholder(/URL de votre entreprise/i);
+    const urlInput = page.getByPlaceholder(/votresite\.com/i);
     const analyzeButton = page.getByRole('button', { name: /analyser/i });
 
     await urlInput.fill('https://sse-test.com');
@@ -196,7 +196,7 @@ test.describe('War Room Real-time Features', () => {
   test('should show progress bar updates', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill('https://progress-test.com');
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://progress-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/);

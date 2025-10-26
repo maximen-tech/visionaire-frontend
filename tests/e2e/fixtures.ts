@@ -95,7 +95,7 @@ export const pageHelpers = {
    */
   submitAnalysisURL: async (page: any, url: string) => {
     await page.goto('/');
-    await page.getByPlaceholder(/URL de votre entreprise/i).fill(url);
+    await page.getByPlaceholder(/votresite\.com/i).fill(url);
     await page.getByRole('button', { name: /analyser/i }).click();
     await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
   },
