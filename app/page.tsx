@@ -1,19 +1,34 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { startAnalysis } from "@/lib/api";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
-    // TODO: Appel API backend
-    console.log("URL soumise:", url);
+    try {
+      // Appel API backend pour démarrer l'analyse
+      const response = await startAnalysis(url);
 
-    setTimeout(() => setIsLoading(false), 2000);
+      // Redirection vers la War Room avec l'ID d'analyse
+      router.push(`/analysis/${response.analysis_id}`);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Erreur lors du démarrage de l'analyse"
+      );
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -30,6 +45,11 @@ export default function Home() {
 
         {/* URL Input Form */}
         <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800">{error}</p>
+            </div>
+          )}
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <input
               type="url"
