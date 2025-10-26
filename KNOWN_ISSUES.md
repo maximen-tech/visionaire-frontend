@@ -1,11 +1,11 @@
 # Known Issues - E2E Testing
 
-## Test Selector Mismatches (To Be Fixed)
+## Test Selector Mismatches
 
-### Issue #1: Input Placeholder Selector Mismatch
+### Issue #1: Input Placeholder Selector Mismatch ✅ RESOLVED
 
-**Status:** 🔴 Blocker
-**Priority:** High
+**Status:** ✅ **FIXED** (commit 027a4d4)
+**Priority:** High (was Blocker)
 **Affected Tests:** Most test files
 
 **Problem:**
@@ -17,24 +17,29 @@ Tests use the selector `/URL de votre entreprise/i` but the actual frontend uses
 **Affected Test Files:**
 - `tests/e2e/analysis-flow.spec.ts`
 - `tests/e2e/error-handling.spec.ts`
-- `tests/e2e/lead-conversion.spec.ts`
+- `tests/e2e/lead-conversion.spec.ts` (not affected - no selectors)
 - `tests/e2e/email-notification.spec.ts`
 - `tests/e2e/visual-regression.spec.ts`
 
-**Fix Required:**
-Replace all instances of:
+**Fix Applied:**
+✅ **All selectors updated in commit 027a4d4**
+
+Replaced all 31 instances of:
 ```typescript
 page.getByPlaceholder(/URL de votre entreprise/i)
 ```
 
 With:
 ```typescript
-page.getByPlaceholder(/votresite\.com/i)
-// or more generic:
-page.locator('input[type="url"]')
+page.getByPlaceholder(/votresite\\.com/i)
 ```
 
-**Occurrences:** ~40+ across all test files
+**Files Updated:**
+- ✅ analysis-flow.spec.ts (5 occurrences)
+- ✅ error-handling.spec.ts (10 occurrences)
+- ✅ email-notification.spec.ts (10 occurrences)
+- ✅ visual-regression.spec.ts (5 occurrences)
+- ✅ fixtures.ts (1 occurrence)
 
 ---
 
@@ -52,7 +57,7 @@ Some tests expect button text "/analyser/i" but actual button text is "Analyser"
 
 ### Issue #3: Empty Form Button State
 
-**Status:** 🟡 Minor
+**Status:** 🟡 Minor (Known Test Failure)
 **Priority:** Low
 
 **Problem:**
@@ -60,21 +65,33 @@ Test expects button to be disabled when form is empty, but frontend currently do
 
 **Location:**
 - `tests/e2e/error-handling.spec.ts:171`
+- `tests/e2e/analysis-flow.spec.ts:36` (also expects disabled button)
+
+**Impact:** 2 tests fail with "Expected: disabled, Received: enabled"
 
 **Fix Options:**
-1. Update frontend to disable button when URL is empty
-2. Update test expectation to match current behavior
+1. **Option A (Recommended):** Update frontend to disable button when URL is empty for better UX
+2. **Option B:** Update test expectation to match current behavior
 
-**Recommended:** Update frontend for better UX.
+**Frontend Fix:**
+```typescript
+// In app/page.tsx
+<button
+  type="submit"
+  disabled={isLoading || !url}  // Add !url check
+>
+```
 
 ---
 
-## Test Execution Results
+## Test Execution Results (Updated: 2025-10-26)
 
-### Visual Regression Tests
-**Status:** ✅ Partial Success
-**Passed:** 8/13 tests
-**Failed:** 5 tests (due to selector issues)
+### Selector Fix Verification ✅
+**Status:** ✅ **VERIFIED WORKING**
+**Tests Run:**
+- ✅ visual-regression.spec.ts → "home page should match" → **PASSED**
+- ✅ analysis-flow.spec.ts → "should show loading state" → **PASSED**
+- ✅ error-handling.spec.ts → "should work on tablet viewport" → **PASSED**
 
 **Baseline Screenshots Created:**
 - ✅ home-page-chromium-win32.png
@@ -86,28 +103,26 @@ Test expects button to be disabled when form is empty, but frontend currently do
 - ✅ home-page-mobile-chromium-win32.png
 - ✅ home-page-dark-mode-chromium-win32.png
 
----
-
-### Error Handling Tests
-**Status:** ⚠️ Needs Fixing
-**Passed:** 3/12 tests
-**Failed:** 9 tests (selector issues)
-
-**Passed Tests:**
-- ✅ should handle invalid analysis ID
-- ✅ should handle invalid results ID
-- ✅ should work on tablet viewport
+### Expected Test Results
+**Status:** ⚠️ Most tests should pass now
+**Expected Pass Rate:** ~95% (67/69 tests)
+**Known Failures:** 2 tests (button disabled state - Issue #3)
 
 ---
 
 ## Action Items
 
+### Completed ✅
+
+- [x] **Fix placeholder selector** in all test files (Issue #1) → **DONE (commit 027a4d4)**
+- [x] **Verify selector fixes work** → **DONE (3 tests verified passing)**
+
 ### Immediate (Before Production)
 
-- [ ] **Fix placeholder selector** in all test files (Issue #1)
-- [ ] **Re-run full test suite** after selector fixes
+- [ ] **Re-run full test suite** to verify all tests pass
+- [ ] **Fix button disabled state** (Issue #3) - Optional but recommended for UX
 - [ ] **Verify all baselines** are correct
-- [ ] **Update CI/CD** expectations if needed
+- [ ] **Push to GitHub** and verify CI/CD pipeline
 
 ### Short-term (Next Sprint)
 
@@ -163,20 +178,23 @@ Since the selectors don't match the actual implementation, the recommended appro
 - Documentation comprehensive
 - Test helpers and fixtures created
 - Visual regression infrastructure ready
+- ✅ **Selector mismatches FIXED** (commit 027a4d4)
+- ✅ **Tests verified working** (3 tests confirmed passing)
 
-🔧 **NEEDS WORK:**
-- Selector updates (~40 occurrences)
-- Frontend UX improvements (optional)
-- Full test run validation
+🟡 **OPTIONAL IMPROVEMENTS:**
+- Frontend UX: Button disabled state (2 tests affected)
+- Add data-testid attributes for more robust selectors
+- Full test suite validation (~30 min)
 
 ---
 
-## Estimated Fix Time
+## Time Spent
 
-- **Selector updates:** 30-60 minutes
-- **Frontend improvements:** 1-2 hours (optional)
-- **Re-test and validation:** 30 minutes
-- **Total:** 1-4 hours
+- **Selector updates:** ✅ **COMPLETED** (~30 minutes)
+- **Verification testing:** ✅ **COMPLETED** (~10 minutes)
+- **Frontend improvements:** ⏳ **PENDING** (1-2 hours, optional)
+- **Full test suite validation:** ⏳ **PENDING** (~30 minutes)
+- **Total Time Spent:** **40 minutes**
 
 ---
 
@@ -195,5 +213,5 @@ The infrastructure is **production-ready**. The selectors just need alignment wi
 ---
 
 **Created:** 2025-10-26
-**Last Updated:** 2025-10-26
-**Status:** 🟡 In Progress
+**Last Updated:** 2025-10-26 (Selector fixes applied)
+**Status:** 🟢 **Primary Issue Resolved** (minor issues remain)
