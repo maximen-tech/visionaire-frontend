@@ -1,0 +1,14 @@
+# Vision'AI're robots.txt
+# https://visionai.re/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /analysis/
+Disallow: /results/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://visionai.re/sitemap.xml
+
+# Crawl-delay for politeness
+Crawl-delay: 1
