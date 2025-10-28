@@ -1,17 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ProgressBar from "@/components/ProgressBar";
 import LogStream from "@/components/LogStream";
 import ProgressiveMessage from "@/components/ProgressiveMessage";
 import { getSSEStreamURL } from "@/lib/api";
 import type { SSEEvent, IdentityA1 } from "@/lib/types";
+import toast, { Toaster } from "react-hot-toast";
 
 interface LogEntry {
   timestamp: string;
   message: string;
   phase?: "A1" | "A2" | "SYNTHESIS";
+}
+
+// Extended SSE Event with optional data field
+interface EnhancedSSEEvent extends SSEEvent {
+  data?: {
+    identity?: Partial<IdentityA1>;
+    partial_hours?: number;
+    [key: string]: any;
+  };
 }
 
 export default function WaitingRoomPage() {
@@ -27,18 +37,25 @@ export default function WaitingRoomPage() {
   const [messageComplete, setMessageComplete] = useState(false);
   const [showRedirectButton, setShowRedirectButton] = useState(false);
   const [error, setError] = useState<string>("");
+  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const eventSourceRef = useRef<EventSource | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
+  // SSE Connection function with retry logic
+  const connectSSE = () => {
     if (!analysisId) return;
 
-    // Connect to SSE stream
     const sseUrl = getSSEStreamURL(analysisId);
     const eventSource = new EventSource(sseUrl);
+    eventSourceRef.current = eventSource;
+
+    // Reset error state
+    setError("");
 
     // Handle SSE messages
     eventSource.onmessage = (event) => {
       try {
-        const data: SSEEvent = JSON.parse(event.data);
+        const data: EnhancedSSEEvent = JSON.parse(event.data);
 
         // Update status and progress
         setStatus(data.status);
@@ -52,36 +69,81 @@ export default function WaitingRoomPage() {
         };
         setLogs((prevLogs) => [...prevLogs, newLog]);
 
-        // Parse identity data from log messages (Phase A1)
-        if (data.phase === "A1" && data.log_message.includes("Entreprise identifiée")) {
-          // Mock identity data - in real implementation, this would come from API
-          // For now, we'll fetch it when analysis completes
+        // Parse identity data if available (Phase A1)
+        if (data.phase === "A1" && data.data?.identity) {
+          const identity: IdentityA1 = {
+            company_name: data.data.identity.company_name || "Entreprise",
+            owner_first_name: data.data.identity.owner_first_name || null,
+            sector: data.data.identity.sector || "Secteur non identifié",
+            size: data.data.identity.size || "Non déterminé",
+            tier: data.data.identity.tier || "Standard",
+          };
+          setIdentityData(identity);
+          toast.success("Entreprise identifiée!", { duration: 2000 });
+        }
+
+        // Parse partial hours if available (Phase A2)
+        if (data.phase === "A2" && data.data?.partial_hours) {
+          setTotalHours(data.data.partial_hours);
         }
 
         // When analysis complete, we wait for message to complete
         if (data.status === "COMPLETE") {
-          // Don't close eventSource yet - let message complete first
+          // Reset reconnect attempts on successful completion
+          setReconnectAttempts(0);
+          toast.success("Analyse terminée!", { duration: 3000 });
         }
 
         // If analysis failed
         if (data.status === "FAILED") {
-          setError(
-            data.log_message || "L'analyse a échoué. Veuillez réessayer."
-          );
+          const errorMsg = data.log_message || "L'analyse a échoué. Veuillez réessayer.";
+          setError(errorMsg);
+          toast.error(errorMsg);
           eventSource.close();
         }
       } catch (err) {
         console.error("Erreur parsing SSE:", err);
+        toast.error("Erreur de traitement des données");
       }
     };
 
-    // Handle SSE errors
+    // Handle SSE errors with retry logic
     eventSource.onerror = (err) => {
       console.error("Erreur SSE:", err);
-      setError("Connexion au serveur perdue. Actualiser la page.");
       eventSource.close();
+
+      // Retry logic (max 3 attempts)
+      if (reconnectAttempts < 3) {
+        const nextAttempt = reconnectAttempts + 1;
+        setReconnectAttempts(nextAttempt);
+
+        toast.loading(`Reconnexion... (tentative ${nextAttempt}/3)`, {
+          duration: 5000,
+        });
+
+        // Exponential backoff: 2s, 4s, 8s
+        const delay = Math.pow(2, nextAttempt) * 1000;
+
+        reconnectTimeoutRef.current = setTimeout(() => {
+          connectSSE();
+        }, delay);
+      } else {
+        setError("Connexion au serveur perdue. Veuillez actualiser la page.");
+        toast.error("Connexion impossible. Actualisez la page.", {
+          duration: 10000,
+        });
+      }
     };
 
+    // Connection opened
+    eventSource.onopen = () => {
+      if (reconnectAttempts > 0) {
+        toast.success("Reconnecté!", { duration: 2000 });
+      }
+    };
+  };
+
+  useEffect(() => {
     // Initial log
     setLogs([
       {
@@ -90,9 +152,17 @@ export default function WaitingRoomPage() {
       },
     ]);
 
+    // Connect SSE
+    connectSSE();
+
     // Cleanup
     return () => {
-      eventSource.close();
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
     };
   }, [analysisId]);
 
@@ -120,6 +190,7 @@ export default function WaitingRoomPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+      <Toaster position="top-right" />
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

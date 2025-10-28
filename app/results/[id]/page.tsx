@@ -6,6 +6,7 @@ import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
 import LeadForm from "@/components/LeadForm";
 import OpportunityCard from "@/components/OpportunityCard";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -45,6 +46,28 @@ export default function ResultsPage() {
     if (!isNaN(rate) && rate > 0) {
       setHourlyRate(rate);
       setShowValorization(true);
+      const totalValue = results ? Math.round(results.total_hours_per_year * rate) : 0;
+      toast.success(
+        `Valorisation calculée: ${totalValue.toLocaleString("fr-FR")} $ CAD/an!`,
+        { duration: 4000 }
+      );
+    } else {
+      toast.error("Veuillez entrer un taux horaire valide");
+    }
+  };
+
+  // Copy Analysis ID to clipboard
+  const copyAnalysisId = () => {
+    navigator.clipboard.writeText(analysisId);
+    toast.success("ID d'analyse copié!", { duration: 2000 });
+  };
+
+  // Scroll to Lead Form
+  const scrollToLeadForm = () => {
+    const leadFormElement = document.getElementById("lead-form");
+    if (leadFormElement) {
+      leadFormElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      toast("Réservez votre place 👇", { duration: 2000, icon: "🎁" });
     }
   };
 
@@ -85,6 +108,7 @@ export default function ResultsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+      <Toaster position="top-right" />
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -186,12 +210,18 @@ export default function ResultsPage() {
           <h3 className="text-xl font-bold text-orange-900 mb-2 flex items-center gap-2">
             ⚠️ Reality Check
           </h3>
-          <p className="text-orange-800">
+          <p className="text-orange-800 mb-4">
             <span className="font-bold">73% des PME</span> qui identifient ces
             opportunités ne passent jamais à l&apos;action. Pourquoi?
             Manque de temps, de ressources, ou d&apos;expertise technique. Ne
             faites pas cette erreur.
           </p>
+          <button
+            onClick={scrollToLeadForm}
+            className="px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all transform hover:scale-105"
+          >
+            🎁 Réserver ma consultation GRATUITE →
+          </button>
         </div>
 
         {/* 3 Opportunity Cards */}
@@ -269,14 +299,25 @@ export default function ResultsPage() {
         </div>
 
         {/* CTA - Conversion Lead */}
-        <LeadForm analysisId={results.analysis_id} />
+        <div id="lead-form">
+          <LeadForm analysisId={results.analysis_id} />
+        </div>
 
         {/* Métadonnées */}
-        <div className="bg-gray-50 rounded-lg p-4 text-center text-sm text-gray-500">
-          <p>
-            Analyse ID: <span className="font-mono">{results.analysis_id}</span>
-          </p>
-          <p className="mt-1">URL analysée: {results.url}</p>
+        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-500">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <p>
+              Analyse ID: <span className="font-mono font-semibold">{results.analysis_id}</span>
+            </p>
+            <button
+              onClick={copyAnalysisId}
+              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-xs font-medium transition-colors"
+              title="Copier l'ID"
+            >
+              📋 Copier
+            </button>
+          </div>
+          <p>URL analysée: {results.url}</p>
         </div>
       </div>
     </div>
