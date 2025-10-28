@@ -23,7 +23,7 @@ export default function Home() {
 
     try {
       const response = await startAnalysis(url);
-      router.push(`/analysis/${response.analysis_id}`);
+      router.push(`/waiting-room/${response.analysis_id}`);
     } catch (err) {
       setError(
         err instanceof Error
