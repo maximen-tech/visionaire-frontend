@@ -349,7 +349,7 @@
 
 ### Session 8: Waiting Room Blueprint Refactor (Completed)
 **Status:** ✅ DONE
-**Commits:** Pending
+**Commits:** 5d60e33
 **Documentation:** SESSION_8_WAITING_ROOM_BLUEPRINT.md
 
 **Réalisations:**
