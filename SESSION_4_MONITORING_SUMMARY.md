@@ -78,10 +78,18 @@ Sentry.init({
     return event;
   },
 
+  // Enable logs to be sent to Sentry
+  enableLogs: true,
+
+  // Profiling
+  profilesSampleRate: 1.0, // Capture 100% of profiles in dev
+
   // Integrations
   integrations: [
     Sentry.replayIntegration(), // Session replay
     Sentry.browserTracingIntegration(), // Performance
+    Sentry.browserProfilingIntegration(), // Browser profiling
+    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }), // Console logging
   ],
 
   // Trace API calls
@@ -108,9 +116,16 @@ Sentry.init({
 
 **Key Features:**
 ```javascript
+const { nodeProfilingIntegration } = require("@sentry/profiling-node");
+
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0, // CPU profiling
+
+  integrations: [
+    nodeProfilingIntegration(), // Node.js profiling
+  ],
 
   ignoreErrors: [
     "ECONNREFUSED", // Connection refused

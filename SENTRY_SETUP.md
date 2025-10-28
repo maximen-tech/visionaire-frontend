@@ -14,15 +14,19 @@ This document explains how to complete the Sentry setup for Vision'AI're error t
 
 ### 2. Configuration Files Created
 
-**Client-side:** `sentry.client.config.ts`
+**Client-side:** `instrumentation-client.ts`
 - Performance monitoring (100% traces in dev)
+- Browser profiling (JavaScript execution profiling)
+- Router navigation tracking (Next.js page transitions)
 - Session replay (100% errors, 10% normal sessions)
+- Console logging integration (console.log, console.warn, console.error)
 - Error filtering (browser extensions, expected network errors)
 - Custom context enrichment
 
 **Server-side:** `sentry.server.config.ts`
 - Server-side error tracking
 - Performance traces
+- CPU profiling (via @sentry/profiling-node)
 - Custom server context
 
 **Edge:** `sentry.edge.config.ts`

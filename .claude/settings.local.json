@@ -15,7 +15,10 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(gh pr create:*)",
-      "Bash(npm run test:e2e:*)"
+      "Bash(npm run test:e2e:*)",
+      "Bash(pkill:*)",
+      "Bash(netstat:*)",
+      "Bash(npx kill-port:*)"
     ],
     "deny": [],
     "ask": []

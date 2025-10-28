@@ -1,14 +1,11 @@
-# Vision'AI're robots.txt
-# https://visionai.re/robots.txt
-
+# *
 User-agent: *
 Allow: /
-Disallow: /analysis/
-Disallow: /results/
-Disallow: /api/
+Disallow: /test-sentry
+Disallow: /api/*
 
-# Sitemap
-Sitemap: https://visionai.re/sitemap.xml
+# Host
+Host: http://localhost:3000
 
-# Crawl-delay for politeness
-Crawl-delay: 1
+# Sitemaps
+Sitemap: http://localhost:3000/sitemap.xml
