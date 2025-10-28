@@ -2,10 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import * as Sentry from "@sentry/nextjs";
 import ProgressBar from "@/components/ProgressBar";
 import LogStream from "@/components/LogStream";
 import ProgressiveMessage from "@/components/ProgressiveMessage";
+import PulsingButton from "@/components/design-system/PulsingButton";
+import BlueprintGrid from "@/components/design-system/BlueprintGrid";
+import GlassmorphicCard from "@/components/design-system/GlassmorphicCard";
 import { getSSEStreamURL } from "@/lib/api";
 import type { SSEEvent, IdentityA1 } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,7 +20,7 @@ import {
   trackSSEEvent,
   trackError,
 } from "@/lib/analytics";
-import { SkeletonWaitingRoom } from "@/components/ui/Skeleton";
+import { fadeIn, fadeInUp } from "@/lib/animations";
 
 interface LogEntry {
   timestamp: string;
@@ -247,50 +251,83 @@ export default function WaitingRoomPage() {
 
   if (!analysisId) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-600">ID d&apos;analyse invalide</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+        <p className="text-red-400 text-lg font-semibold">ID d&apos;analyse invalide</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      {/* Blueprint Grid Background */}
+      <BlueprintGrid density="low" animated={true} />
+
       <Toaster position="top-right" />
-      <div className="max-w-7xl mx-auto space-y-6">
+
+      <div className="relative z-10 max-w-7xl mx-auto p-4 md:p-8 space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Salle d&apos;Attente Virtuelle
-          </h1>
-          <button
+        <motion.div
+          {...fadeInUp}
+          className="flex flex-col md:flex-row md:items-center justify-between gap-4"
+        >
+          <div>
+            <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2">
+              ⏰ Salle d&apos;Attente Virtuelle
+            </h1>
+            <p className="text-slate-300 text-sm md:text-base">
+              Notre IA dessine votre blueprint de temps récupérable...
+            </p>
+          </div>
+
+          <PulsingButton
+            variant="secondary"
+            size="sm"
             onClick={() => router.push("/")}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 border border-gray-300 transition-colors"
+            leftIcon={<span>←</span>}
           >
-            ← Retour
-          </button>
-        </div>
+            Retour
+          </PulsingButton>
+        </motion.div>
 
         {/* Error message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800 font-medium">{error}</p>
-          </div>
+          <motion.div {...fadeIn}>
+            <GlassmorphicCard className="border-2 border-red-500/50 bg-red-500/10">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">❌</span>
+                <div>
+                  <h3 className="text-red-400 font-bold mb-1">Erreur</h3>
+                  <p className="text-red-300 text-sm">{error}</p>
+                </div>
+              </div>
+            </GlassmorphicCard>
+          </motion.div>
         )}
 
         {/* Progress Bar */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <ProgressBar progress={progress} status={status} />
-        </div>
+        <motion.div {...fadeIn} transition={{ delay: 0.2 }}>
+          <GlassmorphicCard>
+            <ProgressBar progress={progress} status={status} />
+          </GlassmorphicCard>
+        </motion.div>
 
         {/* Dual View Layout - Desktop: 35% / 65%, Mobile: Stacked */}
         <div className="grid grid-cols-1 lg:grid-cols-[35%_65%] gap-6">
-          {/* Left: Log Stream (35%) */}
-          <div className="order-2 lg:order-1">
+          {/* Left: Log Stream (35%) - Order 2 on mobile, 1 on desktop */}
+          <motion.div
+            {...fadeIn}
+            transition={{ delay: 0.3 }}
+            className="order-2 lg:order-1 h-[400px] lg:h-[600px]"
+          >
             <LogStream logs={logs} />
-          </div>
+          </motion.div>
 
-          {/* Right: Progressive Message (65%) */}
-          <div className="order-1 lg:order-2">
+          {/* Right: Progressive Message (65%) - Order 1 on mobile, 2 on desktop */}
+          <motion.div
+            {...fadeIn}
+            transition={{ delay: 0.4 }}
+            className="order-1 lg:order-2 h-[500px] lg:h-[600px]"
+          >
             <ProgressiveMessage
               progress={progress}
               identityData={identityData}
@@ -298,32 +335,58 @@ export default function WaitingRoomPage() {
               status={status}
               onComplete={handleMessageComplete}
             />
-          </div>
+          </motion.div>
         </div>
 
         {/* Redirect Button - Only shows after message complete + 3 sec */}
         {showRedirectButton && (
-          <div className="flex justify-center animate-fade-in">
-            <button
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex justify-center"
+          >
+            <PulsingButton
+              variant="primary"
+              size="lg"
               onClick={handleViewResults}
-              className="px-8 py-4 bg-indigo-600 text-white text-lg font-semibold rounded-lg hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+              rightIcon={<span>→</span>}
             >
-              Voir mes résultats détaillés →
-            </button>
-          </div>
+              Voir mon blueprint complet
+            </PulsingButton>
+          </motion.div>
         )}
 
         {/* Info Card */}
-        <div className="bg-indigo-50 rounded-lg p-4 border border-indigo-200">
-          <h3 className="font-semibold text-indigo-900 mb-2">
-            ℹ️ Pendant l&apos;analyse
-          </h3>
-          <ul className="text-sm text-indigo-800 space-y-1">
-            <li>• Analyse en cours (7-10 minutes)</li>
-            <li>• Notre IA évalue 47 critères de maturité digitale</li>
-            <li>• Vous verrez vos résultats dès que c&apos;est prêt</li>
-          </ul>
-        </div>
+        <motion.div
+          {...fadeIn}
+          transition={{ delay: 0.5 }}
+        >
+          <GlassmorphicCard className="border border-cyan-500/30">
+            <div className="flex items-start gap-4">
+              <span className="text-3xl">ℹ️</span>
+              <div>
+                <h3 className="font-heading font-bold text-white mb-3 text-lg">
+                  Pendant l&apos;analyse
+                </h3>
+                <ul className="text-sm text-slate-300 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-cyan-400 mt-0.5">•</span>
+                    <span>Analyse en cours (7-10 minutes)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-cyan-400 mt-0.5">•</span>
+                    <span>Notre IA évalue 47 critères de maturité digitale</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-cyan-400 mt-0.5">•</span>
+                    <span>Vous verrez vos résultats dès que c&apos;est prêt</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </GlassmorphicCard>
+        </motion.div>
       </div>
     </div>
   );
