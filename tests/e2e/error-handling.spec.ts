@@ -73,7 +73,7 @@ test.describe('Error Handling', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://sse-error-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Intercept SSE endpoint to simulate failure
     await page.route('**/api/v1/analysis/*/stream', (route) => {
@@ -129,7 +129,7 @@ test.describe('Error Handling', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://fail-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Wait for FAILED status to appear
     await expect(page.getByText(/échec|failed|erreur/i)).toBeVisible({ timeout: 15000 });
@@ -196,16 +196,16 @@ test.describe('Error Handling', () => {
 
     // Should only navigate once
     const url = page.url();
-    expect(url).toMatch(/\/analysis\/[a-f0-9-]+/);
+    expect(url).toMatch(/\/waiting-room\/[a-f0-9-]+/);
   });
 
-  test('should handle back navigation from War Room', async ({ page }) => {
+  test('should handle back navigation from Waiting Room', async ({ page }) => {
     await page.goto('/');
 
     await page.getByPlaceholder(/votresite\.com/i).fill('https://back-nav-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Go back to home
     await page.goBack();
@@ -217,20 +217,20 @@ test.describe('Error Handling', () => {
     await expect(page.getByPlaceholder(/votresite\.com/i)).toBeVisible();
   });
 
-  test('should handle browser refresh on War Room', async ({ page }) => {
+  test('should handle browser refresh on Waiting Room', async ({ page }) => {
     await page.goto('/');
 
     await page.getByPlaceholder(/votresite\.com/i).fill('https://refresh-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     const analysisUrl = page.url();
 
     // Reload the page
     await page.reload();
 
-    // Should still show War Room (SSE reconnects)
+    // Should still show Waiting Room (SSE reconnects)
     await expect(page.getByText(/analyse en cours/i)).toBeVisible({ timeout: 10000 });
 
     // URL should be same
@@ -254,10 +254,10 @@ test.describe('Responsive Behavior', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://mobile-test.com');
     await page.getByRole('button', { name: /analyser/i }).first().click();
 
-    // Should navigate to War Room
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    // Should navigate to Waiting Room
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
-    // War Room should be responsive
+    // Waiting Room should be responsive
     await expect(page.locator('[role="progressbar"]').first()).toBeVisible();
   });
 

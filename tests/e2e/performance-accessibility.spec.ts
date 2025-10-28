@@ -292,11 +292,11 @@ test.describe('Accessibility (WCAG 2.1)', () => {
     // Press Enter to submit
     await urlInput.press('Enter');
 
-    // Should navigate to War Room
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    // Should navigate to Waiting Room
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     const url = page.url();
-    expect(url).toMatch(/\/analysis\/[a-f0-9-]+/);
+    expect(url).toMatch(/\/waiting-room\/[a-f0-9-]+/);
 
     console.log('✅ Form submits via Enter key');
   });

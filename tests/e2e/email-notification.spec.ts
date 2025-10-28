@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
  * E2E Test: Email Notification Feature
  *
  * Tests the email notification fallback mechanism:
- * - Email notification button visibility on War Room
+ * - Email notification button visibility on Waiting Room
  * - Email input validation
  * - Notification activation
  * - Success confirmation
@@ -12,14 +12,14 @@ import { test, expect } from '@playwright/test';
  */
 
 test.describe('Email Notification', () => {
-  test('should display email notification option on War Room', async ({ page }) => {
+  test('should display email notification option on Waiting Room', async ({ page }) => {
     // Start an analysis
     await page.goto('/');
 
     await page.getByPlaceholder(/votresite\.com/i).fill('https://email-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Look for email notification component
     // It might be a button, form, or collapsible section
@@ -33,7 +33,7 @@ test.describe('Email Notification', () => {
 
     expect(hasEmailOption).toBeTruthy();
 
-    console.log('✅ Email notification option found on War Room');
+    console.log('✅ Email notification option found on Waiting Room');
   });
 
   test('should expand email notification form when clicked', async ({ page }) => {
@@ -42,7 +42,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://expand-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Find the email notification trigger
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -84,7 +84,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://validation-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -131,7 +131,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://success-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -172,7 +172,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://error-notify-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -216,7 +216,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://loading-notify-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -266,7 +266,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://collapse-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -321,7 +321,7 @@ test.describe('Email Notification', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://duplicate-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Expand email form if needed
     const emailButton = page.getByRole('button', { name: /email|notification|notifier/i }).first();
@@ -359,9 +359,9 @@ test.describe('Email Notification Use Cases', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://long-analysis-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
-    // Wait for War Room to load
+    // Wait for Waiting Room to load
     await expect(page.getByText(/analyse en cours/i)).toBeVisible({ timeout: 10000 });
 
     // Email option should be available immediately
@@ -385,7 +385,7 @@ test.describe('Email Notification Use Cases', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://sse-fail-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 }).catch(() => {});
 
     // Email notification should still be available as fallback
     const hasEmailOption =

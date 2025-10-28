@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
  *
  * This test simulates the complete user journey:
  * 1. Home page → Submit URL
- * 2. War Room → Real-time progress via SSE
+ * 2. Waiting Room → Real-time progress via SSE
  * 3. Results page → View analysis results
  *
  * Prerequisites:
@@ -45,18 +45,18 @@ test.describe('Complete Analysis Flow', () => {
     // Step 3: Submit the form
     await analyzeButton.click();
 
-    // Step 4: Wait for navigation to War Room
-    // URL should change to /analysis/[id]
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
+    // Step 4: Wait for navigation to Waiting Room
+    // URL should change to /waiting-room/[id]
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 });
 
     // Extract analysis ID from URL
     const url = page.url();
-    const analysisId = url.match(/\/analysis\/([a-f0-9-]+)/)?.[1];
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
     expect(analysisId).toBeTruthy();
 
     console.log(`✅ Analysis started with ID: ${analysisId}`);
 
-    // Step 5: Verify War Room components are visible
+    // Step 5: Verify Waiting Room components are visible
     await expect(page.getByText(/analyse en cours/i)).toBeVisible();
 
     // Check for progress bar
@@ -161,7 +161,7 @@ test.describe('Complete Analysis Flow', () => {
   });
 });
 
-test.describe('War Room Real-time Features', () => {
+test.describe('Waiting Room Real-time Features', () => {
   test('should display real-time SSE events', async ({ page }) => {
     // This test requires mocking or a running backend
     // Start an analysis first
@@ -173,7 +173,7 @@ test.describe('War Room Real-time Features', () => {
     await urlInput.fill('https://sse-test.com');
     await analyzeButton.click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/);
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/);
 
     // Monitor for SSE events in log stream
     const logStream = page.locator('.bg-gray-900').first();
@@ -199,7 +199,7 @@ test.describe('War Room Real-time Features', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://progress-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/);
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/);
 
     // Get progress bar
     const progressBar = page.locator('[role="progressbar"]').first();

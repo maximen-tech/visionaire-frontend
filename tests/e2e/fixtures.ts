@@ -19,35 +19,43 @@ export const mockAnalysisData = {
     status: 'COMPLETE',
     url: 'https://example-company.com',
     identity_a1: {
+      company_name: 'Example Company Inc.',
+      owner_first_name: 'Jean',
       sector: 'Services Professionnels',
-      estimated_size: '50-100',
+      size: 'PME (10-50)',
       tier: 'Tier 2',
     },
-    score_a2: {
-      score: 72,
-      benchmark: 85,
-      interpretation:
-        'Votre performance digitale est inférieure au benchmark de votre secteur. Des opportunités d\'amélioration significatives existent.',
+    digital_presence: {
+      hours_per_week: 3.5,
+      hours_per_year: 182,
+      problem_teaser: 'Gestion manuelle des réseaux sociaux et du site web',
+      complexity_level: 6,
+      tools_hint: 'Buffer, Zapier, ChatGPT',
     },
-    top_3_gaps: [
-      {
-        title: 'Performance Web Lente',
-        impact_financial_monthly: 12000,
-        ia_opportunity:
-          'Mise en place d\'un monitoring prédictif avec alertes automatiques et optimisation de la stack technique.',
-      },
-      {
-        title: 'Faible Visibilité SEO',
-        impact_financial_monthly: 8500,
-        ia_opportunity:
-          'Optimisation automatisée du contenu et génération de meta-descriptions par IA.',
-      },
-      {
-        title: 'Taux de Conversion Bas',
-        impact_financial_monthly: 15000,
-        ia_opportunity: 'Personnalisation de l\'expérience utilisateur par machine learning.',
-      },
-    ],
+    value_creation: {
+      hours_per_week: 2.8,
+      hours_per_year: 145,
+      problem_teaser: 'Création de contenu marketing et propositions',
+      complexity_level: 7,
+      tools_hint: 'Jasper AI, Canva AI, Copy.ai',
+    },
+    business_management: {
+      hours_per_week: 4.2,
+      hours_per_year: 218,
+      problem_teaser: 'Suivi manuel des leads et facturation',
+      complexity_level: 5,
+      tools_hint: 'HubSpot, QuickBooks AI',
+    },
+    total_hours_per_week: 10.5,
+    total_hours_per_year: 545,
+    implementation_time_solo: {
+      hours: 120,
+      description: 'Recherche, essais-erreurs, configuration manuelle',
+    },
+    implementation_time_expert: {
+      hours: 25,
+      description: 'Implémentation guidée avec formation incluse',
+    },
     created_at: new Date().toISOString(),
     completed_at: new Date().toISOString(),
   }),
@@ -97,14 +105,14 @@ export const pageHelpers = {
     await page.goto('/');
     await page.getByPlaceholder(/votresite\.com/i).fill(url);
     await page.getByRole('button', { name: /analyser/i }).click();
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 });
   },
 
   /**
-   * Navigate to War Room for specific analysis
+   * Navigate to Waiting Room for specific analysis
    */
-  goToWarRoom: async (page: any, analysisId: string) => {
-    await page.goto(`/analysis/${analysisId}`);
+  goToWaitingRoom: async (page: any, analysisId: string) => {
+    await page.goto(`/waiting-room/${analysisId}`);
   },
 
   /**
@@ -142,7 +150,7 @@ export const pageHelpers = {
   },
 
   /**
-   * Activate email notification on War Room
+   * Activate email notification on Waiting Room
    */
   activateEmailNotification: async (page: any, email: string) => {
     // Try to expand form if it's collapsible
@@ -170,7 +178,7 @@ export const pageHelpers = {
    * Extract analysis ID from current URL
    */
   getAnalysisIdFromURL: (url: string): string | null => {
-    const match = url.match(/\/analysis\/([a-f0-9-]+)/);
+    const match = url.match(/\/waiting-room\/([a-f0-9-]+)/);
     return match ? match[1] : null;
   },
 

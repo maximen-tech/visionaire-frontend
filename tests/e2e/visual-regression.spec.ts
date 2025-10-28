@@ -90,7 +90,7 @@ test.describe('Visual Regression', () => {
     console.log('✅ Error state visual baseline captured');
   });
 
-  test('War Room page should match baseline', async ({ page }) => {
+  test('Waiting Room page should match baseline', async ({ page }) => {
     // Mock APIs to avoid long wait
     await page.route('**/api/v1/analysis/start', async (route) => {
       await route.fulfill({
@@ -124,9 +124,9 @@ test.describe('Visual Regression', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://visual-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 });
 
-    // Wait for War Room to load
+    // Wait for Waiting Room to load
     await page.waitForTimeout(3000);
 
     await expect(page).toHaveScreenshot('war-room-page.png', {
@@ -135,10 +135,10 @@ test.describe('Visual Regression', () => {
       mask: [page.locator('text=/\\d{2}:\\d{2}:\\d{2}/')], // Mask timestamps
     });
 
-    console.log('✅ War Room visual baseline captured');
+    console.log('✅ Waiting Room visual baseline captured');
   });
 
-  test('War Room progress bar should match baseline', async ({ page }) => {
+  test('Waiting Room progress bar should match baseline', async ({ page }) => {
     await page.route('**/api/v1/analysis/start', async (route) => {
       await route.fulfill({
         status: 202,
@@ -169,7 +169,7 @@ test.describe('Visual Regression', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://progress-test.com');
     await page.getByRole('button', { name: /analyser/i }).click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 });
     await page.waitForTimeout(2000);
 
     const progressBar = page.locator('[role="progressbar"]').first();
@@ -330,7 +330,7 @@ test.describe('Mobile Visual Regression', () => {
     console.log('✅ Mobile home page visual baseline captured');
   });
 
-  test('War Room mobile should match baseline', async ({ page }) => {
+  test('Waiting Room mobile should match baseline', async ({ page }) => {
     await page.route('**/api/v1/analysis/start', async (route) => {
       await route.fulfill({
         status: 202,
@@ -361,7 +361,7 @@ test.describe('Mobile Visual Regression', () => {
     await page.getByPlaceholder(/votresite\.com/i).fill('https://mobile-test.com');
     await page.getByRole('button', { name: /analyser/i }).first().click();
 
-    await page.waitForURL(/\/analysis\/[a-f0-9-]+/, { timeout: 10000 });
+    await page.waitForURL(/\/waiting-room\/[a-f0-9-]+/, { timeout: 10000 });
     await page.waitForTimeout(2000);
 
     await expect(page).toHaveScreenshot('war-room-mobile.png', {
@@ -370,7 +370,7 @@ test.describe('Mobile Visual Regression', () => {
       mask: [page.locator('text=/\\d{2}:\\d{2}:\\d{2}/')],
     });
 
-    console.log('✅ Mobile War Room visual baseline captured');
+    console.log('✅ Mobile Waiting Room visual baseline captured');
   });
 });
 
