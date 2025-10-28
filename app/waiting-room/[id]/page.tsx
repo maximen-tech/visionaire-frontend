@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import * as Sentry from "@sentry/nextjs";
 import ProgressBar from "@/components/ProgressBar";
 import LogStream from "@/components/LogStream";
 import ProgressiveMessage from "@/components/ProgressiveMessage";
@@ -121,6 +122,17 @@ export default function WaitingRoomPage() {
       } catch (err) {
         console.error("Erreur parsing SSE:", err);
         toast.error("Erreur de traitement des données");
+
+        // Track SSE parsing error to Sentry
+        Sentry.captureException(err, {
+          tags: {
+            error_type: "sse_parse_error",
+            analysis_id: analysisId,
+          },
+          extra: {
+            event_data: event.data,
+          },
+        });
       }
     };
 
@@ -128,6 +140,19 @@ export default function WaitingRoomPage() {
     eventSource.onerror = (err) => {
       console.error("Erreur SSE:", err);
       eventSource.close();
+
+      // Track SSE connection error to Sentry
+      Sentry.captureException(new Error("SSE connection error"), {
+        tags: {
+          error_type: "sse_connection_error",
+          analysis_id: analysisId,
+          reconnect_attempt: reconnectAttempts + 1,
+        },
+        extra: {
+          sse_url: sseUrl,
+          error: err,
+        },
+      });
 
       // Retry logic (max 3 attempts)
       if (reconnectAttempts < 3) {
@@ -152,6 +177,19 @@ export default function WaitingRoomPage() {
         trackSSEEvent('failed', analysisId, 3);
         trackError('sse_connection_failed', 'Max reconnection attempts reached', {
           analysis_id: analysisId,
+        });
+
+        // Track final SSE failure to Sentry
+        Sentry.captureMessage("SSE connection failed after max retries", {
+          level: "error",
+          tags: {
+            error_type: "sse_max_retries",
+            analysis_id: analysisId,
+          },
+          extra: {
+            max_attempts: 3,
+            sse_url: sseUrl,
+          },
         });
       }
     };

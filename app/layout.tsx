@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import CookieBanner from "@/components/CookieBanner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -128,7 +129,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
         <CookieBanner />
       </body>
     </html>

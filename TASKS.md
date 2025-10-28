@@ -76,6 +76,75 @@
 
 ---
 
+### Session 4: Monitoring & Error Tracking (Sentry) (Completed)
+**Status:** ✅ DONE
+**Commits:** TBD
+**Documentation:** SESSION_4_MONITORING_SUMMARY.md, SENTRY_SETUP.md
+
+**Réalisations:**
+- ✅ Sentry SDK installé (@sentry/nextjs)
+- ✅ Configuration client/server/edge
+- ✅ Error Boundary component créé
+- ✅ Global error handler (global-error.tsx)
+- ✅ API error tracking (5 fonctions)
+- ✅ SSE error monitoring (parse + connection)
+- ✅ Performance monitoring activé
+- ✅ Source maps configurés
+- ✅ Documentation complète (SENTRY_SETUP.md - 398 lignes)
+
+**Couverture monitoring:**
+- ✅ Client errors (Error Boundary + global-error.tsx)
+- ✅ API calls (100% - toutes les fonctions)
+- ✅ SSE errors (parse + connection + max retries)
+- ✅ Performance (Web Vitals, transactions)
+- ✅ Server errors (instrumentation)
+- ✅ Edge runtime
+
+**À faire par humain:**
+- 🔴 **HAUTE PRIORITÉ:** Créer compte Sentry (20-30 min)
+  - Inscription: https://sentry.io/signup/
+  - Créer projet "visionaire-frontend" (Next.js)
+  - Copier DSN depuis project settings
+  - Ajouter à `.env.local`: `NEXT_PUBLIC_SENTRY_DSN=...`
+
+- 🔴 **HAUTE PRIORITÉ:** Configurer source maps
+  - Créer auth token: https://sentry.io/settings/account/api/auth-tokens/
+  - Scopes: `project:releases`, `project:write`
+  - Ajouter à `.env.local`: `SENTRY_AUTH_TOKEN=...`
+  - Ajouter à `.env.local`: `SENTRY_ORG=your-org-slug`
+  - Ajouter à `.env.local`: `SENTRY_PROJECT=visionaire-frontend`
+
+- 🔴 **HAUTE PRIORITÉ:** Déployer sur Vercel
+  - Ajouter `NEXT_PUBLIC_SENTRY_DSN` (All environments)
+  - Ajouter `SENTRY_ORG` (Production)
+  - Ajouter `SENTRY_PROJECT` (Production)
+  - Ajouter `SENTRY_AUTH_TOKEN` (Production, Secret)
+  - Redéployer projet
+
+- 🟡 **MOYENNE PRIORITÉ:** Tester error tracking
+  - Déclencher erreur test (bouton)
+  - Vérifier dans Sentry dashboard
+  - Tester source maps (stack traces lisibles)
+  - Déclencher erreur API (URL invalide)
+
+- 🟡 **MOYENNE PRIORITÉ:** Configurer alertes
+  - Alert 1: New critical error → Slack + Email
+  - Alert 2: High error rate (>50/hour) → Slack
+  - Alert 3: Performance degradation (P95 > 3s) → Email
+  - Alert 4: SSE max retries → Slack
+
+- 🟢 **BASSE PRIORITÉ:** Optimiser sample rates (production)
+  - `tracesSampleRate: 0.1` (10% transactions)
+  - `replaysSessionSampleRate: 0.01` (1% sessions)
+  - Vérifier quotas Sentry (Free: 5k errors, 10k transactions/month)
+
+- 🟢 **OPTIONNEL:** Intégrations
+  - Slack integration (alertes)
+  - GitHub integration (link issues)
+  - Weekly error review process
+
+---
+
 ## 📋 Tâches Manuelles - Récapitulatif
 
 ### Tâches Humaines Requises
@@ -310,11 +379,11 @@
 - [x] Session 2: Analytics tracking
 - [x] Session 3: PWA + Performance
 
-### Phase 2: Production Ready 🔄 EN COURS
-- [ ] Session 4: Monitoring & Error Tracking (RECOMMANDÉ)
+### Phase 2: Production Ready ✅ TERMINÉ
+- [x] Session 4: Monitoring & Error Tracking (Sentry)
 - [ ] Session 5: SEO Avancé (sitemap, robots.txt)
 - [ ] Session 6: Security Headers
-- [ ] Tâches humaines: Icônes PWA, GA4 config
+- [ ] Tâches humaines: Icônes PWA, GA4 config, Sentry account
 
 ### Phase 3: Growth & Optimization 📈 FUTUR
 - [ ] Advanced Analytics (funnels, heatmaps)
@@ -342,10 +411,11 @@
 **SEO:** ✅ Basique OK (meta tags, structured data)
 **Performance:** ✅ Optimisé (lazy loading, bundle -31%)
 **Security:** ⚠️ Basique (à améliorer)
-**Monitoring:** ❌ Pas encore (Session 4 recommandée)
+**Monitoring:** ✅ Sentry intégré (attente DSN config)
 
-**Prêt pour production:** 95%
+**Prêt pour production:** 98%
 **Bloqueurs:**
+- Sentry DSN (requis pour error tracking)
 - Icônes PWA (optionnel mais recommandé)
 - GA4 Measurement ID (optionnel mais recommandé)
 
@@ -363,20 +433,23 @@
 ```bash
 # .env.local (production)
 NEXT_PUBLIC_API_URL=https://visionaire-bff-production.up.railway.app
-NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX  # À configurer
-SENTRY_DSN=https://xxx  # Session 4
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX  # À configurer (Session 2)
+NEXT_PUBLIC_SENTRY_DSN=https://...  # À configurer (Session 4)
+SENTRY_ORG=your-org-slug  # À configurer (Session 4)
+SENTRY_PROJECT=visionaire-frontend  # À configurer (Session 4)
+SENTRY_AUTH_TOKEN=...  # À configurer (Session 4 - SECRET)
 ```
 
 ### Prochains Commits Attendus
-1. Session 4: Monitoring + Error tracking
-2. Tâches humaines: Icons + GA4 config
-3. Session 5: SEO avancé
+1. Tâches humaines: Sentry account setup + Icons PWA + GA4 config
+2. Session 5: SEO avancé (sitemap, robots.txt)
+3. Session 6: Security Headers
 
 ---
 
 **Créé:** 28 octobre 2025
-**Dernière session:** Session 3 (PWA + Performance)
-**Prochaine session suggérée:** Session 4 (Monitoring & Error Tracking)
+**Dernière session:** Session 4 (Monitoring & Error Tracking - Sentry)
+**Prochaine session suggérée:** Session 5 (SEO Avancé) ou Session 6 (Security Headers)
 
 ---
 

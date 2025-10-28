@@ -1,5 +1,6 @@
 // Service API pour communiquer avec le backend FastAPI
 
+import * as Sentry from "@sentry/nextjs";
 import type {
   AnalysisStartResponse,
   AnalysisStatus,
@@ -21,20 +22,46 @@ const API_URL = `${API_BASE_URL}/api/${API_VERSION}`;
 export async function startAnalysis(
   url: string
 ): Promise<AnalysisStartResponse> {
-  const response = await fetch(`${API_URL}/analysis/start`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ url }),
-  });
+  try {
+    const response = await fetch(`${API_URL}/analysis/start`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
 
-  if (!response.ok) {
-    const error: APIError = await response.json();
-    throw new Error(error.detail || "Erreur lors du démarrage de l'analyse");
+    if (!response.ok) {
+      const error: APIError = await response.json();
+      const errorMessage = error.detail || "Erreur lors du démarrage de l'analyse";
+
+      // Track API error to Sentry
+      Sentry.captureException(new Error(errorMessage), {
+        tags: {
+          api_endpoint: "analysis/start",
+          status_code: response.status,
+        },
+        extra: {
+          url,
+          error_detail: error.detail,
+        },
+      });
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    // Track unexpected errors
+    Sentry.captureException(error, {
+      tags: {
+        api_endpoint: "analysis/start",
+        error_type: "fetch_error",
+      },
+      extra: { url },
+    });
+    throw error;
   }
-
-  return response.json();
 }
 
 /**
@@ -43,16 +70,38 @@ export async function startAnalysis(
 export async function getAnalysisStatus(
   analysisId: string
 ): Promise<AnalysisStatus> {
-  const response = await fetch(`${API_URL}/analysis/${analysisId}/status`);
+  try {
+    const response = await fetch(`${API_URL}/analysis/${analysisId}/status`);
 
-  if (!response.ok) {
-    const error: APIError = await response.json();
-    throw new Error(
-      error.detail || "Erreur lors de la récupération du statut"
-    );
+    if (!response.ok) {
+      const error: APIError = await response.json();
+      const errorMessage = error.detail || "Erreur lors de la récupération du statut";
+
+      Sentry.captureException(new Error(errorMessage), {
+        tags: {
+          api_endpoint: "analysis/status",
+          status_code: response.status,
+        },
+        extra: {
+          analysis_id: analysisId,
+          error_detail: error.detail,
+        },
+      });
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        api_endpoint: "analysis/status",
+        error_type: "fetch_error",
+      },
+      extra: { analysis_id: analysisId },
+    });
+    throw error;
   }
-
-  return response.json();
 }
 
 /**
@@ -61,18 +110,40 @@ export async function getAnalysisStatus(
 export async function getAnalysisResults(
   analysisId: string
 ): Promise<AnalysisResults> {
-  const response = await fetch(
-    `${API_URL}/analysis/${analysisId}/results-summary`
-  );
-
-  if (!response.ok) {
-    const error: APIError = await response.json();
-    throw new Error(
-      error.detail || "Erreur lors de la récupération des résultats"
+  try {
+    const response = await fetch(
+      `${API_URL}/analysis/${analysisId}/results-summary`
     );
-  }
 
-  return response.json();
+    if (!response.ok) {
+      const error: APIError = await response.json();
+      const errorMessage = error.detail || "Erreur lors de la récupération des résultats";
+
+      Sentry.captureException(new Error(errorMessage), {
+        tags: {
+          api_endpoint: "analysis/results",
+          status_code: response.status,
+        },
+        extra: {
+          analysis_id: analysisId,
+          error_detail: error.detail,
+        },
+      });
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        api_endpoint: "analysis/results",
+        error_type: "fetch_error",
+      },
+      extra: { analysis_id: analysisId },
+    });
+    throw error;
+  }
 }
 
 /**
@@ -88,20 +159,48 @@ export function getSSEStreamURL(analysisId: string): string {
 export async function convertLead(
   data: LeadConversionRequest
 ): Promise<LeadConversionResponse> {
-  const response = await fetch(`${API_URL}/leads/convert`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(`${API_URL}/leads/convert`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!response.ok) {
-    const error: APIError = await response.json();
-    throw new Error(error.detail || "Erreur lors de la conversion du lead");
+    if (!response.ok) {
+      const error: APIError = await response.json();
+      const errorMessage = error.detail || "Erreur lors de la conversion du lead";
+
+      Sentry.captureException(new Error(errorMessage), {
+        tags: {
+          api_endpoint: "leads/convert",
+          status_code: response.status,
+        },
+        extra: {
+          analysis_id: data.analysis_id,
+          email: data.email,
+          error_detail: error.detail,
+        },
+      });
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        api_endpoint: "leads/convert",
+        error_type: "fetch_error",
+      },
+      extra: {
+        analysis_id: data.analysis_id,
+        email: data.email,
+      },
+    });
+    throw error;
   }
-
-  return response.json();
 }
 
 /**
@@ -111,20 +210,46 @@ export async function enableEmailNotification(
   analysisId: string,
   data: EmailNotificationRequest
 ): Promise<EmailNotificationResponse> {
-  const response = await fetch(`${API_URL}/analysis/${analysisId}/notify`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(`${API_URL}/analysis/${analysisId}/notify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!response.ok) {
-    const error: APIError = await response.json();
-    throw new Error(
-      error.detail || "Erreur lors de l'activation de la notification"
-    );
+    if (!response.ok) {
+      const error: APIError = await response.json();
+      const errorMessage = error.detail || "Erreur lors de l'activation de la notification";
+
+      Sentry.captureException(new Error(errorMessage), {
+        tags: {
+          api_endpoint: "analysis/notify",
+          status_code: response.status,
+        },
+        extra: {
+          analysis_id: analysisId,
+          email: data.email,
+          error_detail: error.detail,
+        },
+      });
+
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        api_endpoint: "analysis/notify",
+        error_type: "fetch_error",
+      },
+      extra: {
+        analysis_id: analysisId,
+        email: data.email,
+      },
+    });
+    throw error;
   }
-
-  return response.json();
 }
