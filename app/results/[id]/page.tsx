@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
-import LeadForm from "@/components/LeadForm";
-import OpportunityCard from "@/components/OpportunityCard";
 import toast, { Toaster } from "react-hot-toast";
+
+// Lazy load heavy components for better performance
+const LeadForm = lazy(() => import("@/components/LeadForm"));
+const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
 import {
   trackResultsEnter,
   trackValorizationCalculate,
@@ -14,6 +16,7 @@ import {
   trackScrollToLeadForm,
   trackLeadFormView,
 } from "@/lib/analytics";
+import { SkeletonResults, SkeletonCard, SkeletonText } from "@/components/ui/Skeleton";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -102,14 +105,7 @@ export default function ResultsPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement des résultats...</p>
-        </div>
-      </div>
-    );
+    return <SkeletonResults />;
   }
 
   if (error || !results) {
@@ -260,26 +256,36 @@ export default function ResultsPage() {
             <span className="text-4xl">⏱️</span>
             Vos 3 Opportunités Détaillées
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <OpportunityCard
-              title="Présence Digitale"
-              opportunity={results.digital_presence}
-              hourlyRate={hourlyRate}
-              icon="🌐"
-            />
-            <OpportunityCard
-              title="Création de Valeur"
-              opportunity={results.value_creation}
-              hourlyRate={hourlyRate}
-              icon="💎"
-            />
-            <OpportunityCard
-              title="Gestion Business"
-              opportunity={results.business_management}
-              hourlyRate={hourlyRate}
-              icon="📊"
-            />
-          </div>
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            }
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <OpportunityCard
+                title="Présence Digitale"
+                opportunity={results.digital_presence}
+                hourlyRate={hourlyRate}
+                icon="🌐"
+              />
+              <OpportunityCard
+                title="Création de Valeur"
+                opportunity={results.value_creation}
+                hourlyRate={hourlyRate}
+                icon="💎"
+              />
+              <OpportunityCard
+                title="Gestion Business"
+                opportunity={results.business_management}
+                hourlyRate={hourlyRate}
+                icon="📊"
+              />
+            </div>
+          </Suspense>
         </div>
 
         {/* Implementation Time Comparison */}
@@ -330,7 +336,15 @@ export default function ResultsPage() {
 
         {/* CTA - Conversion Lead */}
         <div id="lead-form">
-          <LeadForm analysisId={results.analysis_id} />
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <SkeletonText lines={8} />
+              </div>
+            }
+          >
+            <LeadForm analysisId={results.analysis_id} />
+          </Suspense>
         </div>
 
         {/* Métadonnées */}

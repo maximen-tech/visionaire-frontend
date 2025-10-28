@@ -15,6 +15,7 @@ import {
   trackSSEEvent,
   trackError,
 } from "@/lib/analytics";
+import { SkeletonWaitingRoom } from "@/components/ui/Skeleton";
 
 interface LogEntry {
   timestamp: string;

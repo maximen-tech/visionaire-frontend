@@ -63,6 +63,22 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#4F46E5" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Vision'AI're" />
+
+        {/* Apple Touch Icons */}
+        <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+
+        {/* Favicons */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-72x72.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-72x72.png" />
+
         {/* Organization Structured Data */}
         <Script
           id="organization-schema"
