@@ -1,0 +1,78 @@
+{
+  "common": {
+    "siteName": "Vision'AI're",
+    "tagline": "L'Architecte du Temps",
+    "analysis": "Analyse",
+    "results": "Résultats",
+    "contact": "Contact",
+    "about": "À propos",
+    "faq": "FAQ",
+    "back": "Retour",
+    "loading": "Chargement...",
+    "error": "Erreur"
+  },
+  "hero": {
+    "title": "⏰ Récupérez 1 000 heures par an",
+    "subtitle": "Votre blueprint temps libre en 10 minutes",
+    "placeholder": "https://votresite.com",
+    "button": "Dessiner mon blueprint",
+    "trustBadge1": "✓ 500+ blueprints créés",
+    "trustBadge2": "✓ 480,000 heures récupérées",
+    "trustBadge3": "✓ Résultats en 10 minutes"
+  },
+  "waitingRoom": {
+    "title": "⏰ Salle d'Attente Virtuelle",
+    "subtitle": "Notre IA dessine votre blueprint de temps récupérable...",
+    "logsTitle": "🔧 Logs Technique",
+    "messageTitle": "Message de l'IA",
+    "phase1": "Bienvenue",
+    "phase2": "Découverte",
+    "phase3": "Analyse",
+    "phase4": "Révélation",
+    "phase5": "Invitation",
+    "viewResults": "Voir mon blueprint complet",
+    "estimatedTime": "Analyse en cours (7-10 minutes)",
+    "criteria": "Notre IA évalue 47 critères de maturité digitale",
+    "notification": "Vous verrez vos résultats dès que c'est prêt"
+  },
+  "results": {
+    "title": "💎 Votre Blueprint de Temps",
+    "newAnalysis": "Nouvelle analyse",
+    "valorization": "💰 Valorisation (Optionnel)",
+    "valorisationLabel": "Combien vaut 1 heure de votre temps?",
+    "valorisationPlaceholder": "Ex: 75",
+    "perHour": "$ CAD / heure",
+    "totalSummary": "Total Récupérable",
+    "hoursPerWeek": "h/semaine",
+    "hoursPerYear": "h/an",
+    "estimatedValue": "Valeur estimée",
+    "opportunity": "Opportunité",
+    "timeRecoverable": "⏰ Temps récupérable",
+    "problemIdentified": "💡 Problème identifié",
+    "complexity": "⚠️ COMPLEXITÉ",
+    "suggestedTools": "🔧 Outils suggérés",
+    "masked": "• [MASQUÉ - Révélé après consultation]",
+    "solo": "Solo",
+    "expert": "Expert"
+  },
+  "email": {
+    "welcome": {
+      "subject": "⏰ Analyse en cours",
+      "title": "Analyse en cours pour {companyName}",
+      "intro": "Excellente nouvelle! Notre IA a commencé à dessiner votre Blueprint de temps récupérable.",
+      "estimatedTime": "Temps estimé: {time} minutes",
+      "criteria": "Analyse de 47 critères de maturité digitale",
+      "opportunities": "Identification de vos 3 opportunités principales",
+      "cta": "Suivre mon analyse"
+    },
+    "resultsReady": {
+      "subject": "💎 Votre Blueprint est prêt!",
+      "title": "Votre Blueprint est prêt!",
+      "greeting": "Bonjour {name}",
+      "intro": "Notre IA a terminé l'analyse de {companyName} et les résultats sont impressionnants.",
+      "hoursRecoverable": "{hours} heures par an récupérables",
+      "equivalent": "C'est l'équivalent de {days} jours de travail que vous pourriez récupérer!",
+      "cta": "Voir mon Blueprint complet"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "common": {
+    "siteName": "Vision'AI're",
+    "tagline": "The Time Architect",
+    "analysis": "Analysis",
+    "results": "Results",
+    "contact": "Contact",
+    "about": "About",
+    "faq": "FAQ",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Error"
+  },
+  "hero": {
+    "title": "⏰ Reclaim 1,000 hours per year",
+    "subtitle": "Your time blueprint in 10 minutes",
+    "placeholder": "https://yourwebsite.com",
+    "button": "Draw my blueprint",
+    "trustBadge1": "✓ 500+ blueprints created",
+    "trustBadge2": "✓ 480,000 hours recovered",
+    "trustBadge3": "✓ Results in 10 minutes"
+  },
+  "waitingRoom": {
+    "title": "⏰ Virtual Waiting Room",
+    "subtitle": "Our AI is drawing your time recovery blueprint...",
+    "logsTitle": "🔧 Technical Logs",
+    "messageTitle": "AI Message",
+    "phase1": "Welcome",
+    "phase2": "Discovery",
+    "phase3": "Analysis",
+    "phase4": "Revelation",
+    "phase5": "Invitation",
+    "viewResults": "View my complete blueprint",
+    "estimatedTime": "Analysis in progress (7-10 minutes)",
+    "criteria": "Our AI evaluates 47 digital maturity criteria",
+    "notification": "You'll see your results as soon as they're ready"
+  },
+  "results": {
+    "title": "💎 Your Time Blueprint",
+    "newAnalysis": "New analysis",
+    "valorization": "💰 Valuation (Optional)",
+    "valorisationLabel": "How much is 1 hour of your time worth?",
+    "valorisationPlaceholder": "Ex: 75",
+    "perHour": "$ CAD / hour",
+    "totalSummary": "Total Recoverable",
+    "hoursPerWeek": "h/week",
+    "hoursPerYear": "h/year",
+    "estimatedValue": "Estimated value",
+    "opportunity": "Opportunity",
+    "timeRecoverable": "⏰ Recoverable time",
+    "problemIdentified": "💡 Problem identified",
+    "complexity": "⚠️ COMPLEXITY",
+    "suggestedTools": "🔧 Suggested tools",
+    "masked": "• [HIDDEN - Revealed after consultation]",
+    "solo": "Solo",
+    "expert": "Expert"
+  },
+  "email": {
+    "welcome": {
+      "subject": "⏰ Analysis in progress",
+      "title": "Analysis in progress for {companyName}",
+      "intro": "Great news! Our AI has started drawing your time recovery Blueprint.",
+      "estimatedTime": "Estimated time: {time} minutes",
+      "criteria": "Analysis of 47 digital maturity criteria",
+      "opportunities": "Identification of your 3 main opportunities",
+      "cta": "Track my analysis"
+    },
+    "resultsReady": {
+      "subject": "💎 Your Blueprint is ready!",
+      "title": "Your Blueprint is ready!",
+      "greeting": "Hello {name}",
+      "intro": "Our AI has completed the analysis of {companyName} and the results are impressive.",
+      "hoursRecoverable": "{hours} hours per year recoverable",
+      "equivalent": "That's equivalent to {days} work days you could reclaim!",
+      "cta": "View my complete Blueprint"
+    }
+  }
+}
