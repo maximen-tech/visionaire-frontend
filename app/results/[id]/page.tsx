@@ -5,6 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import {
+  formatCAD,
+  formatHoursPerWeek,
+  formatHoursPerYear,
+} from "@/lib/formatters";
 
 // Lazy load heavy components for better performance
 const LeadForm = lazy(() => import("@/components/LeadForm"));
@@ -17,6 +23,11 @@ import {
   trackLeadFormView,
 } from "@/lib/analytics";
 import { SkeletonResults, SkeletonCard, SkeletonText } from "@/components/ui/Skeleton";
+import BlueprintGrid from "@/components/design-system/BlueprintGrid";
+import GlassmorphicCard, {
+  GlassmorphicInput,
+} from "@/components/design-system/GlassmorphicCard";
+import PulsingButton from "@/components/design-system/PulsingButton";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -110,20 +121,22 @@ export default function ResultsPage() {
 
   if (error || !results) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-zinc-50 p-8 relative">
+        <BlueprintGrid density="low" animated={true} />
+        <GlassmorphicCard className="max-w-md w-full p-8 text-center relative z-10">
           <div className="text-6xl mb-4">❌</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-heading font-bold text-slate-900 mb-4">
             Erreur
           </h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <button
+          <p className="text-slate-600 mb-6">{error}</p>
+          <PulsingButton
             onClick={() => router.push("/")}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            variant="primary"
+            size="md"
           >
             Retour à l&apos;accueil
-          </button>
-        </div>
+          </PulsingButton>
+        </GlassmorphicCard>
       </div>
     );
   }
@@ -133,127 +146,134 @@ export default function ResultsPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-zinc-50 p-4 md:p-8 relative">
+      <BlueprintGrid density="low" animated={true} />
       <Toaster position="top-right" />
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              Vos Opportunités de Temps Sauvé
+            <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-2">
+              ⏰ Vos Opportunités de Temps Sauvé
             </h1>
-            <p className="text-gray-600">
+            <p className="text-slate-600 font-medium">
               {results.identity_a1.company_name} •{" "}
               {results.identity_a1.sector}
             </p>
           </div>
-          <button
+          <PulsingButton
             onClick={() => router.push("/")}
-            className="px-6 py-3 bg-white text-gray-700 rounded-lg hover:bg-gray-50 border border-gray-300 transition-colors"
+            variant="secondary"
+            size="md"
+            leftIcon={<span>←</span>}
           >
-            ← Nouvelle analyse
-          </button>
+            Nouvelle analyse
+          </PulsingButton>
         </div>
 
         {/* Valorisation Input Section */}
         {!showValorization && (
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-lg shadow-lg p-8 text-white">
+          <GlassmorphicCard variant="highlighted" className="p-8">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                Combien vaut votre temps?
+              <h2 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-4">
+                💰 Combien vaut votre temps?
               </h2>
-              <p className="text-indigo-100 mb-6 text-lg">
+              <p className="text-slate-700 mb-6 text-lg">
                 Entrez votre taux horaire pour voir la valeur économique de
                 chaque opportunité
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <div className="relative">
-                  <input
+                  <GlassmorphicInput
                     type="number"
                     value={hourlyRateInput}
                     onChange={(e) => setHourlyRateInput(e.target.value)}
                     placeholder="75"
-                    className="w-48 px-4 py-3 text-lg text-gray-900 rounded-lg focus:ring-2 focus:ring-white outline-none"
+                    className="w-48 px-4 py-3 text-lg"
                     min="0"
                     step="5"
+                    focusGlow="amber"
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 font-medium text-sm">
                     $ CAD/h
                   </span>
                 </div>
-                <button
+                <PulsingButton
                   onClick={handleCalculateValue}
-                  className="px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-colors text-lg"
+                  variant="primary"
+                  size="md"
                 >
                   Calculer la valeur
-                </button>
+                </PulsingButton>
               </div>
-              <p className="text-indigo-200 text-sm mt-4">
-                Moyenne PME québécoise: 50-100 $ CAD/h
+              <p className="text-slate-500 text-sm mt-4">
+                💡 Moyenne PME québécoise: 50-100 $ CAD/h
               </p>
             </div>
-          </div>
+          </GlassmorphicCard>
         )}
 
         {/* Total Summary Card */}
-        <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-indigo-200">
+        <GlassmorphicCard variant="highlighted" className="p-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Temps Total Récupérable
+            <h2 className="text-2xl font-heading font-bold text-slate-900 mb-4">
+              ⚡ Temps Total Récupérable
             </h2>
             <div className="flex flex-col md:flex-row items-center justify-center gap-8">
               <div>
-                <p className="text-5xl font-bold text-indigo-600">
-                  {results.total_hours_per_week.toFixed(1)}h
+                <p className="text-5xl font-heading font-bold text-cyan-600">
+                  {formatHoursPerWeek(results.total_hours_per_week)}
                 </p>
-                <p className="text-gray-600 mt-2">par semaine</p>
+                <p className="text-slate-600 mt-2 font-medium">par semaine</p>
               </div>
-              <div className="text-4xl text-gray-300">→</div>
+              <div className="text-4xl text-cyan-300">→</div>
               <div>
-                <p className="text-5xl font-bold text-indigo-600">
-                  {Math.round(results.total_hours_per_year)}h
+                <p className="text-5xl font-heading font-bold text-cyan-600">
+                  {formatHoursPerYear(results.total_hours_per_year)}
                 </p>
-                <p className="text-gray-600 mt-2">par année</p>
+                <p className="text-slate-600 mt-2 font-medium">par année</p>
               </div>
             </div>
 
             {showValorization && totalYearlyValue && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <p className="text-sm text-gray-600 mb-2">
-                  Valeur économique totale
+              <div className="mt-6 pt-6 border-t border-cyan-200/50">
+                <p className="text-sm text-slate-600 mb-2 font-medium">
+                  💰 Valeur économique totale
                 </p>
-                <p className="text-4xl font-bold text-green-600">
-                  {Math.round(totalYearlyValue).toLocaleString("fr-FR")} $ CAD
+                <p className="text-4xl font-heading font-bold text-amber-600">
+                  {formatCAD(totalYearlyValue)}
                 </p>
-                <p className="text-gray-600 mt-1">par année</p>
+                <p className="text-slate-600 mt-1">par année</p>
               </div>
             )}
           </div>
-        </div>
+        </GlassmorphicCard>
 
         {/* Reality Check Section */}
-        <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-6">
-          <h3 className="text-xl font-bold text-orange-900 mb-2 flex items-center gap-2">
+        <GlassmorphicCard className="p-6 bg-gradient-to-br from-amber-50/80 to-orange-50/80 border-2 border-amber-300/50">
+          <h3 className="text-xl font-heading font-bold text-amber-900 mb-2 flex items-center gap-2">
             ⚠️ Reality Check
           </h3>
-          <p className="text-orange-800 mb-4">
-            <span className="font-bold">73% des PME</span> qui identifient ces
+          <p className="text-slate-800 mb-4 leading-relaxed">
+            <span className="font-bold text-amber-900">73% des PME</span> qui identifient ces
             opportunités ne passent jamais à l&apos;action. Pourquoi?
             Manque de temps, de ressources, ou d&apos;expertise technique. Ne
             faites pas cette erreur.
           </p>
-          <button
+          <PulsingButton
             onClick={scrollToLeadForm}
-            className="px-6 py-3 bg-orange-600 text-white font-semibold rounded-lg hover:bg-orange-700 transition-all transform hover:scale-105"
+            variant="primary"
+            size="md"
+            rightIcon={<span>→</span>}
           >
-            🎁 Réserver ma consultation GRATUITE →
-          </button>
-        </div>
+            🎁 Réserver ma consultation GRATUITE
+          </PulsingButton>
+        </GlassmorphicCard>
 
         {/* 3 Opportunity Cards */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <span className="text-4xl">⏱️</span>
+          <h2 className="text-2xl font-heading font-bold text-slate-900 mb-6 flex items-center gap-3">
+            <span className="text-4xl">🎯</span>
             Vos 3 Opportunités Détaillées
           </h2>
           <Suspense
@@ -267,72 +287,30 @@ export default function ResultsPage() {
           >
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <OpportunityCard
+                number={1}
                 title="Présence Digitale"
                 opportunity={results.digital_presence}
                 hourlyRate={hourlyRate}
-                icon="🌐"
+                icon={<span className="text-2xl">🌐</span>}
               />
               <OpportunityCard
+                number={2}
                 title="Création de Valeur"
                 opportunity={results.value_creation}
                 hourlyRate={hourlyRate}
-                icon="💎"
+                icon={<span className="text-2xl">💎</span>}
               />
               <OpportunityCard
+                number={3}
                 title="Gestion Business"
                 opportunity={results.business_management}
                 hourlyRate={hourlyRate}
-                icon="📊"
+                icon={<span className="text-2xl">📊</span>}
               />
             </div>
           </Suspense>
         </div>
 
-        {/* Implementation Time Comparison */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Temps d&apos;Implémentation
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border-2 border-gray-200 rounded-lg p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="text-3xl">👤</div>
-                <h3 className="text-xl font-semibold text-gray-900">
-                  En Solo
-                </h3>
-              </div>
-              <p className="text-4xl font-bold text-gray-700 mb-2">
-                {results.implementation_time_solo.hours}h
-              </p>
-              <p className="text-gray-600">
-                {results.implementation_time_solo.description}
-              </p>
-            </div>
-
-            <div className="border-2 border-green-200 rounded-lg p-6 bg-green-50">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="text-3xl">🚀</div>
-                <h3 className="text-xl font-semibold text-green-900">
-                  Avec Expert
-                </h3>
-              </div>
-              <p className="text-4xl font-bold text-green-700 mb-2">
-                {results.implementation_time_expert.hours}h
-              </p>
-              <p className="text-green-800">
-                {results.implementation_time_expert.description}
-              </p>
-              <div className="mt-4 pt-4 border-t border-green-200">
-                <p className="text-sm font-semibold text-green-900">
-                  Économie:{" "}
-                  {results.implementation_time_solo.hours -
-                    results.implementation_time_expert.hours}
-                  h d&apos;implémentation
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* CTA - Conversion Lead */}
         <div id="lead-form">
@@ -348,21 +326,23 @@ export default function ResultsPage() {
         </div>
 
         {/* Métadonnées */}
-        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-500">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <p>
-              Analyse ID: <span className="font-mono font-semibold">{results.analysis_id}</span>
+        <GlassmorphicCard className="p-4 text-sm text-slate-500">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-2 mb-2">
+            <p className="font-medium">
+              Analyse ID: <span className="font-mono font-semibold text-cyan-600">{results.analysis_id}</span>
             </p>
             <button
               onClick={copyAnalysisId}
-              className="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-xs font-medium transition-colors"
+              className="px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded text-xs font-medium transition-colors"
               title="Copier l'ID"
             >
               📋 Copier
             </button>
           </div>
-          <p>URL analysée: {results.url}</p>
-        </div>
+          <p className="text-center">
+            <span className="font-medium">URL analysée:</span> {results.url}
+          </p>
+        </GlassmorphicCard>
       </div>
     </div>
   );

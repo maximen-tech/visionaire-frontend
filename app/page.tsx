@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { startAnalysis } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -10,6 +11,12 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { trackAnalysisStart, trackURLInputFocus, trackURLValidationError } from "@/lib/analytics";
 import { validateWebsiteUrl, checkRateLimit } from "@/lib/security/sanitize";
+
+// Blueprint Design Components
+import BlueprintGrid from "@/components/design-system/BlueprintGrid";
+import { GlassmorphicInput } from "@/components/design-system/GlassmorphicCard";
+import PulsingButton from "@/components/design-system/PulsingButton";
+import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -64,58 +71,136 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-zinc-50 relative">
+      {/* Blueprint Grid Background */}
+      <BlueprintGrid density="low" animated={true} />
+
       <main>
-      {/* Hero Section - Variation A */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Connaissez vos 3 priorités digitales en 10 minutes
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed">
-              Analyse IA gratuite de votre site web. Identifiez vos opportunités d'amélioration avec impact financier. Sans carte bancaire, résultats immédiats.
-            </p>
+        {/* Hero Section - Blueprint Time-First Design */}
+        <section className="relative py-24 md:py-32">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-4xl mx-auto">
+              {/* Heading */}
+              <motion.h1
+                className="text-hero font-heading font-bold text-slate-900 mb-6 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent"
+                variants={fadeInUp}
+                initial="initial"
+                animate="animate"
+                transition={{ delay: 0.2 }}
+              >
+                ⏰ Récupérez 1 000 heures par an
+              </motion.h1>
 
-            {/* URL Input Form */}
-            <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto mb-8">
-              {error && (
-                <Alert variant="error" className="mb-4">
-                  <AlertTitle>Erreur</AlertTitle>
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Input
-                  type="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  onFocus={trackURLInputFocus}
-                  placeholder="https://votresite.com"
-                  required
-                  className="flex-1 text-lg"
-                />
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  size="lg"
-                  className="sm:w-auto w-full"
+              {/* Subheading */}
+              <motion.p
+                className="text-2xl md:text-3xl text-slate-600 mb-12 leading-relaxed font-body"
+                variants={fadeInUp}
+                initial="initial"
+                animate="animate"
+                transition={{ delay: 0.4 }}
+              >
+                Votre <span className="text-amber-600 font-semibold">blueprint temps libre</span> en 10 minutes
+              </motion.p>
+
+              {/* URL Input Form */}
+              <motion.form
+                onSubmit={handleSubmit}
+                className="w-full max-w-2xl mx-auto mb-12"
+                variants={fadeInUp}
+                initial="initial"
+                animate="animate"
+                transition={{ delay: 0.6 }}
+              >
+                {error && (
+                  <Alert variant="error" className="mb-4">
+                    <AlertTitle>Erreur</AlertTitle>
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="space-y-4">
+                  <GlassmorphicInput
+                    type="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    onFocus={trackURLInputFocus}
+                    placeholder="https://votresite.com"
+                    required
+                    focusGlow="cyan"
+                  />
+
+                  <PulsingButton
+                    type="submit"
+                    disabled={isLoading}
+                    loading={isLoading}
+                    size="lg"
+                    variant="primary"
+                    className="w-full sm:w-auto"
+                    rightIcon={
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    }
+                  >
+                    Dessiner mon blueprint
+                  </PulsingButton>
+                </div>
+              </motion.form>
+
+              {/* Trust Badges */}
+              <motion.div
+                className="space-y-4"
+                variants={staggerContainer}
+                initial="initial"
+                animate="animate"
+              >
+                <motion.p
+                  className="text-base text-slate-600 font-body"
+                  variants={staggerItem}
                 >
-                  {isLoading ? "Démarrage..." : "Analysez votre site"}
-                </Button>
-              </div>
-            </form>
+                  Rejoignez <span className="font-semibold text-amber-600">500+ PME québécoises</span> qui ont récupéré leur temps
+                </motion.p>
 
-            <p className="text-sm text-gray-600 mb-4">
-              Déjà <span className="font-semibold text-blue-600">500+ PME</span> ont identifié leurs priorités
-            </p>
+                <motion.div
+                  className="flex flex-wrap justify-center gap-6 text-sm text-slate-700"
+                  variants={staggerContainer}
+                >
+                  <motion.div
+                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
+                    variants={staggerItem}
+                  >
+                    <span className="text-emerald-500 font-bold">✓</span>
+                    <span className="font-medium">500+ blueprints créés</span>
+                  </motion.div>
 
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-600">
-              <span className="flex items-center gap-1">✓ 100% gratuit</span>
-              <span className="flex items-center gap-1">✓ Résultats en 10 minutes</span>
-              <span className="flex items-center gap-1">✓ Sans carte bancaire</span>
+                  <motion.div
+                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
+                    variants={staggerItem}
+                  >
+                    <span className="text-emerald-500 font-bold">✓</span>
+                    <span className="font-medium">480 000 heures récupérées</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
+                    variants={staggerItem}
+                  >
+                    <span className="text-emerald-500 font-bold">✓</span>
+                    <span className="font-medium">Résultats en 10 minutes</span>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             </div>
-          </div>
         </div>
       </section>
 
