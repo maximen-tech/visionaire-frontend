@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import { convertLead } from "@/lib/api";
 import type { LeadConversionRequest } from "@/lib/types";
+import {
+  trackLeadSubmit,
+  trackLeadSubmitSuccess,
+  trackLeadSubmitError,
+  trackLeadFormFieldFocus,
+} from "@/lib/analytics";
 
 interface LeadFormProps {
   analysisId: string;
@@ -43,6 +49,9 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
     setIsSubmitting(true);
     setError("");
 
+    // Track lead submission attempt
+    trackLeadSubmit(analysisId, formData.opportunity);
+
     try {
       const payload: LeadConversionRequest = {
         analysis_id: analysisId,
@@ -54,6 +63,9 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
 
       const response = await convertLead(payload);
       setIsSuccess(true);
+
+      // Track successful submission
+      trackLeadSubmitSuccess(analysisId, response.lead_id);
 
       // Reset form
       setFormData({
@@ -70,11 +82,13 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
         setIsSuccess(false);
       }, 5000);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de l'envoi du formulaire"
-      );
+      const errorMessage = err instanceof Error
+        ? err.message
+        : "Erreur lors de l'envoi du formulaire";
+      setError(errorMessage);
+
+      // Track error
+      trackLeadSubmitError(analysisId, errorMessage);
     } finally {
       setIsSubmitting(false);
     }

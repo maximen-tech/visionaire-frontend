@@ -8,6 +8,13 @@ import ProgressiveMessage from "@/components/ProgressiveMessage";
 import { getSSEStreamURL } from "@/lib/api";
 import type { SSEEvent, IdentityA1 } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  trackWaitingRoomEnter,
+  trackAnalysisProgress,
+  trackAnalysisComplete,
+  trackSSEEvent,
+  trackError,
+} from "@/lib/analytics";
 
 interface LogEntry {
   timestamp: string;
@@ -61,6 +68,11 @@ export default function WaitingRoomPage() {
         setStatus(data.status);
         setProgress(data.progress_percentage);
 
+        // Track progress updates (every 25% milestone)
+        if (data.progress_percentage % 25 === 0 && data.progress_percentage > 0) {
+          trackAnalysisProgress(analysisId, data.progress_percentage, data.phase || 'unknown');
+        }
+
         // Add log entry
         const newLog: LogEntry = {
           timestamp: data.timestamp,
@@ -92,6 +104,9 @@ export default function WaitingRoomPage() {
           // Reset reconnect attempts on successful completion
           setReconnectAttempts(0);
           toast.success("Analyse terminée!", { duration: 3000 });
+
+          // Track completion
+          trackAnalysisComplete(analysisId, totalHours || 0);
         }
 
         // If analysis failed
@@ -99,6 +114,7 @@ export default function WaitingRoomPage() {
           const errorMsg = data.log_message || "L'analyse a échoué. Veuillez réessayer.";
           setError(errorMsg);
           toast.error(errorMsg);
+          trackError('analysis_failed', errorMsg, { analysis_id: analysisId });
           eventSource.close();
         }
       } catch (err) {
@@ -132,6 +148,10 @@ export default function WaitingRoomPage() {
         toast.error("Connexion impossible. Actualisez la page.", {
           duration: 10000,
         });
+        trackSSEEvent('failed', analysisId, 3);
+        trackError('sse_connection_failed', 'Max reconnection attempts reached', {
+          analysis_id: analysisId,
+        });
       }
     };
 
@@ -139,11 +159,17 @@ export default function WaitingRoomPage() {
     eventSource.onopen = () => {
       if (reconnectAttempts > 0) {
         toast.success("Reconnecté!", { duration: 2000 });
+        trackSSEEvent('reconnected', analysisId, reconnectAttempts);
+      } else {
+        trackSSEEvent('connected', analysisId);
       }
     };
   };
 
   useEffect(() => {
+    // Track page entry
+    trackWaitingRoomEnter(analysisId);
+
     // Initial log
     setLogs([
       {

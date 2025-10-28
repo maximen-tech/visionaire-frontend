@@ -7,6 +7,13 @@ import type { AnalysisResults } from "@/lib/types";
 import LeadForm from "@/components/LeadForm";
 import OpportunityCard from "@/components/OpportunityCard";
 import toast, { Toaster } from "react-hot-toast";
+import {
+  trackResultsEnter,
+  trackValorizationCalculate,
+  trackAnalysisIDCopy,
+  trackScrollToLeadForm,
+  trackLeadFormView,
+} from "@/lib/analytics";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -27,6 +34,14 @@ export default function ResultsPage() {
       try {
         const data = await getAnalysisResults(analysisId);
         setResults(data);
+
+        // Track results page entry
+        trackResultsEnter(analysisId, data.total_hours_per_year);
+
+        // Track lead form visibility (user can see it)
+        setTimeout(() => {
+          trackLeadFormView(analysisId);
+        }, 3000); // Track after 3 seconds (engaged user)
       } catch (err) {
         setError(
           err instanceof Error
@@ -47,6 +62,15 @@ export default function ResultsPage() {
       setHourlyRate(rate);
       setShowValorization(true);
       const totalValue = results ? Math.round(results.total_hours_per_year * rate) : 0;
+
+      // Track valorization calculation
+      trackValorizationCalculate(
+        analysisId,
+        rate,
+        totalValue,
+        results?.total_hours_per_year || 0
+      );
+
       toast.success(
         `Valorisation calculée: ${totalValue.toLocaleString("fr-FR")} $ CAD/an!`,
         { duration: 4000 }
@@ -60,6 +84,9 @@ export default function ResultsPage() {
   const copyAnalysisId = () => {
     navigator.clipboard.writeText(analysisId);
     toast.success("ID d'analyse copié!", { duration: 2000 });
+
+    // Track copy action
+    trackAnalysisIDCopy(analysisId);
   };
 
   // Scroll to Lead Form
@@ -68,6 +95,9 @@ export default function ResultsPage() {
     if (leadFormElement) {
       leadFormElement.scrollIntoView({ behavior: "smooth", block: "start" });
       toast("Réservez votre place 👇", { duration: 2000, icon: "🎁" });
+
+      // Track scroll action
+      trackScrollToLeadForm(analysisId);
     }
   };
 

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
+import { trackAnalysisStart, trackURLInputFocus, trackURLValidationError } from "@/lib/analytics";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -21,15 +22,21 @@ export default function Home() {
     setIsLoading(true);
     setError("");
 
+    // Track analysis start attempt
+    trackAnalysisStart(url);
+
     try {
       const response = await startAnalysis(url);
       router.push(`/waiting-room/${response.analysis_id}`);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Erreur lors du démarrage de l'analyse"
-      );
+      const errorMessage = err instanceof Error
+        ? err.message
+        : "Erreur lors du démarrage de l'analyse";
+      setError(errorMessage);
+
+      // Track error
+      trackURLValidationError(errorMessage);
+
       setIsLoading(false);
     }
   };
@@ -65,6 +72,7 @@ export default function Home() {
                   type="url"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
+                  onFocus={trackURLInputFocus}
                   placeholder="https://votresite.com"
                   required
                   className="flex-1 text-lg"
@@ -430,6 +438,7 @@ export default function Home() {
                 type="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+                onFocus={trackURLInputFocus}
                 placeholder="https://votresite.com"
                 required
                 className="flex-1 text-lg bg-white"
