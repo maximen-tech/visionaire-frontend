@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
 import LeadForm from "@/components/LeadForm";
+import OpportunityCard from "@/components/OpportunityCard";
 
 export default function ResultsPage() {
   const params = useParams();
@@ -14,6 +15,9 @@ export default function ResultsPage() {
   const [results, setResults] = useState<AnalysisResults | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [hourlyRate, setHourlyRate] = useState<number | null>(null);
+  const [hourlyRateInput, setHourlyRateInput] = useState("");
+  const [showValorization, setShowValorization] = useState(false);
 
   useEffect(() => {
     if (!analysisId) return;
@@ -35,6 +39,14 @@ export default function ResultsPage() {
 
     fetchResults();
   }, [analysisId]);
+
+  const handleCalculateValue = () => {
+    const rate = parseFloat(hourlyRateInput);
+    if (!isNaN(rate) && rate > 0) {
+      setHourlyRate(rate);
+      setShowValorization(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -67,20 +79,22 @@ export default function ResultsPage() {
     );
   }
 
+  const totalYearlyValue = hourlyRate
+    ? results.total_hours_per_year * hourlyRate
+    : null;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              Résultats de l&apos;analyse
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+              Vos Opportunités de Temps Sauvé
             </h1>
             <p className="text-gray-600">
-              Analyse terminée le{" "}
-              {results.completed_at
-                ? new Date(results.completed_at).toLocaleString("fr-FR")
-                : "N/A"}
+              {results.identity_a1.company_name} •{" "}
+              {results.identity_a1.sector}
             </p>
           </div>
           <button
@@ -91,126 +105,166 @@ export default function ResultsPage() {
           </button>
         </div>
 
-        {/* URL analysée */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-sm font-medium text-gray-500 mb-2">
-            URL analysée
-          </h2>
-          <p className="text-lg text-gray-900 break-all">{results.url}</p>
-        </div>
-
-        {/* Grille de résultats */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Identité A1 */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-3xl">🎯</div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                Identité (A1)
+        {/* Valorisation Input Section */}
+        {!showValorization && (
+          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-lg shadow-lg p-8 text-white">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Combien vaut votre temps?
               </h2>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <span className="text-sm font-medium text-gray-500">
-                  Secteur
-                </span>
-                <p className="text-lg text-gray-900 font-semibold">
-                  {results.identity_a1.sector}
-                </p>
+              <p className="text-indigo-100 mb-6 text-lg">
+                Entrez votre taux horaire pour voir la valeur économique de
+                chaque opportunité
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={hourlyRateInput}
+                    onChange={(e) => setHourlyRateInput(e.target.value)}
+                    placeholder="75"
+                    className="w-48 px-4 py-3 text-lg text-gray-900 rounded-lg focus:ring-2 focus:ring-white outline-none"
+                    min="0"
+                    step="5"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">
+                    $ CAD/h
+                  </span>
+                </div>
+                <button
+                  onClick={handleCalculateValue}
+                  className="px-8 py-3 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-colors text-lg"
+                >
+                  Calculer la valeur
+                </button>
               </div>
-              <div>
-                <span className="text-sm font-medium text-gray-500">
-                  Taille estimée
-                </span>
-                <p className="text-lg text-gray-900 font-semibold">
-                  {results.identity_a1.estimated_size}
-                </p>
-              </div>
-              <div>
-                <span className="text-sm font-medium text-gray-500">Tier</span>
-                <p className="text-lg text-gray-900 font-semibold">
-                  {results.identity_a1.tier}
-                </p>
-              </div>
+              <p className="text-indigo-200 text-sm mt-4">
+                Moyenne PME québécoise: 50-100 $ CAD/h
+              </p>
             </div>
           </div>
+        )}
 
-          {/* Score A2 */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="text-3xl">📊</div>
-              <h2 className="text-2xl font-bold text-gray-900">Score (A2)</h2>
-            </div>
-            <div className="space-y-4">
+        {/* Total Summary Card */}
+        <div className="bg-white rounded-lg shadow-xl p-8 border-2 border-indigo-200">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Temps Total Récupérable
+            </h2>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8">
               <div>
-                <span className="text-sm font-medium text-gray-500">
-                  Score obtenu
-                </span>
-                <div className="flex items-baseline gap-2">
-                  <p className="text-4xl text-indigo-600 font-bold">
-                    {results.score_a2.score}
-                  </p>
-                  <span className="text-gray-500">/ 100</span>
-                </div>
+                <p className="text-5xl font-bold text-indigo-600">
+                  {results.total_hours_per_week.toFixed(1)}h
+                </p>
+                <p className="text-gray-600 mt-2">par semaine</p>
               </div>
+              <div className="text-4xl text-gray-300">→</div>
               <div>
-                <span className="text-sm font-medium text-gray-500">
-                  Benchmark secteur
-                </span>
-                <p className="text-2xl text-gray-700 font-semibold">
-                  {results.score_a2.benchmark}
+                <p className="text-5xl font-bold text-indigo-600">
+                  {Math.round(results.total_hours_per_year)}h
                 </p>
-              </div>
-              <div className="pt-2 border-t border-gray-200">
-                <span className="text-sm font-medium text-gray-500">
-                  Interprétation
-                </span>
-                <p className="text-gray-900 mt-1">
-                  {results.score_a2.interpretation}
-                </p>
+                <p className="text-gray-600 mt-2">par année</p>
               </div>
             </div>
+
+            {showValorization && totalYearlyValue && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <p className="text-sm text-gray-600 mb-2">
+                  Valeur économique totale
+                </p>
+                <p className="text-4xl font-bold text-green-600">
+                  {Math.round(totalYearlyValue).toLocaleString("fr-FR")} $ CAD
+                </p>
+                <p className="text-gray-600 mt-1">par année</p>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Top 3 Gaps */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-3xl">💡</div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              Top 3 Opportunités d&apos;amélioration
-            </h2>
+        {/* Reality Check Section */}
+        <div className="bg-orange-50 border-2 border-orange-200 rounded-lg p-6">
+          <h3 className="text-xl font-bold text-orange-900 mb-2 flex items-center gap-2">
+            ⚠️ Reality Check
+          </h3>
+          <p className="text-orange-800">
+            <span className="font-bold">73% des PME</span> qui identifient ces
+            opportunités ne passent jamais à l&apos;action. Pourquoi?
+            Manque de temps, de ressources, ou d&apos;expertise technique. Ne
+            faites pas cette erreur.
+          </p>
+        </div>
+
+        {/* 3 Opportunity Cards */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <span className="text-4xl">⏱️</span>
+            Vos 3 Opportunités Détaillées
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <OpportunityCard
+              title="Présence Digitale"
+              opportunity={results.digital_presence}
+              hourlyRate={hourlyRate}
+              icon="🌐"
+            />
+            <OpportunityCard
+              title="Création de Valeur"
+              opportunity={results.value_creation}
+              hourlyRate={hourlyRate}
+              icon="💎"
+            />
+            <OpportunityCard
+              title="Gestion Business"
+              opportunity={results.business_management}
+              hourlyRate={hourlyRate}
+              icon="📊"
+            />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {results.top_3_gaps.map((gap, index) => (
-              <div
-                key={index}
-                className="border-2 border-indigo-100 rounded-lg p-5 hover:border-indigo-300 transition-colors"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="flex items-center justify-center w-8 h-8 bg-indigo-600 text-white rounded-full font-bold">
-                    {index + 1}
-                  </span>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {gap.title}
-                  </h3>
-                </div>
-                <div className="mb-3">
-                  <span className="text-sm font-medium text-gray-500">
-                    Impact financier mensuel
-                  </span>
-                  <p className="text-2xl font-bold text-green-600">
-                    {gap.impact_financial_monthly.toLocaleString("fr-FR")} €
-                  </p>
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-gray-500">
-                    Opportunité IA
-                  </span>
-                  <p className="text-gray-700 mt-1">{gap.ia_opportunity}</p>
-                </div>
+        </div>
+
+        {/* Implementation Time Comparison */}
+        <div className="bg-white rounded-lg shadow-md p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Temps d&apos;Implémentation
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="border-2 border-gray-200 rounded-lg p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="text-3xl">👤</div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  En Solo
+                </h3>
               </div>
-            ))}
+              <p className="text-4xl font-bold text-gray-700 mb-2">
+                {results.implementation_time_solo.hours}h
+              </p>
+              <p className="text-gray-600">
+                {results.implementation_time_solo.description}
+              </p>
+            </div>
+
+            <div className="border-2 border-green-200 rounded-lg p-6 bg-green-50">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="text-3xl">🚀</div>
+                <h3 className="text-xl font-semibold text-green-900">
+                  Avec Expert
+                </h3>
+              </div>
+              <p className="text-4xl font-bold text-green-700 mb-2">
+                {results.implementation_time_expert.hours}h
+              </p>
+              <p className="text-green-800">
+                {results.implementation_time_expert.description}
+              </p>
+              <div className="mt-4 pt-4 border-t border-green-200">
+                <p className="text-sm font-semibold text-green-900">
+                  Économie:{" "}
+                  {results.implementation_time_solo.hours -
+                    results.implementation_time_expert.hours}
+                  h d&apos;implémentation
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -222,10 +276,7 @@ export default function ResultsPage() {
           <p>
             Analyse ID: <span className="font-mono">{results.analysis_id}</span>
           </p>
-          <p>
-            Créée le:{" "}
-            {new Date(results.created_at).toLocaleString("fr-FR")}
-          </p>
+          <p className="mt-1">URL analysée: {results.url}</p>
         </div>
       </div>
     </div>

@@ -21,22 +21,26 @@ export interface SSEEvent {
   phase?: "A1" | "A2" | "SYNTHESIS";
 }
 
+// Phase 2: Time-focused API types
+export interface TimeOpportunity {
+  hours_per_week: number;
+  hours_per_year: number;
+  problem_teaser: string;
+  complexity_level: number; // 1-10
+  tools_hint: string;
+}
+
 export interface IdentityA1 {
+  company_name: string;
+  owner_first_name: string | null; // Can be null
   sector: string;
-  estimated_size: string;
+  size: string;
   tier: string;
 }
 
-export interface ScoreA2 {
-  score: number;
-  benchmark: number;
-  interpretation: string;
-}
-
-export interface Gap {
-  title: string;
-  impact_financial_monthly: number;
-  ia_opportunity: string;
+export interface ImplementationTime {
+  hours: number;
+  description: string;
 }
 
 export interface AnalysisResults {
@@ -44,10 +48,15 @@ export interface AnalysisResults {
   status: string;
   url: string;
   identity_a1: IdentityA1;
-  score_a2: ScoreA2;
-  top_3_gaps: Gap[];
-  created_at: string;
-  completed_at: string | null;
+  digital_presence: TimeOpportunity;
+  value_creation: TimeOpportunity;
+  business_management: TimeOpportunity;
+  total_hours_per_week: number;
+  total_hours_per_year: number;
+  implementation_time_solo: ImplementationTime;
+  implementation_time_expert: ImplementationTime;
+  created_at?: string;
+  completed_at?: string | null;
 }
 
 export interface APIError {
