@@ -1,6 +1,6 @@
 # Vision'AI're - Task Tracker
 
-**Dernière mise à jour:** 28 octobre 2025
+**Dernière mise à jour:** 28 octobre 2025 (Session 6 - Security complétée)
 
 ---
 
@@ -215,7 +215,7 @@
 
 ### Session 6: Frontend Security (Completed)
 **Status:** ✅ DONE
-**Commits:** TBD
+**Commits:** 8ea61d4
 **Documentation:** SESSION_6_SECURITY_SUMMARY.md, BACKEND_SECURITY_TODO.md
 
 **Réalisations:**
