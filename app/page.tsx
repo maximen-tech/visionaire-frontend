@@ -9,6 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { trackAnalysisStart, trackURLInputFocus, trackURLValidationError } from "@/lib/analytics";
+import { validateWebsiteUrl, checkRateLimit } from "@/lib/security/sanitize";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -22,11 +23,28 @@ export default function Home() {
     setIsLoading(true);
     setError("");
 
+    // Client-side rate limiting (3 attempts per minute)
+    const rateLimitCheck = checkRateLimit('url-analysis-submit', 3, 60000);
+    if (!rateLimitCheck.allowed) {
+      setError("Trop de tentatives. Veuillez attendre quelques instants avant de réessayer.");
+      setIsLoading(false);
+      return;
+    }
+
+    // Validate and sanitize URL
+    const validation = validateWebsiteUrl(url);
+    if (!validation.valid) {
+      setError(validation.error || "URL invalide");
+      trackURLValidationError(validation.error || "URL invalide");
+      setIsLoading(false);
+      return;
+    }
+
     // Track analysis start attempt
-    trackAnalysisStart(url);
+    trackAnalysisStart(validation.url!);
 
     try {
-      const response = await startAnalysis(url);
+      const response = await startAnalysis(validation.url!);
       router.push(`/waiting-room/${response.analysis_id}`);
     } catch (err) {
       const errorMessage = err instanceof Error

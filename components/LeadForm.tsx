@@ -9,6 +9,12 @@ import {
   trackLeadSubmitError,
   trackLeadFormFieldFocus,
 } from "@/lib/analytics";
+import {
+  sanitizeName,
+  sanitizeEmail,
+  sanitizePhone,
+  checkRateLimit,
+} from "@/lib/security/sanitize";
 
 interface LeadFormProps {
   analysisId: string;
@@ -49,16 +55,55 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
     setIsSubmitting(true);
     setError("");
 
+    // Client-side rate limiting (5 attempts per minute)
+    const rateLimitCheck = checkRateLimit('lead-form-submit', 5, 60000);
+    if (!rateLimitCheck.allowed) {
+      setError("Trop de tentatives. Veuillez attendre quelques instants avant de réessayer.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Sanitize and validate inputs
+    const sanitizedName = sanitizeName(formData.name);
+    const sanitizedEmail = sanitizeEmail(formData.email);
+    const sanitizedPhone = sanitizePhone(formData.phone);
+    const sanitizedCompany = sanitizeName(formData.company);
+
+    // Validation errors
+    if (!sanitizedName) {
+      setError("Nom invalide. Veuillez entrer un nom valide (lettres, espaces, traits d'union uniquement).");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!sanitizedEmail) {
+      setError("Email invalide. Veuillez entrer une adresse email valide.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!sanitizedPhone) {
+      setError("Numéro de téléphone invalide. Veuillez entrer un numéro à 10 chiffres.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!sanitizedCompany) {
+      setError("Nom d'entreprise invalide. Veuillez entrer un nom valide.");
+      setIsSubmitting(false);
+      return;
+    }
+
     // Track lead submission attempt
     trackLeadSubmit(analysisId, formData.opportunity);
 
     try {
       const payload: LeadConversionRequest = {
         analysis_id: analysisId,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || undefined,
-        company: formData.company || undefined,
+        name: sanitizedName,
+        email: sanitizedEmail,
+        phone: sanitizedPhone,
+        company: sanitizedCompany,
       };
 
       const response = await convertLead(payload);

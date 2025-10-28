@@ -147,7 +147,7 @@
 
 ### Session 5: SEO Avancé (Completed)
 **Status:** ✅ DONE
-**Commits:** TBD
+**Commits:** 21cbb41
 **Documentation:** SESSION_5_SEO_SUMMARY.md, OG_IMAGES_GUIDE.md
 
 **Réalisations:**
@@ -210,6 +210,64 @@
   - Analyser GA4 (pages de destination, sources organiques)
   - Ajuster meta descriptions selon performance
   - Ajouter pages selon besoins (blog, ressources, cas d'usage)
+
+---
+
+### Session 6: Frontend Security (Completed)
+**Status:** ✅ DONE
+**Commits:** TBD
+**Documentation:** SESSION_6_SECURITY_SUMMARY.md, BACKEND_SECURITY_TODO.md
+
+**Réalisations:**
+- ✅ Next.js upgraded 15.0.2 → 15.5.6 (7 critical CVEs fixed)
+- ✅ npm audit: 0 vulnerabilities
+- ✅ 8 security headers configured (CSP, HSTS, X-Frame-Options, etc.)
+- ✅ Content Security Policy strict (whitelist GA, Sentry, BFF)
+- ✅ Input sanitization library (DOMPurify + validators)
+- ✅ Security middleware (bot blocking, request ID, caching)
+- ✅ LeadForm sanitization (name, email, phone, company)
+- ✅ Homepage URL validation (blocks localhost/private IPs)
+- ✅ Client-side rate limiting (5/min forms, 3/min URL)
+- ✅ Backend security documentation (600+ lines)
+
+**Security Features:**
+- ✅ XSS protection (DOMPurify HTML sanitization)
+- ✅ SSRF protection (localhost/private IPs blocked)
+- ✅ Clickjacking protection (X-Frame-Options: DENY)
+- ✅ MIME-sniffing protection (X-Content-Type-Options: nosniff)
+- ✅ Bot protection (bad bots blocked in middleware)
+- ✅ HTTPS enforcement (HSTS 2 years + preload)
+- ✅ Form spam protection (client-side rate limiting)
+- ✅ Request tracing (X-Request-ID header)
+
+**Files Created:**
+- ✅ lib/security/sanitize.ts (input validation library)
+- ✅ middleware.ts (Edge runtime security)
+- ✅ BACKEND_SECURITY_TODO.md (backend requirements)
+
+**À faire par humain:**
+- 🔴 **HAUTE PRIORITÉ:** Tester security headers en production (5 min)
+  - Visiter https://securityheaders.com/?q=visionai.re
+  - Vérifier score A ou A+
+  - Tester CSP policy (pas de violations dans console)
+
+- 🔴 **HAUTE PRIORITÉ:** Backend security implementation (2-3 jours)
+  - Lire BACKEND_SECURITY_TODO.md
+  - Implémenter rate limiting serveur (slowapi + Redis)
+  - Ajouter input validation Pydantic
+  - Vérifier CORS configuration
+  - Tester avec curl scripts
+
+- 🟡 **MOYENNE PRIORITÉ:** Security testing (1-2h)
+  - Tester rate limiting (submit form 6 fois)
+  - Tester XSS payloads (validation errors attendus)
+  - Tester localhost bypass (doit être bloqué)
+  - Vérifier headers avec curl
+
+- 🟢 **BASSE PRIORITÉ:** Monitoring sécurité (continu)
+  - Créer alertes Sentry (rate limit violations, validation errors)
+  - Dashboard GA4 pour security metrics
+  - Weekly security review
 
 ---
 

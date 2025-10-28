@@ -18,7 +18,8 @@
       "Bash(npm run test:e2e:*)",
       "Bash(pkill:*)",
       "Bash(netstat:*)",
-      "Bash(npx kill-port:*)"
+      "Bash(npx kill-port:*)",
+      "Bash(npm audit:*)"
     ],
     "deny": [],
     "ask": []
