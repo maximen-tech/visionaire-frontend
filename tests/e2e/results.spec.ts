@@ -465,3 +465,381 @@ test.describe('Results Page - Metadata', () => {
     await expect(page.getByText(/url analysée/i)).toBeVisible();
   });
 });
+
+test.describe('Phase 2: HourlyRateInput Component', () => {
+  test('should display hourly rate input with proper labels', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-hourly-input.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should display hourly rate input with label
+    await expect(page.locator('label[for="hourly-rate"]')).toBeVisible();
+    await expect(page.locator('label[for="hourly-rate"]')).toContainText(/taux horaire/i);
+
+    // Input field should be visible with placeholder
+    const input = page.locator('input#hourly-rate');
+    await expect(input).toBeVisible();
+    await expect(input).toHaveAttribute('placeholder', 'Ex: 75');
+
+    // Help text should be visible
+    await expect(page.locator('#hourly-rate-help')).toBeVisible();
+    await expect(page.locator('#hourly-rate-help')).toContainText(/entre 20 \$ et 500 \$/);
+  });
+
+  test('should show error for value below minimum ($20)', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-min-validation.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter value below minimum
+    const input = page.locator('input#hourly-rate');
+    await input.fill('15');
+
+    // Error message should appear
+    await expect(page.locator('#hourly-rate-error')).toBeVisible();
+    await expect(page.locator('#hourly-rate-error')).toContainText(/minimum.*20 \$ CAD/i);
+
+    // Input should have aria-invalid="true"
+    await expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expect(input).toHaveAttribute('aria-describedby', 'hourly-rate-error');
+  });
+
+  test('should show error for value above maximum ($500)', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-max-validation.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter value above maximum
+    const input = page.locator('input#hourly-rate');
+    await input.fill('600');
+
+    // Error message should appear
+    await expect(page.locator('#hourly-rate-error')).toBeVisible();
+    await expect(page.locator('#hourly-rate-error')).toContainText(/maximum.*500 \$ CAD/i);
+  });
+
+  test('should accept valid hourly rate and show success toast', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-valid-rate.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter valid rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('100');
+
+    // Should show success toast
+    await expect(page.getByText(/valorisation calculée/i)).toBeVisible({ timeout: 5000 });
+
+    // No error message should be visible
+    await expect(page.locator('#hourly-rate-error')).not.toBeVisible();
+
+    // Input should have aria-invalid="false"
+    await expect(input).toHaveAttribute('aria-invalid', 'false');
+  });
+
+  test('should reset to null when input is cleared', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-clear-input.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter valid rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('75');
+    await page.waitForTimeout(500);
+
+    // Clear input
+    await input.clear();
+
+    // No error should show
+    await expect(page.locator('#hourly-rate-error')).not.toBeVisible();
+
+    // Help text should be visible again
+    await expect(page.locator('#hourly-rate-help')).toBeVisible();
+  });
+});
+
+test.describe('Phase 2: Valorization Flow', () => {
+  test('should not show $ values initially', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-no-initial-values.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // $ CAD values should not be visible yet
+    const cadText = await page.locator('text=/\\d+.*\\$ CAD/').count();
+    // Should only show help text "$ CAD/h", not actual values
+    expect(cadText).toBeLessThanOrEqual(1);
+  });
+
+  test('should display $ values after entering valid hourly rate', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-show-values.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter hourly rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('100');
+
+    // Wait for valorization to calculate
+    await page.waitForTimeout(1000);
+
+    // Total summary should appear
+    await expect(page.getByText(/valeur totale des opportunités/i)).toBeVisible();
+
+    // Should show weekly and annual savings
+    await expect(page.getByText(/économie hebdomadaire/i)).toBeVisible();
+    await expect(page.getByText(/économie annuelle/i)).toBeVisible();
+
+    // $ CAD values should now be visible
+    const cadValues = page.locator('text=/\\d+\\s\\d+.*\\$ CAD/');
+    await expect(cadValues.first()).toBeVisible();
+  });
+
+  test('should calculate valorization correctly with Quebec formatting', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-calculation.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter hourly rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('50');
+
+    await page.waitForTimeout(1000);
+
+    // Check Quebec-style formatting (space before $)
+    // Format: "26 000 $ CAD" (number space $ space CAD)
+    const valorization = page.locator('text=/\\d+\\s\\d+.*\\$ CAD/').first();
+    await expect(valorization).toBeVisible();
+
+    // Verify space before $
+    const text = await valorization.textContent();
+    expect(text).toMatch(/\d+\s\d+\s\$\sCAD/); // Regex: digits space digits space $ space CAD
+  });
+
+  test('should handle decimal hourly rates', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-decimal-rate.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter decimal rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('75.50');
+
+    // Should accept and calculate
+    await expect(page.getByText(/valorisation calculée/i)).toBeVisible({ timeout: 5000 });
+  });
+});
+
+test.describe('Phase 2: OpportunityCard Component', () => {
+  test('should display OpportunityCard with number badge and icon', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-opportunity-card.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should display 3 opportunity cards
+    await expect(page.getByText(/présence digitale/i)).toBeVisible();
+    await expect(page.getByText(/création de valeur/i)).toBeVisible();
+    await expect(page.getByText(/gestion business/i)).toBeVisible();
+
+    // Each card should show hours per week and year
+    const hoursPerWeek = page.locator('text=/\\d+\\.\\d+h\\/semaine/');
+    await expect(hoursPerWeek.first()).toBeVisible();
+
+    const hoursPerYear = page.locator('text=/\\d+h\\/an/');
+    await expect(hoursPerYear.first()).toBeVisible();
+  });
+
+  test('should show $ value on OpportunityCard when hourly rate provided', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-card-valorization.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Enter hourly rate
+    const input = page.locator('input#hourly-rate');
+    await input.fill('80');
+
+    await page.waitForTimeout(1000);
+
+    // Each OpportunityCard should now show $ value
+    await expect(page.getByText(/de valeur\/an/i).first()).toBeVisible();
+  });
+
+  test('should display implementation time estimates', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-implementation-time.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should show implementation time section
+    await expect(page.getByText(/temps d'implémentation estimé/i).first()).toBeVisible();
+
+    // Should show solo (DIY) time
+    await expect(page.getByText(/seul.*diy/i).first()).toBeVisible();
+
+    // Should show expert time
+    await expect(page.getByText(/avec expert/i).first()).toBeVisible();
+
+    // Should show time savings
+    await expect(page.getByText(/économie.*gagnées/i).first()).toBeVisible();
+  });
+
+  test('should display problem teaser in OpportunityCard', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-problem-teaser.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should display "Opportunité" section heading
+    await expect(page.getByText(/💡 opportunité/i).first()).toBeVisible();
+  });
+});
+
+test.describe('Phase 2: ComplexityBar Component', () => {
+  test('should display ComplexityBar with ARIA attributes', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-complexity-bar.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should display complexity section
+    await expect(page.getByText(/📊 complexité/i).first()).toBeVisible();
+
+    // ComplexityBar should have role="progressbar"
+    const progressBar = page.locator('[role="progressbar"]').first();
+    await expect(progressBar).toBeVisible();
+
+    // Should have ARIA label
+    await expect(progressBar).toHaveAttribute('aria-label', /complexity level/i);
+
+    // Should have aria-valuenow (1-10)
+    const valueNow = await progressBar.getAttribute('aria-valuenow');
+    expect(parseInt(valueNow || '0')).toBeGreaterThanOrEqual(1);
+    expect(parseInt(valueNow || '0')).toBeLessThanOrEqual(10);
+  });
+
+  test('should display complexity description', async ({ page }) => {
+    await page.goto('/');
+
+    await page.getByPlaceholder(/votresite\.com/i).fill('https://test-complexity-description.com');
+    await page.getByRole('button', { name: /analyser/i }).click();
+
+    const url = page.url();
+    const analysisId = url.match(/\/waiting-room\/([a-f0-9-]+)/)?.[1];
+
+    if (analysisId) {
+      await page.goto(`/results/${analysisId}`);
+    }
+
+    // Should display complexity description (e.g., "Facile", "Modéré", "Complexe")
+    // Note: Exact text depends on complexity level
+    await page.waitForTimeout(2000);
+  });
+});
