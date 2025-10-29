@@ -15,6 +15,7 @@ import {
 // Lazy load heavy components for better performance
 const LeadForm = lazy(() => import("@/components/LeadForm"));
 const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
+import HourlyRateInput from "@/components/HourlyRateInput";
 import {
   trackResultsEnter,
   trackValorizationCalculate,
@@ -38,8 +39,6 @@ export default function ResultsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [hourlyRate, setHourlyRate] = useState<number | null>(null);
-  const [hourlyRateInput, setHourlyRateInput] = useState("");
-  const [showValorization, setShowValorization] = useState(false);
 
   useEffect(() => {
     if (!analysisId) return;
@@ -70,27 +69,25 @@ export default function ResultsPage() {
     fetchResults();
   }, [analysisId]);
 
-  const handleCalculateValue = () => {
-    const rate = parseFloat(hourlyRateInput);
-    if (!isNaN(rate) && rate > 0) {
-      setHourlyRate(rate);
-      setShowValorization(true);
-      const totalValue = results ? Math.round(results.total_hours_per_year * rate) : 0;
+  // Handle hourly rate change
+  const handleHourlyRateChange = (rate: number | null) => {
+    setHourlyRate(rate);
 
-      // Track valorization calculation
+    // Track valorization calculation when rate is set
+    if (rate && results) {
+      const totalValue = Math.round(results.total_hours_per_year * rate);
+
       trackValorizationCalculate(
         analysisId,
         rate,
         totalValue,
-        results?.total_hours_per_year || 0
+        results.total_hours_per_year
       );
 
       toast.success(
-        `Valorisation calculée: ${totalValue.toLocaleString("fr-FR")} $ CAD/an!`,
+        `Valorisation calculée: ${formatCAD(totalValue)}/an!`,
         { duration: 4000 }
       );
-    } else {
-      toast.error("Veuillez entrer un taux horaire valide");
     }
   };
 
@@ -141,8 +138,12 @@ export default function ResultsPage() {
     );
   }
 
-  const totalYearlyValue = hourlyRate
+  // Calculate total valorization
+  const totalYearlyValue = hourlyRate && results
     ? results.total_hours_per_year * hourlyRate
+    : null;
+  const totalWeeklyValue = hourlyRate && results
+    ? results.total_hours_per_week * hourlyRate
     : null;
 
   return (
@@ -172,46 +173,55 @@ export default function ResultsPage() {
         </div>
 
         {/* Valorisation Input Section */}
-        {!showValorization && (
-          <GlassmorphicCard variant="highlighted" className="p-8">
-            <div className="max-w-3xl mx-auto text-center">
+        <GlassmorphicCard variant="highlighted" className="p-8">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-6">
               <h2 className="text-2xl md:text-3xl font-heading font-bold text-slate-900 mb-4">
-                💰 Combien vaut votre temps?
+                💰 Calculez la valeur de vos opportunités
               </h2>
-              <p className="text-slate-700 mb-6 text-lg">
-                Entrez votre taux horaire pour voir la valeur économique de
-                chaque opportunité
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <div className="relative">
-                  <GlassmorphicInput
-                    type="number"
-                    value={hourlyRateInput}
-                    onChange={(e) => setHourlyRateInput(e.target.value)}
-                    placeholder="75"
-                    className="w-48 px-4 py-3 text-lg"
-                    min="0"
-                    step="5"
-                    focusGlow="amber"
-                  />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 font-medium text-sm">
-                    $ CAD/h
-                  </span>
-                </div>
-                <PulsingButton
-                  onClick={handleCalculateValue}
-                  variant="primary"
-                  size="md"
-                >
-                  Calculer la valeur
-                </PulsingButton>
-              </div>
-              <p className="text-slate-500 text-sm mt-4">
-                💡 Moyenne PME québécoise: 50-100 $ CAD/h
+              <p className="text-slate-700 text-lg">
+                Entrez votre taux horaire pour voir la valeur monétaire annuelle des gains de temps identifiés.
               </p>
             </div>
-          </GlassmorphicCard>
-        )}
+
+            <HourlyRateInput
+              value={hourlyRate}
+              onChange={handleHourlyRateChange}
+              className="max-w-md mx-auto"
+            />
+
+            {/* Total Valorization Summary (if hourly rate provided) */}
+            {hourlyRate && totalYearlyValue && totalWeeklyValue && (
+              <div className="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border-2 border-green-300 dark:border-green-700">
+                <h3 className="text-lg font-bold text-green-800 dark:text-green-300 mb-3 text-center">
+                  📊 Valeur Totale des Opportunités
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="text-center md:text-left">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      Économie hebdomadaire:
+                    </p>
+                    <p className="text-2xl font-bold text-green-700 dark:text-green-400">
+                      {formatCAD(totalWeeklyValue)}/semaine
+                    </p>
+                  </div>
+                  <div className="text-center md:text-right">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      Économie annuelle:
+                    </p>
+                    <p className="text-3xl font-bold text-green-800 dark:text-green-300">
+                      {formatCAD(totalYearlyValue)}/an
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <p className="text-slate-500 text-sm mt-4 text-center">
+              💡 Moyenne PME québécoise: 50-100 $ CAD/h
+            </p>
+          </div>
+        </GlassmorphicCard>
 
         {/* Total Summary Card */}
         <GlassmorphicCard variant="highlighted" className="p-8">
@@ -235,7 +245,7 @@ export default function ResultsPage() {
               </div>
             </div>
 
-            {showValorization && totalYearlyValue && (
+            {hourlyRate && totalYearlyValue && (
               <div className="mt-6 pt-6 border-t border-cyan-200/50">
                 <p className="text-sm text-slate-600 mb-2 font-medium">
                   💰 Valeur économique totale
