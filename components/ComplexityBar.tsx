@@ -1,61 +1,85 @@
-import React from "react";
-import { cn } from "@/lib/utils";
+'use client';
+
+import React from 'react';
+import { motion } from 'framer-motion';
 
 interface ComplexityBarProps {
-  level: number; // 1-10
+  level: number;
+  showLabel?: boolean;
+  height?: string;
   className?: string;
 }
 
 /**
  * ComplexityBar Component
  *
- * Visual bar showing complexity level from 1-10.
- * Uses color coding: green (1-3), amber (4-6), red (7-10).
+ * Visual progress bar showing complexity level from 1-10 with animated gradient fill.
+ * Uses color coding: green (1-3), yellow/orange (4-7), red (8-10).
  *
  * @param level - Complexity level (1-10)
+ * @param showLabel - Show "Complexité: X/10 · Label" text (default: true)
+ * @param height - Bar height in CSS units (default: "8px")
  * @param className - Additional CSS classes
  *
  * @example
- * <ComplexityBar level={8} />
- * // Renders: [████████░░] 8/10 (red color)
+ * <ComplexityBar level={8} showLabel={true} />
+ * // Renders: Complexité header + animated red gradient bar at 80% width
  */
-export default function ComplexityBar({ level, className = "" }: ComplexityBarProps) {
-  // Clamp level between 1 and 10
-  const clampedLevel = Math.max(1, Math.min(10, level));
+export default function ComplexityBar({
+  level,
+  showLabel = true,
+  height = '8px',
+  className = '',
+}: ComplexityBarProps) {
+  // Validate level (1-10)
+  const normalizedLevel = Math.max(1, Math.min(10, level));
+  const percentage = (normalizedLevel / 10) * 100;
 
   // Determine color based on level
-  const getColor = () => {
-    if (clampedLevel <= 3) return "bg-emerald-500"; // Easy
-    if (clampedLevel <= 6) return "bg-amber-500"; // Medium
-    return "bg-red-500"; // Hard
+  const getColor = (lvl: number): string => {
+    if (lvl <= 3) return 'from-green-500 to-green-600'; // Easy
+    if (lvl <= 7) return 'from-yellow-500 to-orange-500'; // Medium
+    return 'from-red-500 to-red-600'; // Complex
   };
 
-  const color = getColor();
-
-  // Generate 10 squares
-  const squares = Array.from({ length: 10 }, (_, index) => {
-    const isFilled = index < clampedLevel;
-
-    return (
-      <div
-        key={index}
-        className={cn(
-          "w-4 h-4 rounded-sm",
-          isFilled ? color : "border-2 border-slate-300 bg-transparent"
-        )}
-      />
-    );
-  });
+  const getLabel = (lvl: number): string => {
+    if (lvl <= 3) return 'Facile';
+    if (lvl <= 7) return 'Moyen';
+    return 'Complexe';
+  };
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      {/* Squares */}
-      <div className="flex gap-1">{squares}</div>
+    <div className={`w-full ${className}`}>
+      {showLabel && (
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Complexité
+          </span>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+            {normalizedLevel}/10 · {getLabel(normalizedLevel)}
+          </span>
+        </div>
+      )}
 
-      {/* Label */}
-      <span className="font-mono font-semibold text-slate-700 text-sm">
-        {clampedLevel}/10
-      </span>
+      <div
+        className="relative w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden"
+        style={{ height }}
+        role="progressbar"
+        aria-label={`Niveau de complexité: ${normalizedLevel} sur 10`}
+        aria-valuenow={normalizedLevel}
+        aria-valuemin={1}
+        aria-valuemax={10}
+      >
+        <motion.div
+          className={`h-full bg-gradient-to-r ${getColor(normalizedLevel)} rounded-full`}
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{
+            duration: 0.8,
+            ease: 'easeOut',
+          }}
+        />
+      </div>
     </div>
   );
 }
