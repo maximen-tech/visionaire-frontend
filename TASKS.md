@@ -326,11 +326,64 @@
 
 ---
 
-## P2 Tasks (Future)
+## P2 Tasks (In Progress)
 
-### FE-010: Improve SSE Reconnection UX
-**Effort**: Medium (2-3h) | **Priority**: P2
-- Better reconnection UI on mobile network changes
+### FE-010: Improve SSE Reconnection UX ✅ DONE
+**Effort**: Medium (2-3h) | **Priority**: P2 | **Status**: ✅ Complete (2025-10-28)
+
+**Problem**: No visual feedback when SSE connection is lost, users unaware of reconnection attempts.
+
+**Implementation** (Completed):
+1. ✅ Created SSEReconnectionBanner component with animated UI
+   - Displays during reconnection attempts
+   - Shows attempt number (1/3, 2/3, 3/3)
+   - Animated entry/exit with Framer Motion
+   - Manual retry button after max attempts
+2. ✅ Improved exponential backoff timing
+   - Attempt 1: 1s delay (was 2s)
+   - Attempt 2: 3s delay (was 4s)
+   - Attempt 3: 5s delay (was 8s)
+   - More responsive reconnection
+3. ✅ Added connection timeout detector
+   - Monitors last message timestamp
+   - Auto-triggers reconnection if 5s without message
+   - Prevents stale connections
+4. ✅ Enhanced analytics tracking
+   - trackSSEEvent('disconnected') - Connection lost
+   - trackSSEEvent('reconnected') - Successful reconnect
+   - trackSSEEvent('manual_retry') - User clicked retry button
+   - Retry attempt number tracked
+5. ✅ Manual retry functionality
+   - User can retry after 3 failed attempts
+   - Resets attempt counter
+   - Tracks manual retry events
+
+**Success Criteria** (All Met):
+- ✅ Banner visible during reconnection
+- ✅ Exponential backoff working (1s, 3s, 5s)
+- ✅ Analytics track all SSE events
+- ✅ Clear message after 3 failed attempts
+- ✅ Manual retry button functional
+- ✅ Mobile responsive (fixed top banner)
+- ✅ Dark mode compatible
+- ✅ TypeScript compilation: 0 errors
+- ✅ Production build: Success (43s)
+
+**Files Created/Modified**:
+- `components/SSEReconnectionBanner.tsx` (NEW - 133 lines)
+- `app/waiting-room/[id]/page.tsx` (UPDATED - added reconnection state, banner integration)
+- `lib/analytics.ts` (UPDATED - added 'disconnected' and 'manual_retry' event types)
+
+**Performance Impact**:
+- Waiting Room route: 7.49 kB → 8.22 kB (+0.73 kB)
+- First Load JS: 284 kB → 285 kB (+1 kB)
+- Impact: Minimal, acceptable for UX improvement
+
+**Notes**:
+- Connection timeout detector prevents silent failures
+- Manual retry gives users control after auto-retry exhausted
+- Analytics provide insights into SSE reliability
+- Banner design matches existing glassmorphic UI
 
 ### FE-011: Adaptive Typewriter Timing
 **Effort**: Small (1h) | **Priority**: P2

@@ -10,6 +10,7 @@ import ProgressiveMessage from "@/components/ProgressiveMessage";
 import PulsingButton from "@/components/design-system/PulsingButton";
 import BlueprintGrid from "@/components/design-system/BlueprintGrid";
 import GlassmorphicCard from "@/components/design-system/GlassmorphicCard";
+import SSEReconnectionBanner from "@/components/SSEReconnectionBanner";
 import { getSSEStreamURL } from "@/lib/api";
 import type { SSEEvent, IdentityA1 } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
@@ -51,8 +52,11 @@ export default function WaitingRoomPage() {
   const [showRedirectButton, setShowRedirectButton] = useState(false);
   const [error, setError] = useState<string>("");
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const [isReconnecting, setIsReconnecting] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastMessageTimeRef = useRef<number>(Date.now());
+  const connectionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // SSE Connection function with retry logic
   const connectSSE = () => {
@@ -65,10 +69,18 @@ export default function WaitingRoomPage() {
     // Reset error state
     setError("");
 
+    // Set reconnecting state if this is a retry
+    if (reconnectAttempts > 0) {
+      setIsReconnecting(true);
+    }
+
     // Handle SSE messages
     eventSource.onmessage = (event) => {
       try {
         const data: EnhancedSSEEvent = JSON.parse(event.data);
+
+        // Update last message timestamp
+        lastMessageTimeRef.current = Date.now();
 
         // Update status and progress
         setStatus(data.status);
@@ -107,8 +119,9 @@ export default function WaitingRoomPage() {
 
         // When analysis complete, we wait for message to complete
         if (data.status === "COMPLETE") {
-          // Reset reconnect attempts on successful completion
+          // Reset reconnect attempts and reconnecting state on successful completion
           setReconnectAttempts(0);
+          setIsReconnecting(false);
           toast.success("Analyse terminée!", { duration: 3000 });
 
           // Track completion
@@ -162,18 +175,24 @@ export default function WaitingRoomPage() {
       if (reconnectAttempts < 3) {
         const nextAttempt = reconnectAttempts + 1;
         setReconnectAttempts(nextAttempt);
+        setIsReconnecting(true);
+
+        // Track disconnection event
+        trackSSEEvent('disconnected', analysisId, nextAttempt);
 
         toast.loading(`Reconnexion... (tentative ${nextAttempt}/3)`, {
           duration: 5000,
         });
 
-        // Exponential backoff: 2s, 4s, 8s
-        const delay = Math.pow(2, nextAttempt) * 1000;
+        // Improved exponential backoff: 1s, 3s, 5s
+        const delays = [1000, 3000, 5000];
+        const delay = delays[nextAttempt - 1];
 
         reconnectTimeoutRef.current = setTimeout(() => {
           connectSSE();
         }, delay);
       } else {
+        setIsReconnecting(false);
         setError("Connexion au serveur perdue. Veuillez actualiser la page.");
         toast.error("Connexion impossible. Actualisez la page.", {
           duration: 10000,
@@ -203,10 +222,33 @@ export default function WaitingRoomPage() {
       if (reconnectAttempts > 0) {
         toast.success("Reconnecté!", { duration: 2000 });
         trackSSEEvent('reconnected', analysisId, reconnectAttempts);
+        setIsReconnecting(false);
+        setReconnectAttempts(0);
       } else {
         trackSSEEvent('connected', analysisId);
       }
+
+      // Reset last message timestamp
+      lastMessageTimeRef.current = Date.now();
     };
+
+    // Setup connection timeout detector (5s without messages = disconnected)
+    const checkConnectionTimeout = () => {
+      const timeSinceLastMessage = Date.now() - lastMessageTimeRef.current;
+
+      // If more than 5 seconds without message and not complete
+      if (timeSinceLastMessage > 5000 && status !== "COMPLETE" && !isReconnecting) {
+        console.warn("No SSE message for 5s, connection may be stale");
+
+        // Trigger reconnection
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+        }
+      }
+    };
+
+    // Check connection health every 2 seconds
+    connectionTimeoutRef.current = setInterval(checkConnectionTimeout, 2000);
   };
 
   useEffect(() => {
@@ -232,8 +274,33 @@ export default function WaitingRoomPage() {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
       }
+      if (connectionTimeoutRef.current) {
+        clearInterval(connectionTimeoutRef.current);
+      }
     };
   }, [analysisId]);
+
+  // Manual retry handler
+  const handleManualRetry = () => {
+    setReconnectAttempts(0);
+    setIsReconnecting(true);
+    setError("");
+
+    // Close existing connection
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+
+    // Track manual retry
+    trackSSEEvent('manual_retry', analysisId);
+
+    toast.loading("Tentative de reconnexion...", { duration: 2000 });
+
+    // Retry connection immediately
+    setTimeout(() => {
+      connectSSE();
+    }, 500);
+  };
 
   // Handle message completion callback
   const handleMessageComplete = () => {
@@ -261,6 +328,14 @@ export default function WaitingRoomPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
       {/* Blueprint Grid Background */}
       <BlueprintGrid density="low" animated={true} />
+
+      {/* SSE Reconnection Banner */}
+      <SSEReconnectionBanner
+        isReconnecting={isReconnecting}
+        attemptNumber={reconnectAttempts}
+        maxAttempts={3}
+        onManualRetry={handleManualRetry}
+      />
 
       <Toaster position="top-right" />
 

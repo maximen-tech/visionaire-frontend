@@ -1,0 +1,22 @@
+#!/bin/bash
+# Post-commit hook for visionaire-frontend
+
+# Get last commit info
+COMMIT_MSG=$(git log -1 --format='%s')
+COMMIT_HASH=$(git log -1 --format='%h')
+COMMIT_DATE=$(date +"%Y-%m-%d %H:%M:%S")
+
+# Update STATE.md with last commit info
+if [ -f "STATE.md" ]; then
+    # Update "Dernière mise à jour" timestamp
+    sed -i "s/\*\*Dernière mise à jour\*\*:.*/\*\*Dernière mise à jour\*\*: $COMMIT_DATE (Auto-updated via Git hook)/" STATE.md 2>/dev/null || \
+    sed -i '' "s/\*\*Dernière mise à jour\*\*:.*/\*\*Dernière mise à jour\*\*: $COMMIT_DATE (Auto-updated via Git hook)/" STATE.md 2>/dev/null
+
+    # Update "Last Auto-Update" at bottom
+    sed -i "s/\*\*Last Auto-Update\*\*:.*/\*\*Last Auto-Update\*\*: $COMMIT_DATE/" STATE.md 2>/dev/null || \
+    sed -i '' "s/\*\*Last Auto-Update\*\*:.*/\*\*Last Auto-Update\*\*: $COMMIT_DATE/" STATE.md 2>/dev/null
+
+    echo "STATE.md updated with commit $COMMIT_HASH: $COMMIT_MSG"
+fi
+
+exit 0

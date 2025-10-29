@@ -1,4 +1,179 @@
-# PROJECT CONTEXT: Vision'AI're - Analyseur Maturité Digitale (PHASE 2)
+# Claude Code Web - Frontend Setup
+
+## Environment Configuration
+
+### sessionStart Hook
+```bash
+# Install Node dependencies
+npm install
+
+# Setup environment
+cp .env.example .env.local
+
+# Verify installations
+node --version
+npm --version
+npx next --version
+```
+
+### Network Access
+- **Mode**: Limited (default allowlist)
+- **Required Domains**:
+  - registry.npmjs.org (npm packages)
+  - github.com (git operations)
+  - vercel.com (deployment checks)
+
+### Tests Before Code
+```bash
+# Always run type check + lint FIRST
+npm run lint
+npx tsc --noEmit
+```
+
+## Critical Context for Claude Code Web
+
+**Current Priority**: Phase 2 - Waiting Room + Valorisation
+**Critical Components**: 
+  - `app/waiting-room/[id]/page.tsx` (SSE + Progressive Message)
+  - `components/ProgressiveMessage.tsx` (5-phase storytelling)
+  - `components/OpportunityCard.tsx` (Time opportunities)
+**Test Strategy**: E2E Playwright tests (DO NOT run in cloud, local only)
+**Git Strategy**: Work on branch `feature/phase2-frontend`
+```
+
+---
+
+### **2. Workflow Optimisé avec Claude Code Web**
+
+#### **Nouveau Workflow Desktop → Cloud → PR**
+```
+┌─────────────────────────────────────────────────────────────┐
+│         CLAUDE DESKTOP (Toi - Stratégie)                    │
+│                                                              │
+│  1. Review Documentation (TASKS.md, STATE.md)               │
+│  2. Créer Spec Détaillée (.claude/specs/task-name.md)       │
+│  3. Identifier Tâche Prioritaire (ex: BE-003)               │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│      INITIATE TASK VIA CLAUDE CODE WEB                      │
+│      https://claude.ai/code                                 │
+│                                                              │
+│  1. Select Repository: visionaire-bff                       │
+│  2. Select Branch: main (or feature/phase2-backend)         │
+│  3. Paste Spec from Desktop:                                │
+│                                                              │
+│     "Implement BE-003: Parse Financial Impacts              │
+│                                                              │
+│      Context:                                               │
+│      - Read visionaire-bff/TASKS.md task BE-003             │
+│      - Read visionaire-bff/ARCHITECTURE.md                  │
+│      - File: app/tassks/analysis_tasks.py                    │
+│                                                              │
+│      Requirements:                                          │
+│      - Create parse_financial_impact(text: str) -> int      │
+│      - Support formats: '12 000 $', '12000$', '12k$'        │
+│      - Add unit tests in tests/test_parsers.py              │
+│      - Run tests BEFORE writing code                        │
+│                                                              │
+│      Success Criteria:                                      │
+│      - All tests pass (pytest)                              │
+│      - No breaking changes to existing API                  │
+│      - Update STATE.md: BE-003 IN_PROGRESS → DONE          │
+│                                                              │
+│      Branch: feature/be-003-parse-financial-impacts"        │
+│                                                              │
+│  4. Click "Start Task"                                      │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│      CLAUDE CODE WEB EXECUTION (Autonomous)                 │
+│                                                              │
+│  • Clones repo to Anthropic-managed VM                      │
+│  • Runs sessionStart hook (pip install)                     │
+│  • Reads CLAUDE.md context                                  │
+│  • Analyzes code architecture                               │
+│  • Writes tests FIRST (TDD approach)                        │
+│  • Implements parse_financial_impact()                      │
+│  • Runs pytest validation                                   │
+│  • Updates STATE.md automatically                           │
+│  • Commits with Conventional Commits format                 │
+│  • Pushes to branch feature/be-003-parse-financial-impacts  │
+│                                                              │
+│  Duration: ~15-30 minutes (autonomous)                      │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│         NOTIFICATION & PR CREATION                          │
+│                                                              │
+│  • Claude Code Web notifies: "Task Complete ✅"             │
+│  • Click "Create Pull Request" button                       │
+│  • PR auto-created on GitHub with:                          │
+│    - Title: "feat(backend): implement financial parser"     │
+│    - Description: Auto-generated from commits               │
+│    - Files changed: Detailed diff                           │
+│    - Tests: All passing ✅                                  │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│      CLAUDE DESKTOP REVIEW (Toi)                            │
+│                                                              │
+│  1. Review PR on GitHub                                     │
+│  2. Check code quality, tests, conventions                  │
+│  3. Approve & Merge OR Request changes                      │
+│  4. Update TASKS.md: Move BE-003 to DONE                    │
+│  5. Initiate next task (FE-006, FE-005...)                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### **3. Tâches Idéales pour Claude Code Web**
+
+Selon la doc, **Claude Code Web excelle pour** :
+
+✅ **Backend Tasks (Parfait pour Phase 2)** :
+- ✅ **BE-003** (Parse Financial Impacts) - Well-defined, tests-driven
+- ✅ **BE-002** (AI Prompts Optimization) - Code analysis + refactoring
+- ✅ **BE-004** (AI Tests) - Mock fixtures + unit tests
+
+✅ **Frontend Components** :
+- ✅ **FE-006** (ComplexityBar) - Isolated component, clear spec
+- ✅ **FE-005** (OpportunityCard) - Isolated component, clear spec
+- ✅ **FE-007** (Update Redirects) - Search & replace task
+
+⚠️ **Modéré pour Claude Code Web** :
+- ⚠️ **FE-003** (ProgressiveMessage) - Complexe UX, requires steering
+- ⚠️ **FE-002** (Waiting Room Route) - Multiple interactions, SSE logic
+
+❌ **Moins Idéal pour Cloud** :
+- ❌ **FE-009** (E2E Playwright Tests) - Require browser, mieux en local
+- ❌ **FE-010** (Visual Snapshots) - Require screenshots, local only
+
+---
+
+### **4. Workflow Parallèle Optimisé**
+
+**Stratégie : 2 Sessions Parallèles (Backend + Frontend)**
+
+#### **Session 1 : Backend Critical Path** 🔴
+```
+claude.ai/code → visionaire-bff
+Task: "Implement BE-003 + BE-002 + BE-004 (backend Phase 2 critical)"
+Branch: feature/phase2-backend
+Duration: ~4-6h autonomous
+```
+
+#### **Session 2 : Frontend Components** 🔵
+```
+claude.ai/code → visionaire-frontend  
+Task: "Implement FE-006 + FE-005 + FE-007 (UI components Phase 2)"
+Branch: feature/phase2-frontend-components
+Duration: ~3-4h autonomous# PROJECT CONTEXT: Vision'AI're - Analyseur Maturité Digitale (PHASE 2)
 
 ## 🎯 MISSION
 MVP SaaS B2B : Analyse automatisée focus **TEMPS SAUVÉ** en 2 minutes.

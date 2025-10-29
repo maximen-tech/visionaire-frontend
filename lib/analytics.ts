@@ -177,7 +177,7 @@ export const trackAnalysisComplete = (
  * Track SSE connection events
  */
 export const trackSSEEvent = (
-  eventType: 'connected' | 'reconnected' | 'failed',
+  eventType: 'connected' | 'reconnected' | 'disconnected' | 'failed' | 'manual_retry',
   analysisId: string,
   retryAttempt?: number
 ): void => {

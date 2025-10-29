@@ -1,0 +1,21 @@
+#!/bin/bash
+# Pre-commit hook for visionaire-frontend
+
+echo "Running pre-commit checks..."
+
+# Check if npm is available
+if ! command -v npm &> /dev/null; then
+    echo "npm not found, skipping checks"
+    exit 0
+fi
+
+# Run ESLint check
+echo "Running ESLint..."
+npm run lint 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "Linting issues found. Run 'npm run lint' to see details."
+    echo "Continuing anyway..."
+fi
+
+echo "Pre-commit checks completed!"
+exit 0

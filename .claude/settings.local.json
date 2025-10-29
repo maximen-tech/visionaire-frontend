@@ -19,7 +19,14 @@
       "Bash(pkill:*)",
       "Bash(netstat:*)",
       "Bash(npx kill-port:*)",
-      "Bash(npm audit:*)"
+      "Bash(npm audit:*)",
+      "Bash(npx tsc:*)",
+      "Bash(findstr:*)",
+      "Bash(dir:*)",
+      "Bash(test:*)",
+      "Bash(npm test:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(npm run test:*)"
     ],
     "deny": [],
     "ask": []
