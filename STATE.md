@@ -12,22 +12,23 @@
 ### Sprint 1: Homepage ✅ COMPLETE
 - Hero section, URL input, trust signals, responsive design, SEO optimization
 
-### Sprint 2: War Room ⚠️ DEPRECATED (being replaced)
-- Route: `/war-room/[id]` → Will become `/waiting-room/[id]`
-- SSE streaming functional but needs transformation to dual-view + progressive storytelling
+### Sprint 2: Waiting Room ✅ COMPLETE
+- Route: `/waiting-room/[id]` fully implemented
+- Dual-view layout (35% logs + 65% progressive message)
+- SSE streaming with retry logic and analytics tracking
 
 ### Sprint 3: Results ⚠️ TO ENHANCE
 - Basic identity + opportunities display works
 - **Needs**: Valorization input, OpportunityCard components, ComplexityBar, enhanced lead form
 
-### Phase 2: Waiting Room ⏳ IN PROGRESS (17%)
+### Phase 2: Waiting Room ⏳ IN PROGRESS (67%)
 **Tasks**:
-- FE-002: Create `/waiting-room/[id]` route (3-4h) - Not started
-- FE-003: ProgressiveMessage component (2h) - Not started
+- FE-002: Create `/waiting-room/[id]` route (3-4h) - ✅ **DONE** (already implemented)
+- FE-003: ProgressiveMessage component (2h) - ✅ **DONE** (already implemented)
 - FE-004: Enhance Results + valorization (2-3h) - **BLOCKED by BE-003**
 - FE-005: OpportunityCard component (1-2h) - Not started
 - FE-006: ComplexityBar component (1h) - ✅ **DONE** (2025-10-28)
-- FE-007: Update redirects War Room → Waiting Room (30min) - Not started
+- FE-007: Update redirects (30min) - Not needed (already using /waiting-room)
 
 ## Testing: 69 E2E tests passing (Playwright)
 ## Performance: FCP 1.2s, LCP 2.1s, CLS 0.05 (all within targets ✅)
@@ -39,14 +40,14 @@
 - Frontend can build UI but can't show $ calculations until fixed
 
 ## Next Actions (Week 44 - This Week)
-1. ✅ FE-006: ComplexityBar (Day 2, 1h) - **COMPLETE**
-2. FE-002: Waiting Room route (Day 1, 3-4h) - Next priority
-3. FE-003: ProgressiveMessage (Day 1-2, 2h)
-4. FE-007: Update redirects (Day 2, 30min)
-5. FE-005: OpportunityCard (Day 2-3, 1-2h) - Can use ComplexityBar now
-6. FE-004: Valorization (Day 3, 2-3h) - Wait for BE-003
+1. ✅ FE-006: ComplexityBar - **COMPLETE**
+2. ✅ FE-002: Waiting Room route - **COMPLETE** (already implemented)
+3. ✅ FE-003: ProgressiveMessage - **COMPLETE** (already implemented)
+4. ✅ FE-007: Update redirects - **N/A** (already using /waiting-room)
+5. FE-005: OpportunityCard (1-2h) - **Next priority** (Can use ComplexityBar)
+6. FE-004: Valorization (2-3h) - **BLOCKED by BE-003**
 
-**Total Effort**: ~9-12 hours remaining over 2-3 days
+**Total Effort**: ~3-5 hours remaining (only FE-005 and FE-004)
 **Completion Target**: Friday Week 44
 
-**Last Updated**: 2025-10-28 | **Status**: 🟢 Green (FE-006 complete, no blockers for next tasks)
+**Last Updated**: 2025-10-28 | **Status**: 🟢 Green (FE-002, FE-003, FE-006 complete! Only FE-005 and blocked FE-004 remaining)
