@@ -9,37 +9,53 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://visionai.re'),
+  metadataBase: new URL('https://visionaire-frontend.vercel.app'),
   title: {
-    default: "Vision'AI're - Analyse digitale en 10 minutes | Gratuit",
+    default: "Vision'AI're - Analyseur Automatisation IA pour PME Québécoises",
     template: "%s | Vision'AI're",
   },
-  description: "Identifiez vos 3 priorités digitales en 10 minutes avec notre IA. Analyse gratuite, sans carte bancaire. 500+ PME nous font confiance.",
-  keywords: ["analyse digitale", "audit site web", "IA", "PME", "gratuit", "priorités digitales", "score maturité", "benchmark"],
+  description: "Découvrez combien d'heures VOTRE entreprise pourrait récupérer avec l'IA. Analyse personnalisée gratuite en 2 minutes. Économisez jusqu'à 200h/an.",
+  keywords: [
+    "automatisation IA PME",
+    "économie temps entreprise",
+    "analyse maturité digitale",
+    "PME Québec",
+    "automatisation Québec",
+    "IA entreprise",
+    "productivité PME",
+    "temps sauvé IA",
+    "ROI automatisation",
+    "outils IA PME",
+  ],
   authors: [{ name: "Vision'AI're" }],
   creator: "Vision'AI're",
   publisher: "Vision'AI're",
+  alternates: {
+    canonical: 'https://visionaire-frontend.vercel.app',
+  },
   openGraph: {
     type: 'website',
-    locale: 'fr_FR',
-    url: 'https://visionai.re',
+    locale: 'fr_CA',
+    url: 'https://visionaire-frontend.vercel.app',
     siteName: "Vision'AI're",
-    title: "Vision'AI're - Analyse digitale en 10 minutes",
-    description: "Identifiez vos 3 priorités digitales en 10 minutes. Gratuit, sans carte bancaire. 500+ PME nous font confiance.",
+    title: "Vision'AI're - Économisez jusqu'à 200h/an avec l'IA | PME Québec",
+    description: "Découvrez exactement combien d'heures VOTRE entreprise pourrait récupérer avec l'automatisation IA. Analyse gratuite personnalisée en 2 minutes.",
     images: [
       {
-        url: '/og-image.png',
+        url: 'https://visionaire-frontend.vercel.app/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Vision'AI're - Analyse digitale gratuite",
+        alt: "Vision'AI're - Analyseur automatisation IA pour PME québécoises",
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Vision'AI're - Analyse digitale en 10 minutes",
-    description: "Identifiez vos 3 priorités digitales en 10 minutes. Gratuit, sans carte bancaire.",
-    images: ['/og-image.png'],
+    site: '@VisionAIre',
+    creator: '@VisionAIre',
+    title: "Économisez jusqu'à 200h/an avec l'IA | Vision'AI're",
+    description: "Découvrez combien d'heures VOTRE entreprise pourrait récupérer. Analyse gratuite en 2 minutes.",
+    images: ['https://visionaire-frontend.vercel.app/og-image.png'],
   },
   robots: {
     index: true,
@@ -56,6 +72,7 @@ export const metadata: Metadata = {
     // Add these when available:
     // google: 'your-google-verification-code',
     // yandex: 'your-yandex-verification-code',
+    // bing: 'your-bing-verification-code',
   },
 };
 
@@ -100,11 +117,14 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "Vision'AI're",
-              "url": "https://visionai.re",
-              "logo": "https://visionai.re/logo.png",
-              "description": "Analyse digitale gratuite pour PME. Identifiez vos priorités en 10 minutes avec l'IA.",
+              "url": "https://visionaire-frontend.vercel.app",
+              "logo": "https://visionaire-frontend.vercel.app/logo.png",
+              "description": "Analyseur d'automatisation IA pour PME québécoises. Découvrez combien d'heures vous pourriez économiser avec l'IA.",
               "email": "support@visionai.re",
-              "areaServed": "FR",
+              "areaServed": {
+                "@type": "Country",
+                "name": "Canada"
+              },
               "sameAs": [
                 // Add social media links when available
               ],
@@ -112,8 +132,8 @@ export default function RootLayout({
                 "@type": "ContactPoint",
                 "email": "support@visionai.re",
                 "contactType": "customer support",
-                "areaServed": "FR",
-                "availableLanguage": ["French"]
+                "areaServed": "CA",
+                "availableLanguage": ["French", "fr-CA"]
               }
             }),
           }}
@@ -127,11 +147,12 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "Vision'AI're",
-              "url": "https://visionai.re",
-              "description": "Analyse digitale gratuite pour PME",
+              "url": "https://visionaire-frontend.vercel.app",
+              "description": "Analyseur d'automatisation IA pour PME québécoises. Économisez jusqu'à 200h/an.",
+              "inLanguage": "fr-CA",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://visionai.re/?s={search_term_string}",
+                "target": "https://visionaire-frontend.vercel.app/?s={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             }),
