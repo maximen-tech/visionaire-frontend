@@ -26,7 +26,8 @@
       "Bash(test:*)",
       "Bash(npm test:*)",
       "Bash(npx playwright test:*)",
-      "Bash(npm run test:*)"
+      "Bash(npm run test:*)",
+      "Bash(set ANALYZE=true)"
     ],
     "deny": [],
     "ask": []

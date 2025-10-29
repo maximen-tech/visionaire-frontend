@@ -1,5 +1,10 @@
 import { withSentryConfig } from "@sentry/nextjs";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -25,7 +30,13 @@ const nextConfig: NextConfig = {
   // Experimental Features
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['framer-motion', 'lucide-react'],
+    optimizePackageImports: [
+      'framer-motion',
+      'lucide-react',
+      'react-markdown',
+      'react-hot-toast',
+      '@sentry/nextjs',
+    ],
   },
 
   // Security Headers Configuration
@@ -128,7 +139,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+export default bundleAnalyzer(withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
@@ -151,4 +162,4 @@ export default withSentryConfig(nextConfig, {
   sourcemaps: {
     disable: false,
   },
-});
+}));

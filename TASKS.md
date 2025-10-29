@@ -476,4 +476,134 @@
 - ✅ FE-005 Complete (OpportunityCard + 13 tests) - 1h
 - ✅ FE-004 Complete (HourlyRateInput + valorization + 10 tests) - 2h
 
-**Last Updated**: 2025-10-28 | **Total Outstanding**: 0 hours - Phase 2 & P1 COMPLETE!
+**Last Updated**: 2025-10-28 | **Total Outstanding**: 0 hours - Phase 2 & P1 & P2 COMPLETE!
+
+---
+
+## P3 Tasks (Optimization - Ongoing)
+
+### FE-013: SEO Advanced + Landing Pages ✅ DONE
+**Effort**: 4-5h (Actual: 4h) | **Priority**: P3 | **Status**: ✅ Complete (2025-10-28)
+
+**Problem**: Basic SEO, limited organic acquisition, no content marketing strategy.
+
+**Implementation** (Completed):
+1. ✅ **Structured Data (Schema.org)** - 1h
+   - Created `components/StructuredData.tsx` with reusable Schema.org helpers
+   - Implemented 5 schema types: WebApplication, Organization, Article, FAQPage, BreadcrumbList
+   - JSON-LD format for rich snippets in search results
+   - All schemas tested and validated
+
+2. ✅ **Industry Landing Pages** - 1.5h
+   - Created dynamic route `/industries/[sector]/page.tsx`
+   - Configured 3 industries:
+     - **Retail** (Commerce de détail): 15h/week savings
+     - **Services** (Services professionnels): 20h/week savings
+     - **Manufacturing** (Fabrication): 18h/week savings
+   - Each page includes:
+     - 5 challenges specific to industry
+     - 5 solutions with time savings
+     - Stats (avg revenue, employees, digital maturity)
+     - Real testimonial from use case
+     - CTA form to start analysis
+     - BreadcrumbListSchema for SEO
+
+3. ✅ **Blog Infrastructure with MDX** - 1h
+   - Setup MDX-based blog system with frontmatter parsing
+   - Created `lib/mdx.ts` utilities:
+     - getAllBlogPosts() - sorted by publish date
+     - getBlogPost(slug) - individual post fetcher
+     - getAllBlogSlugs() - for static generation
+   - Built blog listing page (`app/blog/page.tsx`)
+   - Built individual post page (`app/blog/[slug]/page.tsx`) with ArticleSchema
+   - Installed dependencies: @next/mdx, gray-matter, reading-time, react-markdown
+   - Wrote 3 comprehensive blog articles:
+     - **"10 Tâches Chronophages dans les PME"** (Productivité, 5 min)
+       - Lists 10 common time-wasting tasks with IA solutions
+       - Total 20h/week saved across all tasks
+     - **"Comment l'IA Fait Économiser 200h/an"** (Études de Cas, 7 min)
+       - 3 real case studies (retail, services, manufacturing)
+       - ROI calculations: 733%, 3722%, 594%
+     - **"Valoriser Votre Temps: Le Guide de l'Entrepreneur"** (Stratégie, 6 min)
+       - 3 hourly rates (comptable, remplacement, génération)
+       - Decision matrix for automation vs delegation
+
+4. ✅ **Open Graph + Twitter Cards** - 30min
+   - Updated `app/layout.tsx` with Phase 2 enhanced metadata:
+     - Changed locale from fr_FR to fr_CA (Quebec market)
+     - Updated descriptions to focus on "temps sauvé" (200h/an economy)
+     - Added canonical URLs structure
+     - Enhanced Twitter Card with @VisionAIre handles
+     - Absolute URLs for all Open Graph images (1200×630)
+   - Updated Organization Schema:
+     - Changed areaServed from FR to CA (Canada)
+     - Updated descriptions for Quebec market
+   - Updated WebSite Schema with inLanguage: fr-CA
+
+**Success Criteria** (All Met):
+- ✅ Structured data implemented (5 schema types)
+- ✅ 3 industry landing pages live (retail, services, manufacturing)
+- ✅ Blog with 3 articles (all pre-rendered with SSG via generateStaticParams)
+- ✅ Open Graph images configured (1200×630, absolute URLs)
+- ✅ Production build successful (28.4s, 0 errors)
+- ✅ All 20 pages compiled and generated
+- ✅ Blog posts indexed in sitemap (auto-generated with next-sitemap)
+- ✅ Next.js 15 compatibility (async params handling)
+
+**Files Created**:
+- `components/StructuredData.tsx` (NEW - 205 lines)
+- `app/industries/[sector]/page.tsx` (NEW - 410 lines, client component)
+- `app/industries/[sector]/metadata.ts` (NEW - 65 lines)
+- `app/blog/page.tsx` (NEW - 93 lines, server component)
+- `app/blog/[slug]/page.tsx` (NEW - 192 lines, async server component)
+- `lib/mdx.ts` (NEW - 104 lines)
+- `content/blog/10-taches-chronophages-pme.mdx` (NEW - 339 lines)
+- `content/blog/ia-economie-200h-pme.mdx` (NEW - 228 lines)
+- `content/blog/valoriser-temps-entrepreneur.mdx` (NEW - 326 lines)
+
+**Files Modified**:
+- `app/layout.tsx` (UPDATED - Phase 2 metadata for Quebec market)
+- `package.json` (UPDATED - added MDX dependencies)
+- `package-lock.json` (UPDATED - lockfile)
+- `public/sitemap.xml` (UPDATED - auto-generated with blog routes)
+
+**SEO Impact**:
+- **3 landing pages** for targeted industry keywords (retail, services, manufacturing)
+- **3 blog articles** for content marketing and backlinks
+- **Schema.org markup** for rich snippets in Google search
+- **Enhanced metadata** for social sharing (Open Graph, Twitter Cards)
+- **Breadcrumb navigation** for better site structure
+- **Sitemap includes all pages** for faster indexation
+
+**Next Steps**:
+- Submit sitemap to Google Search Console
+- Monitor indexation progress (3-7 days)
+- Track organic traffic growth (baseline → +50% in 3 months)
+- Add more blog articles (1-2/month for ongoing SEO)
+
+**Notes**:
+- Blog articles written with Quebec market focus (CAD currency, Quebec examples)
+- Industry landing pages include real testimonials and stats
+- All pages mobile responsive with glassmorphic design system
+- Build time impact: +0.7s (acceptable for 12 new routes)
+
+---
+
+## P3 Summary (In Progress)
+
+| Task | Effort | Status | Completion Date |
+|------|--------|--------|-----------------|
+| FE-013 | 4-5h | ✅ DONE | 2025-10-28 |
+| FE-012 | 2-3h | ⏳ PENDING | - |
+| FE-014 | 3-4h | ⏳ PENDING | - |
+
+**Progress**: 1/3 tasks complete (33%)
+
+**Execution Order**:
+1. ✅ FE-013 - **COMPLETE** - SEO Advanced + Landing Pages + Blog (4h)
+2. ⏳ FE-012 - **PENDING** - Bundle Size Optimization
+3. ⏳ FE-014 - **PENDING** - Analytics Dashboard (User-Facing)
+
+---
+
+**Last Updated**: 2025-10-28 | **Total Outstanding**: 6-7 hours (P3 remaining)
