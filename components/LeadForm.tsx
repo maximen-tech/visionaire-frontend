@@ -15,6 +15,7 @@ import {
   sanitizePhone,
   checkRateLimit,
 } from "@/lib/security/sanitize";
+import PulsingButton from "@/components/design-system/PulsingButton";
 
 interface LeadFormProps {
   analysisId: string;
@@ -350,17 +351,38 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
             </div>
           )}
 
-          <button
+          <PulsingButton
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-lg font-bold rounded-lg hover:from-indigo-700 hover:to-indigo-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all transform hover:scale-105 shadow-lg"
+            loading={isSubmitting}
+            variant="primary"
+            size="lg"
+            className="w-full"
+            rightIcon={<span className="text-2xl">→</span>}
           >
-            {isSubmitting
-              ? "Envoi en cours..."
-              : "🎁 Réserver ma consultation GRATUITE"}
-          </button>
+            🎁 Réserver ma consultation GRATUITE
+          </PulsingButton>
 
-          <p className="text-xs text-gray-500 text-center">
+          {/* Trust Signals */}
+          <div className="flex items-center justify-center gap-6 mt-4 text-xs text-gray-500">
+            <div className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+              </svg>
+              <span>SSL Sécurisé</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>Données protégées</span>
+            </div>
+            <a href="/legal/privacy" className="hover:underline hover:text-gray-700">
+              Politique de confidentialité
+            </a>
+          </div>
+
+          <p className="text-xs text-gray-500 text-center mt-2">
             En soumettant ce formulaire, vous acceptez d&apos;être contacté par
             notre équipe. Vos données sont sécurisées et conformes au RGPD.
           </p>
