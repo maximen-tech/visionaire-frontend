@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { IdentityA1 } from "@/lib/types";
 import GlassmorphicCard from "@/components/design-system/GlassmorphicCard";
 import { fadeIn } from "@/lib/animations";
+import { detectDevicePerformance, getTypewriterSpeed, getDeviceInfo } from "@/lib/performance";
+import { trackDevicePerformance } from "@/lib/analytics";
 
 interface ProgressiveMessageProps {
   progress: number;
@@ -13,8 +15,6 @@ interface ProgressiveMessageProps {
   status: string;
   onComplete: () => void;
 }
-
-const TYPING_SPEED = 20; // ms per character
 
 export default function ProgressiveMessage({
   progress,
@@ -27,7 +27,35 @@ export default function ProgressiveMessage({
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [phaseComplete, setPhaseComplete] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(20); // Default to 20ms, adjusted on mount
   const completedRef = useRef(false);
+  const performanceTrackedRef = useRef(false);
+
+  // Detect device performance and set adaptive typing speed (runs once on mount)
+  useEffect(() => {
+    const devicePerformance = detectDevicePerformance();
+    const adaptiveSpeed = getTypewriterSpeed(devicePerformance);
+    setTypingSpeed(adaptiveSpeed);
+
+    // Track device performance analytics (once)
+    if (!performanceTrackedRef.current) {
+      performanceTrackedRef.current = true;
+      const deviceInfo = getDeviceInfo();
+      trackDevicePerformance(
+        devicePerformance,
+        adaptiveSpeed,
+        deviceInfo.memory,
+        deviceInfo.cores
+      );
+
+      console.log('[ProgressiveMessage] Adaptive typing speed:', {
+        performance: devicePerformance,
+        speed: `${adaptiveSpeed}ms/char`,
+        memory: deviceInfo.memory ? `${deviceInfo.memory}GB` : 'unknown',
+        cores: deviceInfo.cores || 'unknown',
+      });
+    }
+  }, []); // Run once on mount
 
   // Determine phase based on progress
   useEffect(() => {
@@ -87,10 +115,10 @@ export default function ProgressiveMessage({
 
     const timer = setTimeout(() => {
       setDisplayedText(targetText.substring(0, displayedText.length + 1));
-    }, TYPING_SPEED);
+    }, typingSpeed); // Use adaptive typing speed
 
     return () => clearTimeout(timer);
-  }, [displayedText, currentPhase, identityData, totalHours, status, onComplete]);
+  }, [displayedText, currentPhase, identityData, totalHours, status, onComplete, typingSpeed]);
 
   // Reset text when phase changes
   useEffect(() => {

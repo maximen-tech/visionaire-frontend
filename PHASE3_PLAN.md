@@ -107,8 +107,8 @@
 
 ---
 
-#### FE-011: Adaptive Typewriter Timing
-**Effort**: 1h | **Priority**: P2 | **Impact**: Medium
+#### FE-011: Adaptive Typewriter Timing ✅ DONE (2025-10-28)
+**Effort**: 1h (Actual: 1h) | **Priority**: P2 | **Impact**: Medium
 **Problème**: 20ms/char trop rapide sur vieux smartphones (lag, frame drops)
 
 **Implémentation**:

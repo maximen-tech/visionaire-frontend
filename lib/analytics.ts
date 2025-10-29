@@ -205,6 +205,27 @@ export const trackMessagePhase = (
   });
 };
 
+/**
+ * Track device performance detection
+ *
+ * Used for adaptive UX optimization (typewriter speed, animation frame rate)
+ */
+export const trackDevicePerformance = (
+  performanceTier: 'high' | 'medium' | 'low',
+  typingSpeed: number,
+  deviceMemory: number | null,
+  cpuCores: number | null
+): void => {
+  trackEvent('device_performance', {
+    performance_tier: performanceTier,
+    typing_speed_ms: typingSpeed,
+    device_memory_gb: deviceMemory,
+    cpu_cores: cpuCores,
+    event_category: 'technical',
+    event_label: `performance_${performanceTier}`,
+  });
+};
+
 // ========================================
 // RESULTS PAGE EVENTS
 // ========================================
