@@ -14,10 +14,14 @@ import {
 
 // Lazy load heavy components for better performance
 const LeadForm = lazy(() => import("@/components/LeadForm"));
+const MultiStepLeadForm = lazy(() => import("@/components/forms/MultiStepLeadForm"));
+const ProgressiveLeadForm = lazy(() => import("@/components/forms/ProgressiveLeadForm"));
 const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
 const PricingWidget = lazy(() => import("@/components/pricing/PricingWidget"));
 import HourlyRateInput from "@/components/HourlyRateInput";
 import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
+import ExitIntentPopup from "@/components/forms/ExitIntentPopup";
+import { useABTest } from "@/lib/hooks/useABTest";
 import {
   trackResultsEnter,
   trackValorizationCalculate,
@@ -41,6 +45,9 @@ export default function ResultsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [hourlyRate, setHourlyRate] = useState<number | null>(null);
+
+  // A/B test for lead form variants (FE-019)
+  const leadFormVariant = useABTest('lead_form_test', 'control');
 
   useEffect(() => {
     if (!analysisId) return;
@@ -364,7 +371,7 @@ export default function ResultsPage() {
           <TestimonialsCarousel />
         </div>
 
-        {/* CTA - Conversion Lead */}
+        {/* CTA - Conversion Lead (A/B Test: FE-019) */}
         <div id="lead-form">
           <Suspense
             fallback={
@@ -373,9 +380,20 @@ export default function ResultsPage() {
               </div>
             }
           >
-            <LeadForm analysisId={results.analysis_id} />
+            {leadFormVariant === 'multi_step' && (
+              <MultiStepLeadForm analysisId={results.analysis_id} />
+            )}
+            {leadFormVariant === 'progressive' && (
+              <ProgressiveLeadForm analysisId={results.analysis_id} />
+            )}
+            {leadFormVariant === 'control' && (
+              <LeadForm analysisId={results.analysis_id} />
+            )}
           </Suspense>
         </div>
+
+        {/* Exit Intent Popup (always active on all variants) */}
+        <ExitIntentPopup />
 
         {/* Métadonnées */}
         <GlassmorphicCard className="p-4 text-sm text-slate-500">

@@ -33,23 +33,29 @@ export const AB_TESTS: ABTest[] = [
     startDate: new Date('2025-10-30'),
   },
 
-  // Test 2: Lead Form Layout
+  // Test 2: Lead Form Variants (FE-019)
   {
     id: 'lead_form_test',
-    name: 'Lead Form Layout',
-    description: 'Test single-column vs. two-column lead form layout',
+    name: 'Lead Form Variants',
+    description: 'Test single-page vs. multi-step vs. progressive disclosure lead forms',
     variants: [
       {
         id: 'control',
-        name: 'Single Column',
-        weight: 0.5,
-        description: 'Standard single-column form (control)',
+        name: 'Single Page (Control)',
+        weight: 0.33,
+        description: 'Standard single-page form with all fields visible',
       },
       {
-        id: 'two_column',
-        name: 'Two Column',
-        weight: 0.5,
-        description: 'Compact two-column form (variant)',
+        id: 'multi_step',
+        name: 'Multi-Step (3 steps)',
+        weight: 0.33,
+        description: 'Form split into 3 steps with progress bar',
+      },
+      {
+        id: 'progressive',
+        name: 'Progressive Disclosure',
+        weight: 0.34,
+        description: 'Single-page form with fields revealed progressively',
       },
     ],
     isActive: true,
