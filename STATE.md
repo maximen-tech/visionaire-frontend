@@ -375,20 +375,85 @@ b3acc22 - feat(performance): add adaptive typewriter timing based on device capa
 
 ---
 
-## 🎯 Next Steps (Post-Phase 3)
+## 🎯 Phase 4 Planning (Ready to Start)
 
-### Option A: Complete FE-014 (3-4h)
-- User-facing analytics dashboard
-- Implementation tracking + gamification
-- Email reports
+**Status**: ✅ Specs Complete | **Estimated Duration**: 22-27 hours (3-4 weeks)
 
-### Option B: Move to Phase 4 (6-8h)
-- New features (TBD based on business priorities)
-- Backend sync required
-- Specs to be created
+### Phase 4A: User Engagement & Retention (12-15h)
+**Goal**: Increase retention by +25%, improve LTV by +50%
 
-### Decision Point
-**Question for stakeholder**: FE-014 Go/No-Go?
+**Tasks**:
+- **FE-015**: Email Drip Campaign Integration (4h)
+  - 4-email automated sequence (Day 1, 3, 7, 14)
+  - React Email templates with Resend API
+  - Email preferences page + analytics tracking
+  - Vercel cron for scheduled sending
+
+- **FE-016**: Dashboard Enhancements (5h)
+  - Progress timeline chart (Recharts)
+  - Hours saved vs time graph (weekly/monthly)
+  - Badge gallery with social sharing (Vercel OG images)
+  - PDF export (progress report generator)
+  - Celebration milestones (50%, 75%, 100%)
+
+- **FE-017**: Social Proof Widgets (3h)
+  - Testimonials carousel (Embla/Framer Motion)
+  - Live stats counter ("X hours saved this month")
+  - Trust badges (certifications, partnerships)
+  - Case study snippets with CTAs
+  - "Recently analyzed" feed (anonymized activity)
+
+**Expected Impact**: Retention +25%, LTV +50%
+
+---
+
+### Phase 4B: Conversion Optimization (10-12h)
+**Goal**: Increase conversion rate by +30%, improve lead quality by +40%
+
+**Tasks**:
+- **FE-018**: A/B Testing Infrastructure (4h)
+  - Custom client-side testing framework
+  - Google Analytics 4 integration
+  - Variant configuration system
+  - Test dashboard (admin-only)
+  - 3 initial tests (CTA button, headline, form layout)
+
+- **FE-019**: Lead Form Variants (4h)
+  - Multi-step form (reduce cognitive load)
+  - Progressive disclosure (email first, phone later)
+  - Exit-intent popup (last chance offer)
+  - Smart conditional fields (show/hide based on input)
+  - Field-level analytics (drop-off tracking)
+
+- **FE-020**: Pricing Calculator Widget (3h)
+  - Interactive ROI calculator (hourly rate → annual savings)
+  - Comparison matrix (DIY vs Expert)
+  - Payment plan options display
+  - Embedded widget (results page, homepage)
+  - Lead magnet (detailed report PDF after email)
+
+**Expected Impact**: Conversion +30%, Lead Quality +40%
+
+---
+
+### Combined Phase 4 (A+B) Impact
+**Retention**: +25%
+**Conversion**: +30%
+**LTV**: +50%
+**MRR Growth**: +30-40%
+**ROI**: ~10x (investment in hours vs revenue impact)
+
+### Detailed Specifications
+- 📄 `.claude/specs/PHASE4A_USER_ENGAGEMENT.md` (5,300+ lines)
+- 📄 `.claude/specs/PHASE4B_CONVERSION_OPTIMIZATION.md` (4,800+ lines)
+- 📄 `.claude/reports/PHASE3_STATUS_CHECK.md` (600+ lines)
+
+### Recommended Approach
+1. **Week 1-2**: Implement Phase 4A (User Engagement) - 12-15h
+2. **Week 3-4**: Implement Phase 4B (Conversion Optimization) - 10-12h
+3. **Week 5**: Testing, polish, monitoring - 2-3h buffer
+
+**Ready to Start**: Phase 4 specs complete, Phase 3 deployed, backend stable
 
 ---
 
@@ -405,11 +470,11 @@ b3acc22 - feat(performance): add adaptive typewriter timing based on device capa
 ### Repository
 - **GitHub**: https://github.com/maximen-tech/visionaire-frontend
 - **Branch**: main
-- **Last commit**: e10660f (2025-10-28)
+- **Last commit**: 5bf0481 (2025-10-30) - feat(dashboard): implement analytics dashboard (FE-014)
 
 ---
 
-**Last Updated**: 2025-10-29 10:15 UTC
-**Status**: Phase 3 - 67% Complete (2/3 tasks done, FE-014 spec complete - ready for implementation)
-**Next Review**: After FE-014 implementation or Phase 4 planning
-**Updated By**: Claude Code (autonomous session)
+**Last Updated**: 2025-10-30
+**Status**: ✅ Phase 3 - 100% Complete | Phase 4 Planning Complete
+**Next Review**: Phase 4 kickoff (stakeholder decision on A+B combined approach)
+**Updated By**: Claude Code (verification + planning session)

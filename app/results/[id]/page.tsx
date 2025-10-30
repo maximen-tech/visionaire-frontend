@@ -15,6 +15,7 @@ import {
 // Lazy load heavy components for better performance
 const LeadForm = lazy(() => import("@/components/LeadForm"));
 const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
+const PricingWidget = lazy(() => import("@/components/pricing/PricingWidget"));
 import HourlyRateInput from "@/components/HourlyRateInput";
 import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
 import {
@@ -322,6 +323,33 @@ export default function ResultsPage() {
           </Suspense>
         </div>
 
+        {/* Pricing Calculator Widget (FE-020) */}
+        <div className="my-12">
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <SkeletonText lines={12} />
+              </div>
+            }
+          >
+            <PricingWidget
+              defaultHourlyRate={hourlyRate || 50}
+              defaultHoursPerWeek={results.total_hours_per_week}
+              defaultComplexity={Math.round(
+                (results.digital_presence.complexity_level +
+                  results.value_creation.complexity_level +
+                  results.business_management.complexity_level) /
+                  3
+              )}
+              showConfetti={true}
+              showPopularBadge={true}
+              collapsible={false}
+              showROICalculator={true}
+              showComparisonMatrix={true}
+              showPaymentPlans={true}
+            />
+          </Suspense>
+        </div>
 
         {/* Testimonials Section (FE-017) */}
         <div className="my-12">
