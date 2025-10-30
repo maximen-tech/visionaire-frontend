@@ -6,6 +6,7 @@ import MicrosoftClarity from "@/components/MicrosoftClarity";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { ABTestingProvider } from "@/lib/ab-testing/init";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -161,13 +162,15 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <GoogleAnalytics />
-          <MicrosoftClarity />
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
-          <CookieBanner />
-          <ThemeSwitcher />
+          <ABTestingProvider>
+            <GoogleAnalytics />
+            <MicrosoftClarity />
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+            <CookieBanner />
+            <ThemeSwitcher />
+          </ABTestingProvider>
         </ThemeProvider>
       </body>
     </html>

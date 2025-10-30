@@ -431,3 +431,61 @@ export const trackTiming = (
     event_label: name,
   });
 };
+
+// ========================================
+// A/B TESTING EVENTS (FE-018)
+// ========================================
+
+/**
+ * Track when a user is assigned to an A/B test variant
+ */
+export const trackABTestAssignment = (
+  testId: string,
+  variantId: string
+): void => {
+  trackEvent('ab_test_assignment', {
+    test_id: testId,
+    variant_id: variantId,
+    event_category: 'ab_testing',
+    event_label: `${testId}_${variantId}`,
+    timestamp: Date.now(),
+  });
+};
+
+/**
+ * Track conversion event for an A/B test
+ */
+export const trackABTestConversion = (
+  testId: string,
+  variantId: string,
+  value?: number
+): void => {
+  trackEvent('ab_test_conversion', {
+    test_id: testId,
+    variant_id: variantId,
+    value: value,
+    event_category: 'ab_testing',
+    event_label: `${testId}_${variantId}_conversion`,
+    timestamp: Date.now(),
+  });
+};
+
+/**
+ * Track custom event for an A/B test
+ */
+export const trackABTestEvent = (
+  testId: string,
+  variantId: string,
+  eventName: string,
+  eventValue?: number
+): void => {
+  trackEvent('ab_test_event', {
+    test_id: testId,
+    variant_id: variantId,
+    event_name: eventName,
+    event_value: eventValue,
+    event_category: 'ab_testing',
+    event_label: `${testId}_${variantId}_${eventName}`,
+    timestamp: Date.now(),
+  });
+};
