@@ -27,7 +27,8 @@
       "Bash(npm test:*)",
       "Bash(npx playwright test:*)",
       "Bash(npm run test:*)",
-      "Bash(set ANALYZE=true)"
+      "Bash(set ANALYZE=true)",
+      "Read(//c/Users/maxco/**)"
     ],
     "deny": [],
     "ask": []
