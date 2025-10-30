@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { convertLead } from "@/lib/api";
+import { convertLead, scheduleDripCampaign } from "@/lib/api";
 import type { LeadConversionRequest } from "@/lib/types";
 import {
   trackLeadSubmit,
@@ -19,9 +19,10 @@ import PulsingButton from "@/components/design-system/PulsingButton";
 
 interface LeadFormProps {
   analysisId: string;
+  totalHoursPerYear?: number;
 }
 
-export default function LeadForm({ analysisId }: LeadFormProps) {
+export default function LeadForm({ analysisId, totalHoursPerYear }: LeadFormProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -112,6 +113,19 @@ export default function LeadForm({ analysisId }: LeadFormProps) {
 
       // Track successful submission
       trackLeadSubmitSuccess(analysisId, response.lead_id);
+
+      // Schedule drip campaign (FE-015)
+      scheduleDripCampaign({
+        email: sanitizedEmail,
+        name: sanitizedName,
+        company: sanitizedCompany,
+        analysisId,
+        totalHoursPerYear,
+        opportunity: formData.opportunity,
+      }).catch((err) => {
+        console.error('Drip campaign scheduling failed:', err);
+        // Don't block user flow - log only
+      });
 
       // Reset form
       setFormData({

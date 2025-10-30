@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { convertLead } from '@/lib/api';
+import { convertLead, scheduleDripCampaign } from '@/lib/api';
 import type { LeadConversionRequest } from '@/lib/types';
 import {
   trackLeadSubmit,
@@ -21,6 +21,7 @@ import { useABTrack } from '@/lib/hooks/useABTest';
 
 interface ProgressiveLeadFormProps {
   analysisId: string;
+  totalHoursPerYear?: number;
 }
 
 interface FormData {
@@ -31,7 +32,7 @@ interface FormData {
   opportunity: string;
 }
 
-export default function ProgressiveLeadForm({ analysisId }: ProgressiveLeadFormProps) {
+export default function ProgressiveLeadForm({ analysisId, totalHoursPerYear }: ProgressiveLeadFormProps) {
   const [formData, setFormData] = useState<FormData>({
     email: '',
     name: '',
@@ -161,6 +162,18 @@ export default function ProgressiveLeadForm({ analysisId }: ProgressiveLeadFormP
       // Track success
       trackLeadSubmitSuccess(analysisId, response.lead_id);
       trackEvent('form_success', 1);
+
+      // Schedule drip campaign (FE-015)
+      scheduleDripCampaign({
+        email: sanitizedEmail,
+        name: sanitizedName,
+        company: sanitizedCompany,
+        analysisId,
+        totalHoursPerYear,
+        opportunity: formData.opportunity,
+      }).catch((err) => {
+        console.error('Drip campaign scheduling failed:', err);
+      });
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Erreur lors de l\'envoi';

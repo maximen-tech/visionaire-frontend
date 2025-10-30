@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { convertLead } from '@/lib/api';
+import { convertLead, scheduleDripCampaign } from '@/lib/api';
 import type { LeadConversionRequest } from '@/lib/types';
 import {
   trackLeadSubmit,
@@ -22,6 +22,7 @@ import { useABTrack } from '@/lib/hooks/useABTest';
 
 interface MultiStepLeadFormProps {
   analysisId: string;
+  totalHoursPerYear?: number;
 }
 
 interface FormData {
@@ -34,7 +35,7 @@ interface FormData {
 
 const STEP_LABELS = ['Email', 'Informations', 'Détails'];
 
-export default function MultiStepLeadForm({ analysisId }: MultiStepLeadFormProps) {
+export default function MultiStepLeadForm({ analysisId, totalHoursPerYear }: MultiStepLeadFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     email: '',
@@ -188,6 +189,18 @@ export default function MultiStepLeadForm({ analysisId }: MultiStepLeadFormProps
       // Track success
       trackLeadSubmitSuccess(analysisId, response.lead_id);
       trackEvent('form_success', 1);
+
+      // Schedule drip campaign (FE-015)
+      scheduleDripCampaign({
+        email: sanitizedEmail,
+        name: sanitizedName,
+        company: sanitizedCompany,
+        analysisId,
+        totalHoursPerYear,
+        opportunity: formData.opportunity,
+      }).catch((err) => {
+        console.error('Drip campaign scheduling failed:', err);
+      });
 
       // Clear saved progress
       localStorage.removeItem(`lead_form_progress_${analysisId}`);

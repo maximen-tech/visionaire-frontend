@@ -204,6 +204,39 @@ export async function convertLead(
 }
 
 /**
+ * Schedule drip campaign for a lead (FE-015)
+ */
+export async function scheduleDripCampaign(data: {
+  email: string;
+  name: string;
+  company: string;
+  analysisId: string;
+  totalHoursPerYear?: number;
+  opportunity?: string;
+}): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await fetch('/api/email/schedule-drip', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to schedule drip campaign');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Schedule drip campaign error:', error);
+    // Don't throw - drip campaign failure shouldn't block lead conversion
+    return { success: false, message: 'Drip campaign scheduling failed' };
+  }
+}
+
+/**
  * Active la notification email pour une analyse
  */
 export async function enableEmailNotification(

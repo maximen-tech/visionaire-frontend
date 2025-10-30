@@ -381,13 +381,22 @@ export default function ResultsPage() {
             }
           >
             {leadFormVariant === 'multi_step' && (
-              <MultiStepLeadForm analysisId={results.analysis_id} />
+              <MultiStepLeadForm
+                analysisId={results.analysis_id}
+                totalHoursPerYear={results.total_hours_per_year}
+              />
             )}
             {leadFormVariant === 'progressive' && (
-              <ProgressiveLeadForm analysisId={results.analysis_id} />
+              <ProgressiveLeadForm
+                analysisId={results.analysis_id}
+                totalHoursPerYear={results.total_hours_per_year}
+              />
             )}
             {leadFormVariant === 'control' && (
-              <LeadForm analysisId={results.analysis_id} />
+              <LeadForm
+                analysisId={results.analysis_id}
+                totalHoursPerYear={results.total_hours_per_year}
+              />
             )}
           </Suspense>
         </div>
