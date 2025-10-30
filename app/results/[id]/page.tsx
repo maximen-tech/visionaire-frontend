@@ -16,6 +16,7 @@ import {
 const LeadForm = lazy(() => import("@/components/LeadForm"));
 const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
 import HourlyRateInput from "@/components/HourlyRateInput";
+import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
 import {
   trackResultsEnter,
   trackValorizationCalculate,
@@ -321,6 +322,19 @@ export default function ResultsPage() {
           </Suspense>
         </div>
 
+
+        {/* Testimonials Section (FE-017) */}
+        <div className="my-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Des résultats qui parlent d'eux-mêmes
+            </h2>
+            <p className="text-slate-400 text-lg">
+              Rejoignez les entreprises qui ont déjà automatisé leurs processus
+            </p>
+          </div>
+          <TestimonialsCarousel />
+        </div>
 
         {/* CTA - Conversion Lead */}
         <div id="lead-form">

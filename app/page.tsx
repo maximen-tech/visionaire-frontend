@@ -18,6 +18,13 @@ import { GlassmorphicInput } from "@/components/design-system/GlassmorphicCard";
 import PulsingButton from "@/components/design-system/PulsingButton";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 
+// Social Proof Components (FE-017)
+import LiveStatsCounter from "@/components/social-proof/LiveStatsCounter";
+import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
+import CaseStudyCard from "@/components/social-proof/CaseStudyCard";
+import TrustBadges from "@/components/social-proof/TrustBadges";
+import { CASE_STUDIES } from "@/data/case-studies";
+
 export default function Home() {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -204,6 +211,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Live Stats Section (FE-017) */}
+      <section className="py-16 bg-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Une communauté croissante d'entreprises québécoises
+            </h2>
+            <p className="text-slate-400 text-lg">
+              Rejoignez les entreprises qui économisent du temps chaque jour
+            </p>
+          </div>
+          <LiveStatsCounter />
+        </div>
+      </section>
+
+      {/* Testimonials Section (FE-017) */}
+      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ce que disent nos clients
+            </h2>
+            <p className="text-slate-400 text-lg">
+              Des résultats concrets pour des entreprises comme la vôtre
+            </p>
+          </div>
+          <TestimonialsCarousel />
+        </div>
+      </section>
+
       {/* Problem Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -333,6 +370,25 @@ export default function Home() {
               <span>✓ Résultats en 10 minutes</span>
               <span>✓ Aucune carte bancaire requise</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Case Studies Section (FE-017) */}
+      <section className="py-20 bg-gradient-to-br from-slate-900 to-slate-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Résultats prouvés, ROI mesurable
+            </h2>
+            <p className="text-slate-400 text-lg">
+              Découvrez comment nos clients ont transformé leur efficacité
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {CASE_STUDIES.map((caseStudy, index) => (
+              <CaseStudyCard key={caseStudy.id} caseStudy={caseStudy} index={index} />
+            ))}
           </div>
         </div>
       </section>
@@ -622,8 +678,15 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 Vision'AI're. Tous droits réservés.</p>
+
+          {/* Trust Badges (FE-017) */}
+          <div className="border-t border-gray-800 mt-8 pt-8">
+            <div className="mb-8">
+              <TrustBadges layout="grid" />
+            </div>
+            <div className="text-center text-sm text-gray-400">
+              <p>&copy; 2025 Vision'AI're. Tous droits réservés.</p>
+            </div>
           </div>
         </div>
       </footer>
