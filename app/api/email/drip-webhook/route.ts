@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user opted out
-    if (!shouldSendEmail()) {
+    const canSendEmail = await shouldSendEmail(leadData.email);
+    if (!canSendEmail) {
       console.log(`Email skipped (opted out): ${leadData.email}`);
       return NextResponse.json({
         success: true,

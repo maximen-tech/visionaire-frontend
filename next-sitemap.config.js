@@ -1,15 +1,15 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://visionai.re',
-  generateRobotsTxt: true,
+  siteUrl: process.env.SITE_URL || 'https://visionaire-frontend.vercel.app',
+  generateRobotsTxt: false, // We maintain our own robots.txt
   generateIndexSitemap: false,
-  exclude: ['/test-sentry', '/server-sitemap.xml'],
+  exclude: ['/test-sentry', '/server-sitemap.xml', '/admin/*', '/api/*'],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/test-sentry', '/api/*'],
+        disallow: ['/test-sentry', '/api/*', '/admin/*'],
       },
     ],
   },

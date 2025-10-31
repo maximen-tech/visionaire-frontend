@@ -1,5 +1,6 @@
 // app/api/stats/recent-activity/route.ts
 // API endpoint for recent activity feed (cached, 30s TTL)
+// Connected to backend API with graceful fallback to mock data
 
 import { NextResponse } from 'next/server';
 
@@ -30,10 +31,8 @@ function getRelativeTime(minutes: number): string {
   return `Il y a ${days} jours`;
 }
 
-export async function GET() {
-  // TODO: Replace with real backend API call when BE-006 is implemented
-  // For now, generate realistic mock data with varying timestamps
-
+// Mock data generator (fallback if backend unavailable)
+function generateMockActivities(): RecentActivity[] {
   const sectors = [
     'Commerce de détail',
     'Services professionnels',
@@ -53,25 +52,74 @@ export async function GET() {
   ];
 
   const activities: RecentActivity[] = Array.from({ length: 5 }, (_, i) => {
-    const minutesAgo = Math.floor(Math.random() * 120) + (i * 10); // Spread over 2 hours
+    const minutesAgo = Math.floor(Math.random() * 120) + (i * 10);
     const timestamp = new Date(Date.now() - minutesAgo * 60 * 1000);
 
     return {
       id: `act-${Date.now()}-${i}`,
       sector: sectors[Math.floor(Math.random() * sectors.length)],
       city: cities[Math.floor(Math.random() * cities.length)],
-      hours_potential: Math.floor(Math.random() * 200) + 50, // 50-250 hours
+      hours_potential: Math.floor(Math.random() * 200) + 50,
       timestamp,
       relative_time: getRelativeTime(minutesAgo),
     };
   });
 
-  // Sort by most recent first
-  activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+  return activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+}
 
-  return NextResponse.json(activities, {
-    headers: {
-      'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
-    },
-  });
+export async function GET() {
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://visionaire-bff-production.up.railway.app';
+
+  try {
+    // Attempt to fetch real activity from backend
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout (faster than live stats)
+
+    const response = await fetch(`${backendUrl}/api/stats/recent-activity`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache',
+      },
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`Backend returned ${response.status}`);
+    }
+
+    const data = await response.json() as RecentActivity[];
+
+    // Calculate relative time for each activity
+    const enrichedData = data.map(activity => ({
+      ...activity,
+      timestamp: new Date(activity.timestamp),
+      relative_time: activity.relative_time || getRelativeTime(
+        Math.floor((Date.now() - new Date(activity.timestamp).getTime()) / 60000)
+      ),
+    }));
+
+    return NextResponse.json(enrichedData, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+        'X-Data-Source': 'backend',
+      },
+    });
+
+  } catch (error) {
+    // Fallback to mock data if backend is unavailable
+    console.warn('[API Recent Activity] Backend unavailable, using fallback data:', error);
+
+    const activities = generateMockActivities();
+
+    return NextResponse.json(activities, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=30', // Shorter cache for fallback
+        'X-Data-Source': 'fallback',
+      },
+    });
+  }
 }

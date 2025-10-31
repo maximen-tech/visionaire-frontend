@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ContactForm from "@/components/forms/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact | Vision'AI're - Nous Joindre",
@@ -15,138 +16,148 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
+      <div className="bg-white shadow-sm border-b border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 py-12">
+          <h1 className="text-5xl font-bold text-slate-900 mb-4">
             Contactez-Nous
           </h1>
-          <p className="text-lg text-gray-600">
-            Nous sommes là pour répondre à toutes vos questions
+          <p className="text-xl text-slate-600 max-w-2xl">
+            Nous sommes là pour répondre à toutes vos questions sur l'automatisation et l'IA pour votre entreprise.
           </p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
-        {/* Contact Options */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Email */}
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <div className="text-indigo-600 text-4xl mb-4">✉️</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
-              Par Email
-            </h2>
-            <p className="text-gray-700 mb-4">
-              Envoyez-nous un email et nous vous répondrons dans les 24 heures.
-            </p>
-            <a
-              href="mailto:contact@visionai.re"
-              className="inline-block text-indigo-600 hover:text-indigo-700 font-semibold underline"
-            >
-              contact@visionai.re
-            </a>
+      <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
+        {/* Contact Form + Info Grid */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Contact Form (2 columns) */}
+          <div className="lg:col-span-2">
+            <ContactForm />
           </div>
 
-          {/* FAQ */}
-          <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <div className="text-indigo-600 text-4xl mb-4">❓</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
-              Questions Fréquentes
+          {/* Contact Info Sidebar (1 column) */}
+          <div className="space-y-6">
+            {/* Direct Contact */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-cyan-600 text-3xl mb-3">✉️</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                Contact Direct
+              </h3>
+              <p className="text-sm text-slate-600 mb-3">
+                Envoyez-nous un email directement
+              </p>
+              <a
+                href="mailto:contact@visionai.re"
+                className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm underline"
+              >
+                contact@visionai.re
+              </a>
+            </div>
+
+            {/* FAQ */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-cyan-600 text-3xl mb-3">❓</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                Questions Fréquentes
+              </h3>
+              <p className="text-sm text-slate-600 mb-3">
+                Trouvez des réponses immédiates
+              </p>
+              <Link
+                href="/faq"
+                className="text-cyan-600 hover:text-cyan-700 font-semibold text-sm underline"
+              >
+                Consulter la FAQ
+              </Link>
+            </div>
+
+            {/* Business Hours */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-cyan-600 text-3xl mb-3">🕐</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-3">
+                Heures d'Ouverture
+              </h3>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-slate-700">
+                  <span className="font-semibold">Lun - Ven:</span>
+                  <span>9h - 17h</span>
+                </div>
+                <div className="flex justify-between text-slate-700">
+                  <span className="font-semibold">Sam - Dim:</span>
+                  <span>Fermé</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 mt-3">
+                * Réponse sous 24h en semaine
+              </p>
+            </div>
+
+            {/* Location */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-200 p-6">
+              <div className="text-cyan-600 text-3xl mb-3">📍</div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">
+                Localisation
+              </h3>
+              <p className="text-sm text-slate-700 font-semibold">
+                Vision'AI're
+              </p>
+              <p className="text-sm text-slate-600">
+                Québec, Canada
+              </p>
+              <p className="text-xs text-slate-500 mt-3">
+                Services disponibles partout au Québec
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Consultation CTA */}
+        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl shadow-2xl p-8 md:p-12 text-white">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Prêt à Transformer Votre Entreprise?
             </h2>
-            <p className="text-gray-700 mb-4">
-              Consultez notre FAQ pour des réponses immédiates aux questions courantes.
+            <p className="text-cyan-50 mb-6 text-lg">
+              Commencez par une analyse gratuite de 2 minutes. Découvrez combien d'heures vous pourriez économiser grâce à l'automatisation intelligente.
             </p>
+            <div className="bg-white/10 rounded-xl p-6 mb-6 backdrop-blur-sm">
+              <h3 className="font-semibold text-lg mb-3">Ce que vous recevrez:</h3>
+              <ul className="space-y-2 text-cyan-50 text-left max-w-xl mx-auto">
+                <li className="flex items-start">
+                  <span className="mr-2 mt-1">✓</span>
+                  <span>Analyse personnalisée de votre maturité digitale</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 mt-1">✓</span>
+                  <span>Estimation précise du temps récupérable par an</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 mt-1">✓</span>
+                  <span>Blueprint actionnable avec opportunités priorisées</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 mt-1">✓</span>
+                  <span>Consultation gratuite de 30 minutes (optionnelle)</span>
+                </li>
+              </ul>
+            </div>
             <Link
-              href="/faq"
-              className="inline-block text-indigo-600 hover:text-indigo-700 font-semibold underline"
+              href="/"
+              className="inline-block bg-white text-cyan-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-cyan-50 transition-colors shadow-lg hover:shadow-xl"
             >
-              Voir la FAQ
+              Commencer l'Analyse Gratuite →
             </Link>
           </div>
-        </div>
-
-        {/* Consultation Booking */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-xl p-8 text-white">
-          <h2 className="text-2xl font-bold mb-4">
-            Réservez une Consultation Gratuite
-          </h2>
-          <p className="text-indigo-100 mb-6 text-lg">
-            Après votre analyse, discutez de vos résultats avec notre équipe lors d'un appel de 30 minutes. 
-            Nous vous aidons à prioriser les actions et à créer un plan d'automatisation sur mesure.
-          </p>
-          <div className="bg-white/10 rounded-lg p-6 mb-6">
-            <h3 className="font-semibold text-lg mb-3">Lors de la consultation, nous discutons:</h3>
-            <ul className="space-y-2 text-indigo-100">
-              <li className="flex items-start">
-                <span className="mr-2">✓</span>
-                <span>Vos résultats d'analyse en détail</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">✓</span>
-                <span>Priorisation des opportunités selon votre budget</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">✓</span>
-                <span>Outils et solutions adaptés à vos besoins</span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">✓</span>
-                <span>Plan d'action concret et réaliste</span>
-              </li>
-            </ul>
-          </div>
-          <p className="text-sm text-indigo-200 mb-6">
-            Pour réserver une consultation, complétez d'abord votre analyse gratuite.
-          </p>
-          <Link
-            href="/"
-            className="inline-block bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-          >
-            Commencer l'analyse gratuite
-          </Link>
-        </div>
-
-        {/* Business Hours */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Heures d'Ouverture
-          </h2>
-          <div className="space-y-3 text-gray-700">
-            <div className="flex justify-between">
-              <span className="font-semibold">Lundi - Vendredi:</span>
-              <span>9h00 - 17h00 (HNE)</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-semibold">Samedi - Dimanche:</span>
-              <span>Fermé</span>
-            </div>
-          </div>
-          <p className="text-sm text-gray-600 mt-4">
-            * Les emails reçus en dehors des heures d'ouverture seront traités le prochain jour ouvrable.
-          </p>
-        </div>
-
-        {/* Location */}
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Localisation
-          </h2>
-          <p className="text-gray-700 text-lg">
-            <strong>Vision'AI're</strong><br />
-            Québec, Canada
-          </p>
-          <p className="text-gray-600 mt-4">
-            Nous servons les PME partout au Québec et au Canada.
-          </p>
         </div>
 
         {/* Back to Home */}
         <div className="text-center">
           <Link
             href="/"
-            className="inline-block text-gray-600 hover:text-gray-900 transition-colors"
+            className="inline-block text-slate-600 hover:text-slate-900 transition-colors font-medium"
           >
             ← Retour à l'accueil
           </Link>

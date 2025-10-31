@@ -33,7 +33,9 @@
       "Bash(for file in app/legal/terms/page.tsx app/legal/privacy/page.tsx app/legal/cookies/page.tsx)",
       "Bash(do:*)",
       "Bash(head:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(awk:*)",
+      "Bash(npm run postbuild:*)"
     ],
     "deny": [],
     "ask": []

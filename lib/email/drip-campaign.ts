@@ -98,15 +98,15 @@ export function personalizeSubject(subject: string, data: LeadData): string {
 
 /**
  * Check if email should be sent based on opt-out status
- * (Placeholder for future unsubscribe tracking)
  *
  * @param email - Recipient email
  * @returns true if email should be sent
  */
-export function shouldSendEmail(): boolean {
-  // TODO: Check against unsubscribe list in database
-  // For now, always return true
-  return true;
+export async function shouldSendEmail(email: string): Promise<boolean> {
+  // Import dynamically to avoid edge runtime issues
+  const { isUnsubscribed } = await import('./unsubscribe-storage');
+  const unsubscribed = await isUnsubscribed(email);
+  return !unsubscribed;
 }
 
 /**
