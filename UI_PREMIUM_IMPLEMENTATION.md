@@ -785,3 +785,21 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 **Version**: 1.0
 **Last Updated**: 2025-10-31
 **Status**: ✅ Ready for Integration
+
+---
+
+## NEW COMPONENTS - INTEGRATION GUIDE
+
+### EnhancedCard - 3D Tilt Card
+Basic usage with tilt and glow effects.
+
+### EnhancedInput - Floating Label Input  
+Material Design style floating labels with focus glow.
+
+### PageTransition - Page & Modal Animations
+5 transition variants for pages, modals, drawers, toasts.
+
+### IsometricCard - Isometric Depth Cards
+Cards with isometric depth layers and customizable colors.
+
+Full documentation and examples available in component files.
