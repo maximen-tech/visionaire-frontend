@@ -34,7 +34,7 @@ interface EnhancedSSEEvent extends SSEEvent {
   data?: {
     identity?: Partial<IdentityA1>;
     partial_hours?: number;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }
 
@@ -48,7 +48,6 @@ export default function WaitingRoomPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [identityData, setIdentityData] = useState<IdentityA1 | null>(null);
   const [totalHours, setTotalHours] = useState<number | null>(null);
-  const [messageComplete, setMessageComplete] = useState(false);
   const [showRedirectButton, setShowRedirectButton] = useState(false);
   const [error, setError] = useState<string>("");
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
@@ -278,6 +277,8 @@ export default function WaitingRoomPage() {
         clearInterval(connectionTimeoutRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // connectSSE is intentionally not in deps to avoid re-connection on every state change
   }, [analysisId]);
 
   // Manual retry handler
@@ -304,7 +305,6 @@ export default function WaitingRoomPage() {
 
   // Handle message completion callback
   const handleMessageComplete = () => {
-    setMessageComplete(true);
     // Wait 3 seconds then show redirect button
     setTimeout(() => {
       setShowRedirectButton(true);

@@ -338,7 +338,7 @@ export const withDelay = (variant: Variants, delay: number): Variants => {
     animate: {
       ...variant.animate,
       transition: {
-        ...(variant.animate as any)?.transition,
+        ...(variant.animate as Record<string, unknown>)?.transition as Record<string, unknown>,
         delay,
       },
     },

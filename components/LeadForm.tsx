@@ -7,7 +7,6 @@ import {
   trackLeadSubmit,
   trackLeadSubmitSuccess,
   trackLeadSubmitError,
-  trackLeadFormFieldFocus,
 } from "@/lib/analytics";
 import {
   sanitizeName,

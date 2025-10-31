@@ -48,6 +48,8 @@ export default function RecentActivityFeed({
       const interval = setInterval(fetchActivities, refreshInterval);
       return () => clearInterval(interval);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // fetchActivities is intentionally not in deps to prevent interval recreation
   }, [autoRefresh, refreshInterval, maxItems]);
 
   if (isLoading) {

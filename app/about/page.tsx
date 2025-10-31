@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
 export const metadata: Metadata = {
@@ -200,9 +200,9 @@ export default function AboutPage() {
             <p className="text-xl mb-8 leading-relaxed opacity-95">
               Rejoignez les 500+ PME qui ont déjà clarifié leur stratégie digitale. Analyse gratuite en 10 minutes. Sans engagement. Commencez maintenant et découvrez les 3 actions qui auront le plus d'impact sur votre chiffre d'affaires.
             </p>
-            <a href="/" className="inline-flex items-center justify-center px-8 py-4 text-lg bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-white">
+            <Link href="/" className="inline-flex items-center justify-center px-8 py-4 text-lg bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-white">
               Analyser mon site maintenant
-            </a>
+            </Link>
           </div>
         </section>
       </main>

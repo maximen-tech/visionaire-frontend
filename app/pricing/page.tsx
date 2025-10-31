@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Button } from '@/components/ui/Button';
+import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Accordion } from '@/components/ui/Accordion';
@@ -116,9 +116,9 @@ export default function PricingPage() {
                       <span className="text-gray-700">Support par email</span>
                     </li>
                   </ul>
-                  <a href="/" className="inline-flex items-center justify-center w-full px-8 py-4 text-lg bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200">
+                  <Link href="/" className="inline-flex items-center justify-center w-full px-8 py-4 text-lg bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200">
                     Analyser mon site maintenant
-                  </a>
+                  </Link>
                   <p className="text-sm text-gray-500 mt-4 text-center">
                     <strong>Idéal pour :</strong> PME qui veulent clarifier leurs priorités digitales sans engagement
                   </p>
@@ -342,9 +342,9 @@ export default function PricingPage() {
               Pas besoin de carte bancaire. Pas d'engagement. Juste 10 minutes pour connaître vos 3 priorités digitales avec leur impact financier estimé. Plus de 500 PME ont déjà franchi le pas. Rejoignez-les maintenant.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/" className="inline-flex items-center justify-center px-8 py-4 text-lg bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-white">
+              <Link href="/" className="inline-flex items-center justify-center px-8 py-4 text-lg bg-white text-blue-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-4 focus:ring-white">
                 Analyser mon site gratuitement
-              </a>
+              </Link>
               <a href="mailto:pro@visionai.re?subject=Liste%20d%27attente%20Pro" className="inline-flex items-center justify-center px-8 py-4 text-lg bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-white">
                 Rejoindre la liste d'attente Pro
               </a>

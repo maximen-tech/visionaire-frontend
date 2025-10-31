@@ -1,5 +1,4 @@
 import React from "react";
-import { glassmorphism, transitions } from "@/lib/design-tokens";
 import { cn } from "@/lib/utils";
 
 interface GlassmorphicCardProps {

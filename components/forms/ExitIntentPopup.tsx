@@ -134,7 +134,7 @@ export default function ExitIntentPopup() {
       setTimeout(() => {
         setIsVisible(false);
       }, 3000);
-    } catch (err) {
+    } catch {
       setError('Erreur lors de l\'envoi. Veuillez réessayer.');
       trackEvent('exit_intent_submission_error', {
         event_category: 'error',

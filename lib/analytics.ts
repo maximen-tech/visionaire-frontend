@@ -23,9 +23,9 @@ declare global {
     gtag?: (
       command: 'config' | 'event' | 'set',
       targetId: string | Date,
-      config?: Record<string, any>
+      config?: Record<string, unknown>
     ) => void;
-    dataLayer?: any[];
+    dataLayer?: unknown[];
   }
 }
 
@@ -51,7 +51,7 @@ export const isAnalyticsEnabled = (): boolean => {
  */
 export const trackEvent = (
   eventName: string,
-  parameters?: Record<string, any>
+  parameters?: Record<string, unknown>
 ): void => {
   if (!isAnalyticsEnabled()) {
     console.log('[Analytics Debug]', eventName, parameters);
@@ -401,7 +401,7 @@ export const trackLeadSubmitError = (
 export const trackError = (
   errorType: string,
   errorMessage: string,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): void => {
   trackEvent('error', {
     error_type: errorType,

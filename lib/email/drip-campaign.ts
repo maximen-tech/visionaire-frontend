@@ -103,7 +103,7 @@ export function personalizeSubject(subject: string, data: LeadData): string {
  * @param email - Recipient email
  * @returns true if email should be sent
  */
-export function shouldSendEmail(email: string): boolean {
+export function shouldSendEmail(): boolean {
   // TODO: Check against unsubscribe list in database
   // For now, always return true
   return true;

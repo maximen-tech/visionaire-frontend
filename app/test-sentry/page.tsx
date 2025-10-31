@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
 import { startAnalysis } from "@/lib/api";
 
@@ -23,7 +24,7 @@ export default function TestSentryPage() {
     try {
       await startAnalysis("https://invalid-test-url-sentry-12345.com");
       addResult("❌ Test 2 échoué: L'API aurait dû échouer");
-    } catch (error) {
+    } catch {
       addResult("✅ Test 2 réussi: Erreur API capturée et envoyée à Sentry");
     }
   };
@@ -87,7 +88,6 @@ export default function TestSentryPage() {
   const testSentryLogger = () => {
     addResult("🧪 Test 7: Envoi log info avec Sentry.logger...");
     try {
-      // @ts-ignore - logger might not be in types but exists in SDK
       if (Sentry.logger && Sentry.logger.info) {
         Sentry.logger.info('User triggered test log', { log_source: 'sentry_test' });
         addResult("✅ Test 7 réussi: Log info envoyé avec Sentry.logger");
@@ -289,12 +289,12 @@ export default function TestSentryPage() {
 
         {/* Navigation */}
         <div className="mt-8 text-center">
-          <a
+          <Link
             href="/"
             className="inline-block px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
           >
             ← Retour à l&apos;accueil
-          </a>
+          </Link>
         </div>
       </div>
     </div>

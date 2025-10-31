@@ -31,7 +31,7 @@ test.describe('FE-020: Pricing Calculator Widget', () => {
       await expect(page.locator('text=Calculateur de ROI')).toBeVisible({ timeout: 10000 });
 
       // Get initial annual savings value
-      const initialSavings = await page.locator('text=Économies Annuelles').locator('..').locator('text=/\\d+/).first().textContent();
+      const initialSavings = await page.locator('text=Économies Annuelles').locator('..').locator('text=/\\d+/').first().textContent();
 
       // Move hourly rate slider
       const hourlyRateSlider = page.locator('input[type="range"]').first();
@@ -39,7 +39,7 @@ test.describe('FE-020: Pricing Calculator Widget', () => {
       await page.waitForTimeout(500); // Wait for calculation
 
       // Get new annual savings value
-      const newSavings = await page.locator('text=Économies Annuelles').locator('..').locator('text=/\\d+/).first().textContent();
+      const newSavings = await page.locator('text=Économies Annuelles').locator('..').locator('text=/\\d+/').first().textContent();
 
       // Values should be different
       expect(initialSavings).not.toBe(newSavings);

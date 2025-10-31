@@ -112,8 +112,8 @@ describe('OpportunityCard', () => {
     expect(screen.getByText(/Expert IA fortement recommandé/)).toBeInTheDocument();
   });
 
-  it('renders skeleton variant', () => {
-    const { OpportunityCardSkeleton } = require('../OpportunityCard');
+  it('renders skeleton variant', async () => {
+    const { OpportunityCardSkeleton } = await import('../OpportunityCard');
     render(<OpportunityCardSkeleton />);
 
     // Skeleton should have animate-pulse class

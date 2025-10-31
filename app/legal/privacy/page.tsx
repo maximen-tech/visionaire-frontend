@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/Alert';
 
 export const metadata: Metadata = {
@@ -255,7 +256,7 @@ export default function PrivacyPage() {
 
         <footer className="mt-12 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-600">
-            <a href="/" className="text-blue-600 underline hover:no-underline">← Retour à l'accueil</a>
+            <Link href="/" className="text-blue-600 underline hover:no-underline">← Retour à l&apos;accueil</Link>
           </p>
         </footer>
       </div>

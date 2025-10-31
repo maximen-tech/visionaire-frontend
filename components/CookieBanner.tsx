@@ -41,16 +41,16 @@ export default function CookieBanner() {
       expires={365}
       onAccept={() => {
         // Enable analytics when user accepts
-        if (typeof window !== "undefined" && (window as any).gtag) {
-          (window as any).gtag("consent", "update", {
+        if (typeof window !== "undefined" && typeof (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag === "function") {
+          (window as Window & typeof globalThis & { gtag: (...args: unknown[]) => void }).gtag("consent", "update", {
             analytics_storage: "granted",
           });
         }
       }}
       onDecline={() => {
         // Disable analytics when user declines
-        if (typeof window !== "undefined" && (window as any).gtag) {
-          (window as any).gtag("consent", "update", {
+        if (typeof window !== "undefined" && typeof (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag === "function") {
+          (window as Window & typeof globalThis & { gtag: (...args: unknown[]) => void }).gtag("consent", "update", {
             analytics_storage: "denied",
           });
         }

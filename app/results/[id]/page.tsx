@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { getAnalysisResults } from "@/lib/api";
 import type { AnalysisResults } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
-import { cn } from "@/lib/utils";
 import {
   formatCAD,
   formatHoursPerWeek,
@@ -31,9 +30,7 @@ import {
 } from "@/lib/analytics";
 import { SkeletonResults, SkeletonCard, SkeletonText } from "@/components/ui/Skeleton";
 import BlueprintGrid from "@/components/design-system/BlueprintGrid";
-import GlassmorphicCard, {
-  GlassmorphicInput,
-} from "@/components/design-system/GlassmorphicCard";
+import GlassmorphicCard from "@/components/design-system/GlassmorphicCard";
 import PulsingButton from "@/components/design-system/PulsingButton";
 
 export default function ResultsPage() {

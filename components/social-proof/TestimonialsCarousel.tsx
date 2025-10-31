@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
-import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
+import { TESTIMONIALS } from '@/data/testimonials';
 
 interface TestimonialsCarouselProps {
   autoPlayInterval?: number; // milliseconds, default 5000

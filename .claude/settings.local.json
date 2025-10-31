@@ -29,7 +29,11 @@
       "Bash(npm run test:*)",
       "Bash(set ANALYZE=true)",
       "Read(//c/Users/maxco/**)",
-      "Bash(npx next lint:*)"
+      "Bash(npx next lint:*)",
+      "Bash(for file in app/legal/terms/page.tsx app/legal/privacy/page.tsx app/legal/cookies/page.tsx)",
+      "Bash(do:*)",
+      "Bash(head:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []

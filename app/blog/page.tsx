@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import BlueprintGrid from '@/components/design-system/BlueprintGrid';
 import GlassmorphicCard from '@/components/design-system/GlassmorphicCard';
 import { getAllBlogPosts } from '@/lib/mdx';

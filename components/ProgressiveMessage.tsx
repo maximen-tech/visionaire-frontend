@@ -26,7 +26,6 @@ export default function ProgressiveMessage({
   const [currentPhase, setCurrentPhase] = useState(1);
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [phaseComplete, setPhaseComplete] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(20); // Default to 20ms, adjusted on mount
   const completedRef = useRef(false);
   const performanceTrackedRef = useRef(false);
@@ -98,7 +97,6 @@ export default function ProgressiveMessage({
 
     if (targetText === displayedText) {
       setIsTyping(false);
-      setPhaseComplete(true);
 
       // If phase 5 is complete AND status is COMPLETE, trigger onComplete
       if (currentPhase === 5 && status === "COMPLETE" && !completedRef.current) {
@@ -111,19 +109,19 @@ export default function ProgressiveMessage({
     }
 
     setIsTyping(true);
-    setPhaseComplete(false);
 
     const timer = setTimeout(() => {
       setDisplayedText(targetText.substring(0, displayedText.length + 1));
     }, typingSpeed); // Use adaptive typing speed
 
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // getPhaseMessage is intentionally not in deps as it would cause unnecessary re-renders
   }, [displayedText, currentPhase, identityData, totalHours, status, onComplete, typingSpeed]);
 
   // Reset text when phase changes
   useEffect(() => {
     setDisplayedText("");
-    setPhaseComplete(false);
   }, [currentPhase]);
 
   // Get phase label

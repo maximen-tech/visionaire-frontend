@@ -20,7 +20,7 @@ import Script from 'next/script';
 
 interface StructuredDataProps {
   type: 'WebApplication' | 'Organization' | 'FAQPage' | 'Article' | 'BreadcrumbList';
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 /**

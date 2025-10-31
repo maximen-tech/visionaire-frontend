@@ -11,7 +11,7 @@ import { cookies } from 'next/headers';
  *
  * Protected by session cookie (requires admin login)
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   // Check authentication
   const cookieStore = await cookies();
   const isAdmin = cookieStore.get('admin_authenticated')?.value === 'true';
@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
       message: 'Event tracked successfully',
       event,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to track event' },
       { status: 500 }
