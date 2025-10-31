@@ -42,9 +42,7 @@ export const contactFormSchema = z.object({
     .min(20, 'Le message doit contenir au moins 20 caractères')
     .max(2000, 'Le message ne peut pas dépasser 2000 caractères'),
 
-  requestType: z.enum(['question', 'demo', 'support', 'partnership', 'other'], {
-    errorMap: () => ({ message: 'Veuillez sélectionner un type de demande' }),
-  }),
+  requestType: z.enum(['question', 'demo', 'support', 'partnership', 'other']),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;

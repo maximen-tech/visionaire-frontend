@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { industries, industryOrder } from '@/lib/data/industries';
 
 interface IndustryPageProps {
-  params: { sector: string };
+  params: Promise<{ sector: string }>;
 }
 
 export async function generateStaticParams() {
@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: IndustryPageProps): Promise<Metadata> {
-  const industry = industries[params.sector];
+  const { sector } = await params;
+  const industry = industries[sector];
 
   if (!industry) {
     return {
@@ -37,14 +38,15 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
     openGraph: {
       title: `${industry.name} | Vision'AI're`,
       description: industry.tagline,
-      url: `https://visionai.re/industries/${params.sector}`,
+      url: `https://visionai.re/industries/${sector}`,
       type: 'website',
     },
   };
 }
 
-export default function IndustryPage({ params }: IndustryPageProps) {
-  const industry = industries[params.sector];
+export default async function IndustryPage({ params }: IndustryPageProps) {
+  const { sector } = await params;
+  const industry = industries[sector];
 
   if (!industry) {
     notFound();
@@ -233,7 +235,7 @@ export default function IndustryPage({ params }: IndustryPageProps) {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {industryOrder
-              .filter((slug) => slug !== params.sector)
+              .filter((slug) => slug !== sector)
               .map((slug) => {
                 const ind = industries[slug];
                 return (
