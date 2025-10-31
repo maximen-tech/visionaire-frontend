@@ -13,7 +13,6 @@ import { trackAnalysisStart, trackURLInputFocus, trackURLValidationError } from 
 import { validateWebsiteUrl, checkRateLimit } from "@/lib/security/sanitize";
 
 // Blueprint Design Components
-import BlueprintGrid from "@/components/design-system/BlueprintGrid";
 import { GlassmorphicInput } from "@/components/design-system/GlassmorphicCard";
 import PulsingButton from "@/components/design-system/PulsingButton";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
@@ -25,11 +24,16 @@ import CaseStudyCard from "@/components/social-proof/CaseStudyCard";
 import TrustBadges from "@/components/social-proof/TrustBadges";
 import { CASE_STUDIES } from "@/data/case-studies";
 
+// Premium UI Components
+import { ResponsiveHeroBackground } from "@/components/3d/HeroCanvas";
+import { CommandPalette } from "@/components/advanced/CommandPalette";
+
 export default function Home() {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -78,9 +82,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-zinc-50 relative">
-      {/* Blueprint Grid Background */}
-      <BlueprintGrid density="low" animated={true} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-zinc-50 dark:from-dark-bg-primary dark:to-dark-bg-secondary relative">
+      {/* Premium 3D Background (desktop) / Gradient (mobile) */}
+      <ResponsiveHeroBackground />
+
+      {/* Command Palette (Cmd+K) */}
+      <CommandPalette open={commandPaletteOpen} setOpen={setCommandPaletteOpen} />
 
       <main>
         {/* Hero Section - Blueprint Time-First Design */}
