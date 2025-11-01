@@ -17,12 +17,8 @@ import { GlassmorphicInput } from "@/components/design-system/GlassmorphicCard";
 import PulsingButton from "@/components/design-system/PulsingButton";
 import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 
-// Social Proof Components (FE-017)
-import LiveStatsCounter from "@/components/social-proof/LiveStatsCounter";
-import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
-import CaseStudyCard from "@/components/social-proof/CaseStudyCard";
+// Social Proof Components
 import TrustBadges from "@/components/social-proof/TrustBadges";
-import { CASE_STUDIES } from "@/data/case-studies";
 
 // Premium UI Components
 import { ResponsiveHeroBackground } from "@/components/3d/HeroCanvas";
@@ -171,80 +167,38 @@ export default function Home() {
                 </div>
               </motion.form>
 
-              {/* Trust Badges */}
+              {/* Trust Badges - No Fake Stats */}
               <motion.div
-                className="space-y-4"
+                className="flex flex-wrap justify-center gap-6 text-sm text-slate-700"
                 variants={staggerContainer}
                 initial="initial"
                 animate="animate"
               >
-                <motion.p
-                  className="text-base text-slate-600 font-body"
+                <motion.div
+                  className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
                   variants={staggerItem}
                 >
-                  Rejoignez <span className="font-semibold text-amber-600">500+ PME québécoises</span> qui ont récupéré leur temps
-                </motion.p>
+                  <span className="text-emerald-500 font-bold">✓</span>
+                  <span className="font-medium">100% gratuit</span>
+                </motion.div>
 
                 <motion.div
-                  className="flex flex-wrap justify-center gap-6 text-sm text-slate-700"
-                  variants={staggerContainer}
+                  className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
+                  variants={staggerItem}
                 >
-                  <motion.div
-                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
-                    variants={staggerItem}
-                  >
-                    <span className="text-emerald-500 font-bold">✓</span>
-                    <span className="font-medium">500+ blueprints créés</span>
-                  </motion.div>
+                  <span className="text-emerald-500 font-bold">✓</span>
+                  <span className="font-medium">Résultats en 10 minutes</span>
+                </motion.div>
 
-                  <motion.div
-                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
-                    variants={staggerItem}
-                  >
-                    <span className="text-emerald-500 font-bold">✓</span>
-                    <span className="font-medium">480 000 heures récupérées</span>
-                  </motion.div>
-
-                  <motion.div
-                    className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
-                    variants={staggerItem}
-                  >
-                    <span className="text-emerald-500 font-bold">✓</span>
-                    <span className="font-medium">Résultats en 10 minutes</span>
-                  </motion.div>
+                <motion.div
+                  className="flex items-center gap-2 bg-white/30 backdrop-blur-sm px-4 py-2 rounded-full border border-slate-200"
+                  variants={staggerItem}
+                >
+                  <span className="text-emerald-500 font-bold">✓</span>
+                  <span className="font-medium">Aucune carte bancaire</span>
                 </motion.div>
               </motion.div>
             </div>
-        </div>
-      </section>
-
-      {/* Live Stats Section (FE-017) */}
-      <section className="py-16 bg-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Une communauté croissante d'entreprises québécoises
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Rejoignez les entreprises qui économisent du temps chaque jour
-            </p>
-          </div>
-          <LiveStatsCounter />
-        </div>
-      </section>
-
-      {/* Testimonials Section (FE-017) */}
-      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ce que disent nos clients
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Des résultats concrets pour des entreprises comme la vôtre
-            </p>
-          </div>
-          <TestimonialsCarousel />
         </div>
       </section>
 
@@ -377,25 +331,6 @@ export default function Home() {
               <span>✓ Résultats en 10 minutes</span>
               <span>✓ Aucune carte bancaire requise</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies Section (FE-017) */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 to-slate-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Résultats prouvés, ROI mesurable
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Découvrez comment nos clients ont transformé leur efficacité
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {CASE_STUDIES.map((caseStudy, index) => (
-              <CaseStudyCard key={caseStudy.id} caseStudy={caseStudy} index={index} />
-            ))}
           </div>
         </div>
       </section>
@@ -625,27 +560,6 @@ export default function Home() {
             <span>✓ Résultats en 10 minutes</span>
             <span>✓ Sans carte bancaire</span>
             <span>✓ Conforme RGPD</span>
-          </div>
-
-          <div className="mt-12 pt-12 border-t border-blue-500">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div>
-                <div className="text-3xl font-bold mb-1">8 min</div>
-                <div className="text-sm opacity-90">durée moyenne</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold mb-1">500+</div>
-                <div className="text-sm opacity-90">entreprises</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold mb-1">92%</div>
-                <div className="text-sm opacity-90">satisfaits</div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold mb-1">45K€</div>
-                <div className="text-sm opacity-90">impact moyen</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>

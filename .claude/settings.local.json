@@ -35,7 +35,12 @@
       "Bash(head:*)",
       "Bash(done)",
       "Bash(awk:*)",
-      "Bash(npm run postbuild:*)"
+      "Bash(npm run postbuild:*)",
+      "Bash(npx vercel:*)",
+      "Bash(if [ -f \".vercel/project.json\" ])",
+      "Bash(then cat .vercel/project.json)",
+      "Bash(else echo \"Vercel project linked via GitHub integration\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []
