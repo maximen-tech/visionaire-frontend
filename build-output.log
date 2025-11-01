@@ -1,0 +1,111 @@
+
+> visionaire-frontend@0.1.0 build
+> next build
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\maxco\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Users\maxco\visionaire-frontend\package-lock.json
+
+   ▲ Next.js 15.5.6
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ optimizeCss
+     · clientTraceMetadata
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 81s
+   Linting and checking validity of types ...
+
+./app/layout.tsx
+91:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+./app/waiting-room/[id]/page.tsx
+282:6  Warning: React Hook useEffect has a missing dependency: 'connectSSE'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/ProgressiveMessage.tsx
+120:6  Warning: React Hook useEffect has a missing dependency: 'getPhaseMessage'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/41) ...
+   Generating static pages (10/41) 
+   Generating static pages (20/41) 
+   Generating static pages (30/41) 
+ ✓ Generating static pages (41/41)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                 Size  First Load JS
+┌ ○ /                                                     264 kB         546 kB
+├ ○ /_not-found                                          1.16 kB         225 kB
+├ ○ /a-propos                                              376 B         226 kB
+├ ○ /about                                                 378 B         226 kB
+├ ○ /admin/ab-tests                                      4.87 kB         229 kB
+├ ○ /admin/dashboard                                     3.79 kB         227 kB
+├ ƒ /api/admin/analytics                                   337 B         224 kB
+├ ƒ /api/admin/login                                       336 B         224 kB
+├ ƒ /api/contact                                           337 B         224 kB
+├ ƒ /api/email/drip-webhook                                336 B         224 kB
+├ ƒ /api/email/schedule-drip                               337 B         224 kB
+├ ƒ /api/email/unsubscribe                                 336 B         224 kB
+├ ƒ /api/send-email                                        337 B         224 kB
+├ ○ /blog                                                1.31 kB         227 kB
+├ ● /blog/[slug]                                         1.31 kB         227 kB
+├   ├ /blog/10-taches-chronophages-pme
+├   ├ /blog/5-outils-ia-gratuits-pme-quebecoises
+├   ├ /blog/automatiser-comptabilite-guide-complet-2025
+├   └ [+7 more paths]
+├ ○ /contact                                             27.8 kB         253 kB
+├ ƒ /dashboard/[id]                                      18.2 kB         281 kB
+├ ○ /faq                                                   378 B         226 kB
+├ ● /industries/[sector]                                   376 B         226 kB
+├   ├ /industries/restauration
+├   ├ /industries/commerce
+├   ├ /industries/services
+├   └ [+2 more paths]
+├ ○ /legal/cookies                                         377 B         226 kB
+├ ○ /legal/privacy                                         378 B         226 kB
+├ ○ /legal/terms                                           377 B         226 kB
+├ ○ /politique-confidentialite                             377 B         226 kB
+├ ○ /pricing                                             1.05 kB         234 kB
+├ ƒ /results/[id]                                        9.27 kB         297 kB
+├ ○ /sitemap.xml                                           337 B         224 kB
+├ ○ /test-sentry                                          3.5 kB         229 kB
+├ ○ /unsubscribe                                         2.43 kB         228 kB
+└ ƒ /waiting-room/[id]                                   9.26 kB         286 kB
++ First Load JS shared by all                             224 kB
+  ├ chunks/4bd1b696-f85a866ef1f6dd4d.js                  54.4 kB
+  ├ chunks/52774a7f-4917143bf82466c6.js                  36.8 kB
+  ├ chunks/6099-4960dff6382fb1eb.js                       129 kB
+  └ other shared chunks (total)                           3.5 kB
+
+
+ƒ Middleware                                              178 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> visionaire-frontend@0.1.0 postbuild
+> next-sitemap
+
+✨ [next-sitemap] Loading next-sitemap config: file:///C:/Users/maxco/visionaire-frontend/next-sitemap.config.js
+✅ [next-sitemap] Generation completed
+┌───────────────┬────────┐
+│ (index)       │ Values │
+├───────────────┼────────┤
+│ indexSitemaps │ 0      │
+│ sitemaps      │ 1      │
+└───────────────┴────────┘
+-----------------------------------------------------
+ SITEMAPS 
+-----------------------------------------------------
+
+   ○ http://localhost:3000/sitemap.xml
+
+
