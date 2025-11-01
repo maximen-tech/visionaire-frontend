@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { startAnalysis } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
@@ -20,12 +21,21 @@ import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 // Social Proof Components
 import TrustBadges from "@/components/social-proof/TrustBadges";
 
-// Sector Selector Components
-import SectorSelector from "@/components/sectors/SectorSelector";
+// Lazy-loaded Heavy Components (Performance Optimization)
+const SectorSelector = dynamic(() => import("@/components/sectors/SectorSelector"), {
+  loading: () => <div className="text-center py-12 text-slate-600 dark:text-slate-400">Chargement...</div>,
+  ssr: false, // Below fold - no need for SSR
+});
 
-// Premium UI Components
-import { ResponsiveHeroBackground } from "@/components/3d/HeroCanvas";
-import { CommandPalette } from "@/components/advanced/CommandPalette";
+const ResponsiveHeroBackground = dynamic(() => import("@/components/3d/HeroCanvas").then(mod => ({ default: mod.ResponsiveHeroBackground })), {
+  loading: () => null, // Background - no loader needed
+  ssr: false, // 3D canvas - client-side only
+});
+
+const CommandPalette = dynamic(() => import("@/components/advanced/CommandPalette").then(mod => ({ default: mod.CommandPalette })), {
+  loading: () => null, // Keyboard shortcut - no loader needed
+  ssr: false, // Interactive - client-side only
+});
 
 export default function Home() {
   const [url, setUrl] = useState("");
