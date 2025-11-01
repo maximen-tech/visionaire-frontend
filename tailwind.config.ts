@@ -95,11 +95,11 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Premium typography system
-        heading: ['"Space Grotesk"', '"Cabinet Grotesk"', "sans-serif"],
-        body: ['"Inter Variable"', "Inter", "sans-serif"],
-        mono: ['"JetBrains Mono Variable"', '"JetBrains Mono"', "monospace"],
-        display: ['"Space Grotesk"', "serif"], // For hero sections
+        // Premium typography system - Next.js optimized fonts
+        heading: ['var(--font-heading)', '"Cabinet Grotesk"', "sans-serif"],
+        body: ['var(--font-inter)', "Inter", "sans-serif"],
+        mono: ['var(--font-mono)', '"JetBrains Mono"', "monospace"],
+        display: ['var(--font-heading)', "serif"], // For hero sections
       },
       fontSize: {
         'hero-xl': ['6rem', { lineHeight: '1.05', letterSpacing: '-0.03em' }],

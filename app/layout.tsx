@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import CookieBanner from "@/components/CookieBanner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MicrosoftClarity from "@/components/MicrosoftClarity";
@@ -8,6 +9,31 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ABTestingProvider } from "@/lib/ab-testing/init";
 import "./globals.css";
+
+// Optimized Font Loading with Next.js
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap', // Eliminates FOUT
+  variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial']
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-heading',
+  preload: true,
+  fallback: ['system-ui', 'arial']
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
+  preload: true,
+  fallback: ['Courier New', 'monospace']
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://visionaire-frontend.vercel.app'),
@@ -83,15 +109,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
-        {/* Google Fonts - Blueprint Design */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
 
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />
