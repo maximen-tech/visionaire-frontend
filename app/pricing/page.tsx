@@ -74,7 +74,7 @@ export default function PricingPage() {
                   <Badge variant="success" className="w-fit mb-2">Gratuit</Badge>
                   <CardTitle>Analyse Gratuite</CardTitle>
                   <div className="mt-4">
-                    <span className="text-5xl font-bold text-gray-900">0 €</span>
+                    <span className="text-5xl font-bold text-gray-900">0 $ CAD</span>
                     <span className="text-gray-600 ml-2">/ toujours gratuit</span>
                   </div>
                   <p className="text-gray-600 mt-2">
@@ -268,7 +268,7 @@ export default function PricingPage() {
                   </tr>
                   <tr>
                     <td className="px-6 py-4 text-gray-700 font-semibold">Prix</td>
-                    <td className="text-center px-6 py-4 font-bold text-green-700">0 €</td>
+                    <td className="text-center px-6 py-4 font-bold text-green-700">0 $ CAD</td>
                     <td className="text-center px-6 py-4 font-bold text-blue-600">TBD</td>
                   </tr>
                 </tbody>
@@ -312,7 +312,7 @@ export default function PricingPage() {
               </div>
               <div>
                 <div className="text-4xl mb-2">💰</div>
-                <div className="text-3xl font-bold text-gray-900 mb-1">45K€</div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">45K $ CAD</div>
                 <div className="text-sm text-gray-600">impact moyen identifié</div>
               </div>
             </div>

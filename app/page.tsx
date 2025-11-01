@@ -240,10 +240,10 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <p className="mb-4">
-                  Vos concurrents avancent pendant que vous hésitez. Les agences vous proposent 15 chantiers à la fois. Votre équipe débat pendant des semaines. Résultat : vous investissez 20 000€ sans savoir si c'est la bonne priorité.
+                  Vos concurrents avancent pendant que vous hésitez. Les agences vous proposent 15 chantiers à la fois. Votre équipe débat pendant des semaines. Résultat : vous investissez 20 000 $ CAD sans savoir si c'est la bonne priorité.
                 </p>
                 <p className="font-semibold text-orange-700">
-                  Coût d'opportunité : 50 000-150 000€ de CA perdus par an
+                  Coût d'opportunité : 50 000-150 000 $ CAD de CA perdus par an
                 </p>
               </CardContent>
             </Card>
@@ -275,7 +275,7 @@ export default function Home() {
                   Votre DAF demande des preuves avant de débloquer le budget. Les agences parlent de visibilité et d'engagement sans chiffres concrets. Vous ne pouvez pas démontrer l'impact financier. Le budget reste bloqué.
                 </p>
                 <p className="font-semibold text-orange-700">
-                  5 000-15 000€ perdus par mois de retard
+                  5 000-15 000 $ CAD perdus par mois de retard
                 </p>
               </CardContent>
             </Card>

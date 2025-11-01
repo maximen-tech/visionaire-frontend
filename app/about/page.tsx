@@ -45,7 +45,7 @@ export default function AboutPage() {
 
             <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
               <p>
-                Chaque semaine, des dizaines de dirigeants de PME nous contactaient avec la même question : "Par où commencer pour améliorer notre présence digitale ?" Les audits traditionnels coûtent entre 5 000€ et 15 000€ et prennent plusieurs semaines. Les agences proposent des prestations complètes mais sans priorisation claire. Résultat : beaucoup de PME n'osent pas commencer.
+                Chaque semaine, des dizaines de dirigeants de PME nous contactaient avec la même question : "Par où commencer pour améliorer notre présence digitale ?" Les audits traditionnels coûtent entre 5 000 $ CAD et 15 000 $ CAD et prennent plusieurs semaines. Les agences proposent des prestations complètes mais sans priorisation claire. Résultat : beaucoup de PME n'osent pas commencer.
               </p>
 
               <p>

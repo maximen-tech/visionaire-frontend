@@ -40,7 +40,8 @@
       "Bash(if [ -f \".vercel/project.json\" ])",
       "Bash(then cat .vercel/project.json)",
       "Bash(else echo \"Vercel project linked via GitHub integration\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

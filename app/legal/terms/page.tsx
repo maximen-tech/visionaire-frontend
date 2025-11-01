@@ -191,7 +191,7 @@ export default function TermsPage() {
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="font-semibold text-gray-900 mb-2">Responsabilité maximale :</p>
               <ul className="list-disc pl-5 text-gray-700">
-                <li>Plan Gratuit : 0€ (vous n'avez rien payé)</li>
+                <li>Plan Gratuit : 0 $ CAD (vous n'avez rien payé)</li>
                 <li>Plan Pro : Montant payé au cours des 12 derniers mois</li>
               </ul>
             </div>
@@ -244,7 +244,7 @@ export default function TermsPage() {
                 <li>Nous ne garantissons pas de résultats spécifiques (outil d'aide, pas conseil)</li>
                 <li>Utilisation fair-use (pas de spam, pas de copie de notre IA)</li>
                 <li>Vous pouvez arrêter à tout moment</li>
-                <li>Responsabilité limitée (service gratuit = 0€ max)</li>
+                <li>Responsabilité limitée (service gratuit = 0 $ CAD max)</li>
               </ul>
             </AlertDescription>
           </Alert>
