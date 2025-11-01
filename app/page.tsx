@@ -20,6 +20,9 @@ import { fadeInUp, staggerContainer, staggerItem } from "@/lib/animations";
 // Social Proof Components
 import TrustBadges from "@/components/social-proof/TrustBadges";
 
+// Sector Selector Components
+import SectorSelector from "@/components/sectors/SectorSelector";
+
 // Premium UI Components
 import { ResponsiveHeroBackground } from "@/components/3d/HeroCanvas";
 import { CommandPalette } from "@/components/advanced/CommandPalette";
@@ -92,24 +95,25 @@ export default function Home() {
             <div className="text-center max-w-4xl mx-auto">
               {/* Heading */}
               <motion.h1
-                className="text-hero font-heading font-bold text-slate-900 mb-6 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent"
+                className="text-hero font-heading font-bold text-slate-900 dark:text-white mb-6 bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent"
                 variants={fadeInUp}
                 initial="initial"
                 animate="animate"
                 transition={{ delay: 0.2 }}
               >
-                ⏰ Récupérez 1 000 heures par an
+                🤖 Découvrez ce que l'IA peut automatiser dans votre entreprise
               </motion.h1>
 
               {/* Subheading */}
               <motion.p
-                className="text-2xl md:text-3xl text-slate-600 mb-12 leading-relaxed font-body"
+                className="text-2xl md:text-3xl text-slate-600 dark:text-slate-300 mb-12 leading-relaxed font-body"
                 variants={fadeInUp}
                 initial="initial"
                 animate="animate"
                 transition={{ delay: 0.4 }}
               >
-                Votre <span className="text-amber-600 font-semibold">blueprint temps libre</span> en 10 minutes
+                Analyse <span className="text-cyan-600 dark:text-cyan-400 font-semibold">100% gratuite</span> en 10 minutes. <br className="hidden sm:block" />
+                Zéro engagement. Résultats actionnables immédiatement.
               </motion.p>
 
               {/* URL Input Form */}
@@ -162,7 +166,7 @@ export default function Home() {
                       </svg>
                     }
                   >
-                    Dessiner mon blueprint
+                    Analyser mon potentiel IA
                   </PulsingButton>
                 </div>
               </motion.form>
@@ -199,6 +203,22 @@ export default function Home() {
                 </motion.div>
               </motion.div>
             </div>
+        </div>
+      </section>
+
+      {/* NEW: Sector Selector Section */}
+      <section className="py-20 bg-white dark:bg-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Que pouvez-vous automatiser dans votre secteur ?
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Explorez 9 optimisations IA par secteur • Gains réels • Sans jargon technique
+            </p>
+          </div>
+
+          <SectorSelector />
         </div>
       </section>
 
@@ -527,10 +547,10 @@ export default function Home() {
       <section className="py-24 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Prêt à connaître vos priorités digitales ?
+            Prêt à découvrir votre potentiel d'automatisation ?
           </h2>
           <p className="text-xl mb-8 leading-relaxed opacity-95">
-            Arrêtez de deviner où investir votre budget digital. En 10 minutes, vous saurez exactement quelles sont vos 3 priorités d'amélioration avec leur impact financier estimé. Gratuit. Sans engagement. Sans carte bancaire. Juste les réponses concrètes dont vous avez besoin pour faire avancer votre business et convaincre votre direction.
+            Arrêtez de deviner ce que l'IA peut faire pour vous. En 10 minutes, vous saurez exactement quelles tâches automatiser en priorité. Gratuit. Sans engagement. Sans carte bancaire. Juste les réponses concrètes dont vous avez besoin.
           </p>
 
           <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto mb-8">

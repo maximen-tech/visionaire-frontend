@@ -18,7 +18,6 @@ const ProgressiveLeadForm = lazy(() => import("@/components/forms/ProgressiveLea
 const OpportunityCard = lazy(() => import("@/components/OpportunityCard"));
 const PricingWidget = lazy(() => import("@/components/pricing/PricingWidget"));
 import HourlyRateInput from "@/components/HourlyRateInput";
-import TestimonialsCarousel from "@/components/social-proof/TestimonialsCarousel";
 import ExitIntentPopup from "@/components/forms/ExitIntentPopup";
 import { useABTest } from "@/lib/hooks/useABTest";
 import {
@@ -353,19 +352,6 @@ export default function ResultsPage() {
               showPaymentPlans={true}
             />
           </Suspense>
-        </div>
-
-        {/* Testimonials Section (FE-017) */}
-        <div className="my-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Des résultats qui parlent d'eux-mêmes
-            </h2>
-            <p className="text-slate-400 text-lg">
-              Rejoignez les entreprises qui ont déjà automatisé leurs processus
-            </p>
-          </div>
-          <TestimonialsCarousel />
         </div>
 
         {/* CTA - Conversion Lead (A/B Test: FE-019) */}
